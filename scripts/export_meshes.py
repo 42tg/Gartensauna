@@ -13,7 +13,8 @@ PARTS = ["concrete_piers", "floor_underside", "floor_joists", "floor_insulation"
          "wall_cladding", "wall_battens", "wind_barrier", "wall_studs", "wall_insulation",
          "vapour_barrier", "service_battens", "interior_boards", "partition_frame", "partition_boards",
          "ceiling_boards", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
-         "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame"]
+         "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame",
+         "heater_cage", "heater_mount", "heater_stones"]
 WALL_PARTS = PARTS[5:13]
 VARIANTS = ["assembled", "exploded", "wall_detail"]
 
@@ -35,3 +36,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

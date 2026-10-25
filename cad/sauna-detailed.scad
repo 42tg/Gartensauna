@@ -1,6 +1,7 @@
 // Detailed concept geometry. Millimetres; all construction dimensions are assumptions.
 // The V3 room layout and openings remain the authoritative footprint.
 include <sauna-v3.scad>
+include <heater-drop.scad>
 part = "detailed_all";
 // Layer depths from outside: 18 + 20 + 2 + 100 + 1 + 19 + 20 = 180 mm.
 faces = [[1200,-2000,2000,0],[3200,-2000,3700,90],
@@ -82,6 +83,7 @@ module window_frame(){
     for(z=[0,height-35])translate([1200,-wing_extension,z])cube([45,wing_extension,35]);
 }
 module select_part(name){
+    heater_part(name);
     if(name=="concrete_piers")intersection(){
         translate([0,0,-300])footprint_3d(180);
         union(){for(x=[0:900:main_width])for(y=[-wing_extension:900:main_depth])
@@ -111,7 +113,8 @@ names = ["concrete_piers","floor_underside","floor_joists","floor_insulation","f
          "wall_cladding","wall_battens","wind_barrier","wall_studs","wall_insulation",
          "vapour_barrier","service_battens","interior_boards","partition_frame","partition_boards",
          "ceiling_boards","roof_joists","roof_insulation","roof_deck","roof_covering","roof_fascia",
-         "bench_upper","bench_lower","changing_chair","glass_front","glass_frame"];
+         "bench_upper","bench_lower","changing_chair","glass_front","glass_frame",
+         "heater_cage","heater_mount","heater_stones"];
 function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600 :
     n=="floor_joists" || n=="floor_insulation" ? -350 : n=="floor_boards" ? -120 :
     n=="ceiling_boards" ? 800 : n=="roof_joists" || n=="roof_insulation" ? 1200 :
@@ -123,3 +126,4 @@ if(view=="wall_detail"){
     for(n=names)if(part==n || part=="detailed_all")
         translate([0,0,view=="exploded" ? explode_z(n) : 0])select_part(n);
 }
+

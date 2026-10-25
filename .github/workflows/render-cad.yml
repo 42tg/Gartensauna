@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        view: [assembled, exploded, wall_detail, cutaway]
+        view: [assembled, exploded, wall_detail, cutaway, heater_detail]
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
@@ -72,3 +72,4 @@ jobs:
           name: gartensauna-cad-blender
           path: build/
           if-no-files-found: error
+

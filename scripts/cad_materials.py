@@ -7,6 +7,11 @@ def material_for(part):
     nodes, links = material.node_tree.nodes, material.node_tree.links
     bsdf = nodes.get("Principled BSDF")
     bsdf.inputs["Roughness"].default_value = 0.48
+    if part in ("heater_cage", "heater_mount"):
+        bsdf.inputs["Base Color"].default_value = (0.42, 0.46, 0.49, 1)
+        bsdf.inputs["Metallic"].default_value = 0.95
+        bsdf.inputs["Roughness"].default_value = 0.27
+        return material
     if part == "glass_front":
         bsdf.inputs["Base Color"].default_value = (0.92, 0.98, 0.97, 1)
         bsdf.inputs["Transmission Weight"].default_value = 1
@@ -33,7 +38,11 @@ def material_for(part):
     bump = nodes.new("ShaderNodeBump")
     bump.inputs["Strength"].default_value = 0.22
     bump.inputs["Distance"].default_value = 0.001
-    if "insulation" in part:
+    if part == "heater_stones":
+        scale.inputs[1].default_value = (95,95,95)
+        low, high = (0.065,0.075,0.08,1), (0.28,0.30,0.29,1)
+        bsdf.inputs["Roughness"].default_value = 0.92
+    elif "insulation" in part:
         scale.inputs[1].default_value = (180,180,180)
         low, high = (0.30,0.23,0.08,1), (0.79,0.68,0.35,1)
         bump.inputs["Distance"].default_value = 0.003
@@ -63,3 +72,4 @@ def material_for(part):
     links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
     material.diffuse_color = high
     return material
+

@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 manifest = json.loads((ROOT / "build/meshes/manifest.json").read_text())
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 variant = args[0] if args else "assembled"
-source_variant = "assembled" if variant == "cutaway" else variant
+source_variant = "assembled" if variant in ("cutaway", "heater_detail") else variant
 if source_variant not in manifest["variants"]:
     raise ValueError(f"Unknown variant: {variant}")
 
@@ -49,6 +49,20 @@ for part, relative in manifest["variants"][source_variant].items():
     for polygon in obj.data.polygons:
         polygon.use_smooth = False
     obj.data.materials.append(material_for(part))
+
+if variant == "heater_detail":
+    for obj in cad_objects:
+        if not obj.name.startswith("heater_"):
+            obj.hide_render = True
+            obj.hide_set(True)
+
+# Guard the published product envelope against mm/metre conversion regressions.
+heater = bpy.data.objects.get("heater_cage")
+if heater is not None:
+    bpy.context.view_layer.update()
+    for actual, expected in zip(heater.dimensions, (0.390, 0.335, 0.590)):
+        if abs(actual - expected) > 0.002:
+            raise ValueError(f"Heater envelope mismatch: {list(heater.dimensions)}")
 
 # A presentation-only cutaway. Original imported meshes remain intact in the .blend.
 # Roof and glass can be shown again; wall cuts are reversible Boolean modifiers.
@@ -166,3 +180,4 @@ report = {
 (out / f"gartensauna_{variant}.json").write_text(json.dumps(report, indent=2) + "\n")
 bpy.ops.render.render(write_still=True)
 print("Saved Blender and render for", variant)
+
