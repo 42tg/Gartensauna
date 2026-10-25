@@ -1,4 +1,4 @@
-"""Run in Blender: blender -b -P scripts/create_blender.py -- [assembled|exploded]
+"""Run in Blender: blender -b -P scripts/create_blender.py -- [assembled|exploded|wall_detail|cutaway]
 Imports CAD-derived STL meshes, assigns visual materials, camera and lights.
 Blender 4.0+. All STL coordinates are millimetres.
 """
@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 manifest = json.loads((ROOT / "build/meshes/manifest.json").read_text())
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 variant = args[0] if args else "assembled"
-if variant not in manifest["variants"]:
+source_variant = "assembled" if variant == "cutaway" else variant
+if source_variant not in manifest["variants"]:
     raise ValueError(f"Unknown variant: {variant}")
 
 bpy.ops.object.select_all(action="SELECT")
@@ -24,13 +25,14 @@ scene = bpy.context.scene
 scene.unit_settings.system = "METRIC"
 scene.unit_settings.scale_length = 1.0
 scene["cad_source"] = manifest["source"]
-scene["cad_variant"] = variant
+scene["cad_variant"] = source_variant
+scene["presentation"] = variant
 scene["source_units"] = manifest["units"]
 if manifest["units"] != "mm":
     raise ValueError("Expected CAD coordinates in millimetres")
 cad_objects = []
 
-for part, relative in manifest["variants"][variant].items():
+for part, relative in manifest["variants"][source_variant].items():
     path = ROOT / relative
     if not path.exists() or path.stat().st_size == 0:
         raise FileNotFoundError(f"Missing or empty CAD mesh: {path}")
@@ -47,6 +49,39 @@ for part, relative in manifest["variants"][variant].items():
     for polygon in obj.data.polygons:
         polygon.use_smooth = False
     obj.data.materials.append(material_for(part))
+
+# A presentation-only cutaway. Original imported meshes remain intact in the .blend.
+# Roof and glass can be shown again; wall cuts are reversible Boolean modifiers.
+if variant == "cutaway":
+    hidden_parts = {"ceiling_boards", "roof_joists", "roof_insulation", "roof_deck",
+                    "roof_covering", "roof_fascia", "glass_front", "glass_frame"}
+    wall_parts = {"wall_cladding", "wall_battens", "wind_barrier", "wall_studs",
+                  "wall_insulation", "vapour_barrier", "service_battens", "interior_boards"}
+    # CAD footprint is in metres here. Remove only the camera-facing facades.
+    cuts = [((0, 0, -0.01), (1.201, 0.181, 2.42)),
+            ((1.199, -2.001, -0.01), (2.002, 0.182, 2.42)),
+            ((-0.001, 0, -0.01), (0.182, 1.701, 2.42))]
+    cutters = []
+    for index, (origin, size) in enumerate(cuts):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=Vector(origin)+Vector(size)*0.5)
+        cutter = bpy.context.object
+        cutter.name = f"Cutaway facade mask {index+1}"
+        cutter.dimensions = size
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        cutter.hide_render = True
+        cutter.hide_set(True)
+        cutters.append(cutter)
+    for obj in cad_objects:
+        if obj.name in hidden_parts:
+            obj.hide_render = True
+            obj.hide_set(True)
+        elif obj.name in wall_parts:
+            for cutter in cutters:
+                modifier = obj.modifiers.new(name=cutter.name, type="BOOLEAN")
+                modifier.operation = "DIFFERENCE"
+                modifier.solver = "EXACT"
+                modifier.object = cutter
+    scene["cutaway_note"] = "Presentation only: roof, glazing and three garden-facing facade sections hidden. Disable wall Boolean modifiers to restore facades."
 
 # Text is a visual annotation; exported CAD meshes remain unchanged.
 if variant == "wall_detail":
@@ -69,7 +104,7 @@ def point_at(obj, target):
 
 # Fit the complete CAD assembly, including exploded parts, without changing geometry.
 bpy.context.view_layer.update()
-corners = [obj.matrix_world @ Vector(corner) for obj in cad_objects for corner in obj.bound_box]
+corners = [obj.matrix_world @ Vector(corner) for obj in cad_objects if not obj.hide_render for corner in obj.bound_box]
 minimum = Vector([min(p[i] for p in corners) for i in range(3)])
 maximum = Vector([max(p[i] for p in corners) for i in range(3)])
 center = (minimum + maximum) * 0.5
@@ -122,9 +157,10 @@ scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = str(out / f"gartensauna_{variant}.png")
 bpy.ops.wm.save_as_mainfile(filepath=str(out / f"gartensauna_{variant}.blend"))
 report = {
-    "source": manifest["source"], "variant": variant, "units": "m",
+    "source": manifest["source"], "variant": variant, "source_variant": source_variant, "units": "m",
     "parts": {obj.name: {"dimensions": list(obj.dimensions),
-                         "mesh": obj["cad_mesh"]} for obj in cad_objects},
+                         "mesh": obj["cad_mesh"], "hidden_in_render": obj.hide_render,
+                         "cutaway_modifiers": len(obj.modifiers)} for obj in cad_objects},
     "bounds_min": list(minimum), "bounds_max": list(maximum),
 }
 (out / f"gartensauna_{variant}.json").write_text(json.dumps(report, indent=2) + "\n")

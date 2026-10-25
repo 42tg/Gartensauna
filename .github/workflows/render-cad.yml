@@ -10,45 +10,65 @@ on:
 permissions:
   contents: read
 jobs:
-  render:
+  export:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Install CAD and Blender
+      - name: Install CAD
         run: |
           sudo apt-get update
-          sudo apt-get install -y openscad blender xvfb
+          sudo apt-get install -y openscad xvfb
       - name: Export individual CAD meshes
         run: xvfb-run -a python3 scripts/export_meshes.py
-      - name: Render assembled
-        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- assembled
-      - name: Render exploded
-        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- exploded
-      - name: Render wall layer detail
-        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- wall_detail
-      - name: Verify generated files
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cad-meshes
+          path: build/meshes/
+          if-no-files-found: error
+  render:
+    needs: export
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        view: [assembled, exploded, wall_detail, cutaway]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
         run: |
-          python3 - <<'PY'
-          import json, pathlib, struct
-          root = pathlib.Path("build/blender")
-          for variant in ("assembled", "exploded", "wall_detail"):
-              stem = root / f"gartensauna_{variant}"
-              blend = stem.with_suffix(".blend").read_bytes()
-              assert blend.startswith(b"BLENDER"), f"Invalid Blender file: {stem}"
-              png = stem.with_suffix(".png").read_bytes()
-              assert png[:8] == b"\x89PNG\r\n\x1a\n", f"Invalid PNG: {stem}"
-              assert struct.unpack(">II", png[16:24]) == (1600, 1100)
-              report = json.loads(stem.with_suffix(".json").read_text())
-              assert len(report["parts"]) == (8 if variant == "wall_detail" else 26), report
-              print(variant, "verified:", len(report["parts"]), "CAD groups, Blender file, 1600x1100 PNG")
-          PY
-      - name: Upload Blender models and renders
-        if: always()
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - uses: actions/download-artifact@v4
+        with:
+          name: cad-meshes
+          path: build/meshes
+      - name: Render view
+        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- ${{ matrix.view }}
+      - name: Verify generated files
+        run: python3 scripts/verify_render.py ${{ matrix.view }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: render-${{ matrix.view }}
+          path: build/blender/
+          if-no-files-found: error
+  package:
+    needs: render
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: cad-meshes
+          path: build/meshes
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: render-*
+          merge-multiple: true
+          path: build/blender
+      - name: Upload all Blender models and renders
         uses: actions/upload-artifact@v4
         with:
           name: gartensauna-cad-blender
-          path: |
-            build/meshes/
-            build/blender/
-          if-no-files-found: warn
+          path: build/
+          if-no-files-found: error
