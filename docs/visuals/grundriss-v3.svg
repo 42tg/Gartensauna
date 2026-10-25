@@ -13,8 +13,8 @@
 <rect x="670" y="300" width="65" height="400" fill="#bd8c56"/><rect x="610" y="300" width="55" height="400" fill="#d7ad78"/>
 <!-- stove -->
 <rect x="440" y="220" width="80" height="75" rx="6" fill="#69757a"/><text x="480" y="264" font-family="Arial" fill="white" font-size="17" text-anchor="middle">Ofen</text>
-<!-- glazing front facing garden on bottom -->
-<path d="M405 740 H750" stroke="#178e9b" stroke-width="11"/><text x="575" y="778" font-family="Arial" font-size="20" text-anchor="middle" fill="#178e9b">Glasfront zum Garten</text>
+<!-- glazing on LEFT long side of projecting right sauna wing, facing garden -->
+<path d="M370 550 V715" stroke="#178e9b" stroke-width="11"/><text x="340" y="650" font-family="Arial" font-size="18" text-anchor="middle" fill="#178e9b" transform="rotate(-90 340 650)">Glasfront zum Garten (links)</text>
 <g font-family="Arial" fill="#423324"><text x="262" y="277" text-anchor="middle" font-size="22" font-weight="bold">Umkleide</text><text x="260" y="303" text-anchor="middle" font-size="16">beheizbar</text><text x="530" y="455" font-size="26" font-weight="bold">Sauna</text><text x="525" y="485" font-size="17">Liegebänke</text><text x="525" y="507" font-size="17">2 Ebenen</text></g>
 <g font-family="Arial" font-size="18" fill="#25343c" stroke="#25343c" stroke-width="2"><path d="M130 147 H770 M130 137 V157 M770 137 V157"/><text x="450" y="134" stroke="none" text-anchor="middle">3.200</text><path d="M92 180 V520 M82 180 H102 M82 520 H102"/><text x="72" y="350" stroke="none" transform="rotate(-90 72 350)" text-anchor="middle">1.700</text><path d="M805 520 V740 M795 520 H815 M795 740 H815"/><text x="835" y="630" stroke="none" transform="rotate(90 835 630)" text-anchor="middle">zusätzlich 2.000</text><path d="M370 795 H770 M370 785 V805 M770 785 V805"/><text x="570" y="819" stroke="none" text-anchor="middle">Flügelbreite 2.000 (Annahme)</text></g>
 <text x="42" y="804" font-family="Arial" font-size="14" fill="#555">Die Türpositionen, Liegebanklängen und Wanddicken sind schematisch; vor Ausführung maßlich zu verifizieren.</text></svg>
