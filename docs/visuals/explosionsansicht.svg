@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 780">
+<rect width="1000" height="780" fill="#f8f6f1"/>
+<text x="35" y="49" font-family="Arial" font-size="30" fill="#26343c" font-weight="bold">Explosionsansicht – Saunakonzept V2</text>
+<text x="35" y="81" font-family="Arial" font-size="17" fill="#667">Schematische Schichten und Baugruppen · nicht maßstabsgetreu</text>
+<g stroke="#41505a" stroke-width="2" stroke-linejoin="round">
+<polygon points="280,172 610,108 820,206 480,278" fill="#66757a"/>
+<polygon points="280,172 480,278 480,302 280,196" fill="#3f4c52"/>
+<polygon points="480,278 820,206 820,230 480,302" fill="#4b585e"/>
+<polygon points="290,327 595,267 782,362 480,425" fill="#d8b783" fill-opacity=".55"/>
+<polygon points="290,327 480,425 480,605 290,508" fill="#d8b783" fill-opacity=".35"/>
+<polygon points="480,425 782,362 782,545 480,605" fill="#d8b783" fill-opacity=".5"/>
+<g fill="#b57d46"><polygon points="300,333 315,330 315,505 300,500"/><polygon points="466,417 480,425 480,605 466,597"/><polygon points="768,365 782,362 782,545 768,548"/></g>
+<polygon points="320,525 600,472 765,556 480,616" fill="#c8a779"/>
+<polygon points="320,525 480,616 480,639 320,549" fill="#98764f"/>
+<polygon points="480,616 765,556 765,579 480,639" fill="#ab875a"/>
+<polygon points="310,680 600,624 777,711 480,769" fill="#8b9295"/>
+</g>
+<g stroke="#68767b" stroke-dasharray="8 8" stroke-width="2"><path d="M480 302v120 M480 606v33 M480 640v121"/></g>
+<g font-family="Arial" font-size="21" fill="#23333a">
+<text x="40" y="176">01 · Pultdach</text><path d="M205 171L280 184" stroke="#60717a" fill="none"/>
+<text x="40" y="352">02 · Wände /</text><text x="40" y="379">Holzständer</text><path d="M210 359L292 380" stroke="#60717a" fill="none"/>
+<text x="790" y="489">03 · Boden</text><path d="M785 495L709 551" stroke="#60717a" fill="none"/>
+<text x="40" y="694">04 · Fundament</text><path d="M212 687L325 692" stroke="#60717a" fill="none"/>
+</g>
+<text x="660" y="95" font-family="Arial" font-size="15" fill="#667">Dach und Fundament nur Platzhalter</text>
+</svg>
