@@ -1,21 +1,82 @@
-// V3 L-Form Konzept, Millimeter. Geometrie vorläufig, nicht baufreigegeben.
-main_width=3200; main_depth=1700; wing_width=2000; wing_extension=2000;
-wall=180; height=2400; floor_thickness=100; roof_thickness=160;
-view="assembled"; // ["assembled","exploded"]
-explode=view=="exploded"?450:0;
-module block(x,y,z,w,d,h,c){color(c)translate([x,y,z])cube([w,d,h]);}
-module outline(x,y,w,d){difference(){cube([w,d,height]);translate([wall,wall,-1])cube([w-2*wall,d-2*wall,height+2]);}}
-color([.68,.49,.31,.65]) union(){
- // Umkleide links: Grundrechteck bis zur inneren Trennwand
- difference(){cube([main_width,main_depth,height]);translate([wall,wall,-1])cube([main_width-2*wall,main_depth-2*wall,height+2]);}
- // Flügel ragt um 2 m nach vorne (negative y-Richtung)
- translate([main_width-wing_width,-wing_extension,0]) difference(){
- cube([wing_width,wing_extension,height]);
- translate([wall,-1,-1])cube([wing_width-2*wall,wing_extension+2,height+2]);
- }
+// Gartensauna V3 – parametrisches geometrisches Konzept, Einheiten mm.
+// Export: openscad -o wall.stl -D 'part="walls"' -D 'view="assembled"' sauna-v3.scad
+// Wichtig: KEINE geprüfte Baukonstruktion. Öffnungen und Materialien sind Platzhalter.
+main_width = 3200;
+main_depth = 1700;
+wing_width = 2000;       // Annahme, zu bestätigen
+wing_extension = 2000;   // Nutzerangabe als zusätzlicher Schenkel interpretiert
+wall = 180;              // Modellparameter, NICHT freigegebener Wandaufbau
+height = 2400;           // Annahme
+floor_thickness = 120;
+roof_thickness = 160;
+part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
+view = "assembled";      // ["assembled","exploded"]
+offset = view == "exploded" ? 420 : 0;
+// Grundriss: x von 0..3200, y von -2000..1700.
+// Umkleide links im Bestandsrechteck; Saunaflügel rechts.
+module footprint(){
+    union(){
+        square([main_width, main_depth]);
+        translate([main_width-wing_width,-wing_extension]) square([wing_width,wing_extension]);
+    }
 }
-block(0,-wing_extension,-floor_thickness-explode,main_width,main_depth+wing_extension,floor_thickness,[.48,.49,.50]);
-block(-100,-wing_extension-100,height+explode,main_width+200,main_depth+wing_extension+200,roof_thickness,[.26,.30,.33]);
-// Benches in sauna wing, along extension, illustrative only
-block(main_width-650,-wing_extension+180,850,470,1850,55,[.82,.62,.39]);
-block(main_width-1050,-wing_extension+180,450,380,1850,55,[.73,.53,.31]);
+module footprint_3d(h){
+    linear_extrude(height=h) footprint();
+}
+module foundation(){
+    translate([0,0,-300-offset*2]) footprint_3d(180);
+}
+module floor(){
+    translate([0,0,-floor_thickness-offset]) footprint_3d(floor_thickness);
+}
+module walls(){
+    difference(){
+        footprint_3d(height);
+        // inset voids: room on left, and right L wing, with open connection
+        translate([wall,wall,-1]) cube([main_width-wing_width-wall*1.5,main_depth-2*wall,height+2]);
+        translate([main_width-wing_width+wall,-wing_extension+wall,-1])
+            cube([wing_width-2*wall,wing_extension+main_depth-2*wall,height+2]);
+        // passage from dressing room into sauna wing
+        translate([main_width-wing_width-wall-5,370,0]) cube([wall*2+10,800,2050]);
+        // outside entrance on left front (y=0)
+        translate([360,-10,0]) cube([850,wall+20,2050]);
+        // garden-facing glazing, left edge of projecting wing
+        translate([main_width-wing_width-10,-wing_extension+250,650])
+            cube([wall+20,wing_extension-500,1250]);
+    }
+}
+module roof(){
+    translate([-100,-wing_extension-100,height+offset])
+        linear_extrude(height=roof_thickness)
+        offset(r=80) footprint();
+}
+module upper_bench(){
+    translate([main_width-700,-wing_extension+180,920])
+        cube([510,wing_extension+850,55]);
+}
+module lower_bench(){
+    translate([main_width-1080,-wing_extension+180,480])
+        cube([350,wing_extension+850,55]);
+}
+module chair(){
+    // Only illustrative chair: seat + backrest + legs
+    translate([250,main_depth-720,0])
+    union(){
+        translate([0,0,440])cube([470,470,40]);
+        translate([0,430,440])cube([470,40,480]);
+        for(x=[20,410]) for(y=[20,410]) translate([x,y,0])cube([40,40,440]);
+    }
+}
+module glazing(){
+    // 40 mm placeholder glass, overlaps wall opening only, not a glass specification
+    translate([main_width-wing_width+wall/2-20,-wing_extension+250,650])
+        cube([40,wing_extension-500,1250]);
+}
+if(part=="all" || part=="foundation") color("gray") foundation();
+if(part=="all" || part=="floor") color("burlywood") floor();
+if(part=="all" || part=="walls") color("tan",0.65) walls();
+if(part=="all" || part=="roof") color("dimgray") roof();
+if(part=="all" || part=="upper_bench") color("wheat") upper_bench();
+if(part=="all" || part=="lower_bench") color("peru") lower_bench();
+if(part=="all" || part=="chair") color("saddlebrown") chair();
+if(part=="all" || part=="glazing") color("lightblue",0.5) glazing();
