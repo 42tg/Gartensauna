@@ -21,3 +21,15 @@ Für CAD V1 werden **3,20 × 2,00 m** und eine **vordere Höhe von 2,30 m** als 
 6. Stückliste, Kosten und Bauablauf ausarbeiten.
 
 Siehe [Messwerte](docs/measurements.md), [Anforderungen](docs/requirements.md), [Entscheidungen](docs/decisions/README.md) und [Aufgaben](https://github.com/42tg/Gartensauna/issues).
+
+## Visuelle Planung
+
+![Grundriss](docs/visuals/grundriss.svg)
+
+![Explosionsansicht](docs/visuals/explosionsansicht.svg)
+
+![Wandaufbau](docs/visuals/wandaufbau.svg)
+
+[Alle Zeichnungen](docs/visuals/README.md) · [Parametrisches OpenSCAD-Modell](cad/sauna.scad)
+
+**Hinweis:** Das OpenSCAD-Modell ist ein neues Konzeptmodell, nicht die zuvor im Chat erwähnte FreeCAD-/STEP-Datei. Bauphysik und Konstruktion sind noch nicht freigegeben.
