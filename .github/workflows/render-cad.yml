@@ -1,0 +1,36 @@
+name: Render CAD to Blender
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cad/**'
+      - 'scripts/**'
+      - '.github/workflows/render-cad.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CAD and Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openscad blender xvfb
+      - name: Export individual CAD meshes
+        run: xvfb-run -a python3 scripts/export_meshes.py
+      - name: Render assembled
+        run: blender -b -t 2 -P scripts/create_blender.py -- assembled
+      - name: Render exploded
+        run: blender -b -t 2 -P scripts/create_blender.py -- exploded
+      - name: Upload Blender models and renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gartensauna-cad-blender
+          path: |
+            build/meshes/
+            build/blender/
+          if-no-files-found: warn
