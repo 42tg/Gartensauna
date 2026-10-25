@@ -5,7 +5,7 @@
 ![L-Grundriss](visuals/grundriss-v3.svg)
 
 ## Konzept
-- Linker Bestandsbereich als **beheizbare Umkleide mit Sitzbank**.
+- Linker Bestandsbereich als **kleine, beheizbare Umkleide mit einem Stuhl (Standard), optional zwei Stühlen**; keine große Ruhezone erforderlich.
 - Zugang von außen links.
 - Durchgang durch eine zweite, innenliegende Tür in den rechten Saunaflügel.
 - Rechte Wand des Saunaflügels mit Liegebänken; **Glasfront an der linken Längsseite des Saunaflügels**, mit Blick in den Garten (vom Saunaflügel aus gesehen).
@@ -35,3 +35,6 @@ Grundstücksgrenze/Abstandsrecht, Bestandsmauer, Fundament, Dachhöhe/Neigung, O
 
 ## Korrektur 25.10.2026 – Ausrichtung der Glasfront
 Die Verglasung liegt ausdrücklich **links am rechten Saunaflügel** und blickt in den Garten. Die bisherige Stirnseitenverglasung war falsch. Öffnungsmaße, Anschluss an den Umkleidebereich und endgültige Liegebankanordnung sind weiter zu prüfen.
+
+## Nutzeranforderung – Sitzplätze in der Umkleide
+Ein Stuhl genügt, optional zwei. Die bisherige durchgehende Sitzbank ist nicht erforderlich. Platz für Garderobenhaken, Umziehen und den Durchgang zur Sauna erhalten. Die Umkleide soll beheizbar bleiben. Die CAD-Möblierung muss entsprechend aktualisiert werden.
