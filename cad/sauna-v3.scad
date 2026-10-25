@@ -40,9 +40,9 @@ module walls(){
         translate([main_width-wing_width-wall-5,370,0]) cube([wall*2+10,800,2050]);
         // outside entrance on left front (y=0)
         translate([360,-10,0]) cube([850,wall+20,2050]);
-        // garden-facing glazing, left edge of projecting wing
-        translate([main_width-wing_width-10,-wing_extension+250,650])
-            cube([wall+20,wing_extension-500,1250]);
+        // Full garden-facing front: floor to roof underside, entire projecting wing
+        translate([main_width-wing_width-1,-wing_extension-1,-1])
+            cube([wall+2,wing_extension+1,height+2]);
     }
 }
 module roof(){
@@ -68,9 +68,9 @@ module chair(){
     }
 }
 module glazing(){
-    // 40 mm placeholder glass, overlaps wall opening only, not a glass specification
-    translate([main_width-wing_width+wall/2-20,-wing_extension+250,650])
-        cube([40,wing_extension-500,1250]);
+    // Full-height/full-width glazing; 40 mm assembly placeholder, not glass specification
+    translate([main_width-wing_width,-wing_extension,0])
+        cube([40,wing_extension,height]);
 }
 if(part=="all" || part=="foundation") color("gray") foundation();
 if(part=="all" || part=="floor") color("burlywood") floor();

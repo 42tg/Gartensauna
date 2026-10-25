@@ -8,7 +8,7 @@
 - Linker Bestandsbereich als **kleine, beheizbare Umkleide mit einem Stuhl (Standard), optional zwei Stühlen**; keine große Ruhezone erforderlich.
 - Zugang von außen links.
 - Durchgang durch eine zweite, innenliegende Tür in den rechten Saunaflügel.
-- Rechte Wand des Saunaflügels mit Liegebänken; **Glasfront an der linken Längsseite des Saunaflügels**, mit Blick in den Garten (vom Saunaflügel aus gesehen).
+- Rechte Wand des Saunaflügels mit Liegebänken; **vollflächige Glasfront an der linken Längsseite des Saunaflügels**, bodentief bis zur Dachunterkante, mit Blick in den Garten (vom Saunaflügel aus gesehen).
 - Vorhandene Unterstandskonstruktion wird nicht als tragfähig vorausgesetzt; Neubau möglich.
 
 ## Geometrie und offene Interpretation
@@ -38,3 +38,6 @@ Die Verglasung liegt ausdrücklich **links am rechten Saunaflügel** und blickt 
 
 ## Nutzeranforderung – Sitzplätze in der Umkleide
 Ein Stuhl genügt, optional zwei. Die bisherige durchgehende Sitzbank ist nicht erforderlich. Platz für Garderobenhaken, Umziehen und den Durchgang zur Sauna erhalten. Die Umkleide soll beheizbar bleiben. Die CAD-Möblierung muss entsprechend aktualisiert werden.
+
+## Vollflächige Glasfront – 25.10.2026
+Die gesamte gartenseitige Front des vorspringenden Saunaflügels wird verglast: keine geschlossene Brüstung und kein geschlossener Wandstreifen über dem Fenster. Im aktuellen Konzept sind das 2.000 mm Breite × 2.400 mm Höhe (Höhe weiterhin Entwurfsannahme), von Oberkante Boden bis Unterkante Dach. Rahmen, Tragwerk und Glasaufteilung sind noch nicht konstruiert; 40 mm im CAD sind ein Platzhalter für den Glasaufbau.
