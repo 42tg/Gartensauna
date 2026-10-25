@@ -22,9 +22,25 @@ jobs:
       - name: Export individual CAD meshes
         run: xvfb-run -a python3 scripts/export_meshes.py
       - name: Render assembled
-        run: blender -b -t 2 -P scripts/create_blender.py -- assembled
+        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- assembled
       - name: Render exploded
-        run: blender -b -t 2 -P scripts/create_blender.py -- exploded
+        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- exploded
+      - name: Verify generated files
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, struct
+          root = pathlib.Path("build/blender")
+          for variant in ("assembled", "exploded"):
+              stem = root / f"gartensauna_{variant}"
+              blend = stem.with_suffix(".blend").read_bytes()
+              assert blend.startswith(b"BLENDER"), f"Invalid Blender file: {stem}"
+              png = stem.with_suffix(".png").read_bytes()
+              assert png[:8] == b"\x89PNG\r\n\x1a\n", f"Invalid PNG: {stem}"
+              assert struct.unpack(">II", png[16:24]) == (1600, 1100)
+              report = json.loads(stem.with_suffix(".json").read_text())
+              assert len(report["parts"]) == 8, report
+              print(variant, "verified: 8 CAD parts, Blender file, 1600x1100 PNG")
+          PY
       - name: Upload Blender models and renders
         if: always()
         uses: actions/upload-artifact@v4

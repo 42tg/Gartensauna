@@ -1,6 +1,6 @@
 """Run in Blender: blender -b -P scripts/create_blender.py -- [assembled|exploded]
 Imports CAD-derived STL meshes, assigns visual materials, camera and lights.
-Blender 4.1+ recommended. All STL coordinates are millimetres.
+Blender 4.0+. All STL coordinates are millimetres.
 """
 import bpy
 import json
@@ -20,6 +20,12 @@ bpy.ops.object.delete(use_global=False)
 scene = bpy.context.scene
 scene.unit_settings.system = "METRIC"
 scene.unit_settings.scale_length = 1.0
+scene["cad_source"] = manifest["source"]
+scene["cad_variant"] = variant
+scene["source_units"] = manifest["units"]
+if manifest["units"] != "mm":
+    raise ValueError("Expected CAD coordinates in millimetres")
+cad_objects = []
 
 colors = {
     "foundation": (0.43, 0.44, 0.46, 1),
@@ -34,11 +40,17 @@ colors = {
 for part, relative in manifest["variants"][variant].items():
     path = ROOT / relative
     if not path.exists() or path.stat().st_size == 0:
-        continue
+        raise FileNotFoundError(f"Missing or empty CAD mesh: {path}")
     # Blender 4.x native STL importer
     bpy.ops.wm.stl_import(filepath=str(path), global_scale=0.001)
     obj = bpy.context.object
     obj.name = part
+    obj["cad_source"] = manifest["source"]
+    obj["cad_mesh"] = relative
+    obj["cad_part"] = part
+    cad_objects.append(obj)
+    if not obj.data.vertices:
+        raise ValueError(f"Empty imported mesh: {part}")
     material = bpy.data.materials.new(part)
     material.diffuse_color = colors[part]
     material.use_nodes = True
@@ -54,11 +66,21 @@ def point_at(obj, target):
     direction = Vector(target) - obj.location
     obj.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
 
-bpy.ops.object.camera_add(location=(7, -8, 6))
+# Fit the complete CAD assembly, including exploded parts, without changing geometry.
+bpy.context.view_layer.update()
+corners = [obj.matrix_world @ Vector(corner) for obj in cad_objects for corner in obj.bound_box]
+minimum = Vector([min(p[i] for p in corners) for i in range(3)])
+maximum = Vector([max(p[i] for p in corners) for i in range(3)])
+center = (minimum + maximum) * 0.5
+bpy.ops.object.camera_add(location=center + Vector((-7, -9, 6)))
 camera = bpy.context.object
-point_at(camera, (1.6, -0.1, 1.0))
+point_at(camera, center)
 camera.data.type = "ORTHO"
-camera.data.ortho_scale = 8
+rotation = camera.rotation_euler.to_matrix().transposed()
+projected = [rotation @ (p - center) for p in corners]
+width = max(p.x for p in projected) - min(p.x for p in projected)
+height = max(p.y for p in projected) - min(p.y for p in projected)
+camera.data.ortho_scale = max(width, height * 1600 / 1100) * 1.18
 scene.camera = camera
 for loc, power in [((2, -4, 7), 1800), ((-3, 3, 5), 1100)]:
     bpy.ops.object.light_add(type="AREA", location=loc)
@@ -68,13 +90,26 @@ for loc, power in [((2, -4, 7), 1800), ((-3, 3, 5), 1100)]:
     light.data.size = 5
     point_at(light, (1.5, 0, 1))
 scene.render.engine = "CYCLES"
-scene.cycles.samples = 32
+scene.cycles.device = "CPU"
+# Ubuntu's Blender package has no OpenImageDenoiser.
+scene.cycles.use_denoising = False
+for layer in scene.view_layers:
+    layer.cycles.use_denoising = False
+scene.cycles.samples = 64
 scene.render.resolution_x = 1600
 scene.render.resolution_y = 1100
 scene.render.resolution_percentage = 100
 out = ROOT / "build" / "blender"
 out.mkdir(parents=True, exist_ok=True)
-bpy.ops.wm.save_as_mainfile(filepath=str(out / f"gartensauna_{variant}.blend"))
+scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = str(out / f"gartensauna_{variant}.png")
+bpy.ops.wm.save_as_mainfile(filepath=str(out / f"gartensauna_{variant}.blend"))
+report = {
+    "source": manifest["source"], "variant": variant, "units": "m",
+    "parts": {obj.name: {"dimensions": list(obj.dimensions),
+                         "mesh": obj["cad_mesh"]} for obj in cad_objects},
+    "bounds_min": list(minimum), "bounds_max": list(maximum),
+}
+(out / f"gartensauna_{variant}.json").write_text(json.dumps(report, indent=2) + "\n")
 bpy.ops.render.render(write_still=True)
 print("Saved Blender and render for", variant)

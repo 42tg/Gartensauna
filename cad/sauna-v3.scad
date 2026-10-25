@@ -46,7 +46,7 @@ module walls(){
     }
 }
 module roof(){
-    translate([-100,-wing_extension-100,height+offset])
+    translate([0,0,height+offset])
         linear_extrude(height=roof_thickness)
         offset(r=80) footprint();
 }
