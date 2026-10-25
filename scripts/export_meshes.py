@@ -7,10 +7,15 @@ import subprocess
 import json
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "cad" / "sauna-v3.scad"
+SOURCE = ROOT / "cad" / "sauna-detailed.scad"
 DEST = ROOT / "build" / "meshes"
-PARTS = ["foundation", "floor", "walls", "roof", "upper_bench", "lower_bench", "chair", "glazing"]
-VARIANTS = ["assembled", "exploded"]
+PARTS = ["concrete_piers", "floor_underside", "floor_joists", "floor_insulation", "floor_boards",
+         "wall_cladding", "wall_battens", "wind_barrier", "wall_studs", "wall_insulation",
+         "vapour_barrier", "service_battens", "interior_boards", "partition_frame", "partition_boards",
+         "ceiling_boards", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
+         "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame"]
+WALL_PARTS = PARTS[5:13]
+VARIANTS = ["assembled", "exploded", "wall_detail"]
 
 def main():
     if not SOURCE.is_file():
@@ -19,7 +24,7 @@ def main():
     manifest = {"source": str(SOURCE.relative_to(ROOT)), "units": "mm", "variants": {}}
     for view in VARIANTS:
         manifest["variants"][view] = {}
-        for part in PARTS:
+        for part in (WALL_PARTS if view == "wall_detail" else PARTS):
             target = DEST / f"{view}_{part}.stl"
             command = ["openscad", "-o", str(target), "-D", f'part="{part}"',
                        "-D", f'view="{view}"', str(SOURCE)]

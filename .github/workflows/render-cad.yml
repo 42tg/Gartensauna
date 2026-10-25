@@ -25,12 +25,14 @@ jobs:
         run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- assembled
       - name: Render exploded
         run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- exploded
+      - name: Render wall layer detail
+        run: blender -b -t 2 --python-exit-code 1 -P scripts/create_blender.py -- wall_detail
       - name: Verify generated files
         run: |
           python3 - <<'PY'
           import json, pathlib, struct
           root = pathlib.Path("build/blender")
-          for variant in ("assembled", "exploded"):
+          for variant in ("assembled", "exploded", "wall_detail"):
               stem = root / f"gartensauna_{variant}"
               blend = stem.with_suffix(".blend").read_bytes()
               assert blend.startswith(b"BLENDER"), f"Invalid Blender file: {stem}"
@@ -38,8 +40,8 @@ jobs:
               assert png[:8] == b"\x89PNG\r\n\x1a\n", f"Invalid PNG: {stem}"
               assert struct.unpack(">II", png[16:24]) == (1600, 1100)
               report = json.loads(stem.with_suffix(".json").read_text())
-              assert len(report["parts"]) == 8, report
-              print(variant, "verified: 8 CAD parts, Blender file, 1600x1100 PNG")
+              assert len(report["parts"]) == (8 if variant == "wall_detail" else 26), report
+              print(variant, "verified:", len(report["parts"]), "CAD groups, Blender file, 1600x1100 PNG")
           PY
       - name: Upload Blender models and renders
         if: always()

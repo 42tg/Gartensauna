@@ -7,6 +7,9 @@ import json
 import sys
 from pathlib import Path
 from mathutils import Vector
+from math import radians
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from cad_materials import material_for
 
 ROOT = Path(__file__).resolve().parents[1]
 manifest = json.loads((ROOT / "build/meshes/manifest.json").read_text())
@@ -27,16 +30,6 @@ if manifest["units"] != "mm":
     raise ValueError("Expected CAD coordinates in millimetres")
 cad_objects = []
 
-colors = {
-    "foundation": (0.43, 0.44, 0.46, 1),
-    "floor": (0.56, 0.43, 0.30, 1),
-    "walls": (0.72, 0.51, 0.31, 1),
-    "roof": (0.22, 0.27, 0.29, 1),
-    "upper_bench": (0.83, 0.66, 0.42, 1),
-    "lower_bench": (0.77, 0.59, 0.36, 1),
-    "chair": (0.55, 0.38, 0.24, 1),
-    "glazing": (0.26, 0.66, 0.74, 0.35),
-}
 for part, relative in manifest["variants"][variant].items():
     path = ROOT / relative
     if not path.exists() or path.stat().st_size == 0:
@@ -51,16 +44,24 @@ for part, relative in manifest["variants"][variant].items():
     cad_objects.append(obj)
     if not obj.data.vertices:
         raise ValueError(f"Empty imported mesh: {part}")
-    material = bpy.data.materials.new(part)
-    material.diffuse_color = colors[part]
-    material.use_nodes = True
-    principled = material.node_tree.nodes.get("Principled BSDF")
-    if principled:
-        principled.inputs["Base Color"].default_value = colors[part]
-        principled.inputs["Roughness"].default_value = 0.65
-        if part == "glazing":
-            principled.inputs["Alpha"].default_value = 0.35
-    obj.data.materials.append(material)
+    for polygon in obj.data.polygons:
+        polygon.use_smooth = False
+    obj.data.materials.append(material_for(part))
+
+# Text is a visual annotation; exported CAD meshes remain unchanged.
+if variant == "wall_detail":
+    labels = ["1  Fassade / Bretter", "2  Hinterlueftung / Lattung", "3  Winddichtung",
+              "4  Holzstaender", "5  Daemmung", "6  Alu-Dampfsperre",
+              "7  Innenlattung", "8  Saunaholz / Bretter"]
+    for i, label in enumerate(labels):
+        bpy.ops.object.text_add(location=(i*1.4, -0.06, 2.58), rotation=(radians(90), 0, 0))
+        obj = bpy.context.object
+        obj.data.body = label
+        obj.data.size = 0.075
+        obj.name = label
+        text_material = bpy.data.materials.new("Label ink")
+        text_material.diffuse_color = (0.015, 0.02, 0.025, 1)
+        obj.data.materials.append(text_material)
 
 def point_at(obj, target):
     direction = Vector(target) - obj.location
@@ -72,7 +73,7 @@ corners = [obj.matrix_world @ Vector(corner) for obj in cad_objects for corner i
 minimum = Vector([min(p[i] for p in corners) for i in range(3)])
 maximum = Vector([max(p[i] for p in corners) for i in range(3)])
 center = (minimum + maximum) * 0.5
-bpy.ops.object.camera_add(location=center + Vector((-7, -9, 6)))
+bpy.ops.object.camera_add(location=center + Vector((2, -12, 4) if variant == "wall_detail" else (-7, -10, 6 if variant == "assembled" else 8)))
 camera = bpy.context.object
 point_at(camera, center)
 camera.data.type = "ORTHO"
@@ -80,7 +81,7 @@ rotation = camera.rotation_euler.to_matrix().transposed()
 projected = [rotation @ (p - center) for p in corners]
 width = max(p.x for p in projected) - min(p.x for p in projected)
 height = max(p.y for p in projected) - min(p.y for p in projected)
-camera.data.ortho_scale = max(width, height * 1600 / 1100) * 1.18
+camera.data.ortho_scale = max(width, (height + (0.4 if variant == "wall_detail" else 0)) * 1600 / 1100) * 1.18
 scene.camera = camera
 for loc, power in [((2, -4, 7), 1800), ((-3, 3, 5), 1100)]:
     bpy.ops.object.light_add(type="AREA", location=loc)
@@ -89,6 +90,19 @@ for loc, power in [((2, -4, 7), 1800), ((-3, 3, 5), 1100)]:
     light.data.shape = "DISK"
     light.data.size = 5
     point_at(light, (1.5, 0, 1))
+# Neutral studio ground and daylight make material surfaces legible.
+scene.world.use_nodes = True
+scene.world.node_tree.nodes["Background"].inputs[0].default_value = (0.65, 0.72, 0.82, 1)
+scene.world.node_tree.nodes["Background"].inputs[1].default_value = 0.45
+bpy.ops.mesh.primitive_plane_add(size=200, location=(center.x, center.y, minimum.z-0.06))
+ground = bpy.context.object
+mat = bpy.data.materials.new("Studio floor")
+mat.diffuse_color = (0.24, 0.27, 0.25, 1)
+ground.data.materials.append(mat)
+bpy.ops.object.light_add(type="SUN", location=(0, -5, 8))
+bpy.context.object.rotation_euler = (radians(25), radians(-20), radians(-25))
+bpy.context.object.data.energy = 1.5
+bpy.context.object.data.angle = radians(12)
 scene.render.engine = "CYCLES"
 scene.cycles.device = "CPU"
 # Ubuntu's Blender package has no OpenImageDenoiser.
@@ -96,6 +110,9 @@ scene.cycles.use_denoising = False
 for layer in scene.view_layers:
     layer.cycles.use_denoising = False
 scene.cycles.samples = 64
+scene.cycles.use_adaptive_sampling = True
+scene.cycles.adaptive_threshold = 0.045
+scene.cycles.transparent_max_bounces = 8
 scene.render.resolution_x = 1600
 scene.render.resolution_y = 1100
 scene.render.resolution_percentage = 100
