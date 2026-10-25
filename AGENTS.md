@@ -9,3 +9,15 @@
 - Elektroanschlüsse und tragende Änderungen müssen durch geeignete Fachleute beurteilt bzw. ausgeführt werden.
 - Neue Entscheidungen als kurze ADR unter docs/decisions/ dokumentieren; Ungeklärtes als Issue erfassen.
 - Keine Maße aus Fotos ableiten, als seien sie vermessen worden.
+
+## Verbindliche visuelle Präsentation
+
+- Bei Änderungen an CAD-Geometrie, Raumaufteilung, Bauteilen, Materialien oder der Darstellung die aktualisierten Ansichten erzeugen und dem Nutzer **direkt als eingebettete Bilder** präsentieren. Ein bloßer Hinweis auf einen erfolgreichen Workflow oder ein Download-Link genügt nicht.
+- Immer die **Gesamtansicht**, die **Explosionsansicht** und die **Cutaway-Innenansicht** zeigen. Bei Änderungen am Wandaufbau zusätzlich die beschriftete **Wandlagenansicht** zeigen; auf Wunsch alle vier Ansichten.
+- Ausschließlich Bilder aus der tatsächlichen CAD-Geometrie verwenden: OpenSCAD → STL-Bauteile → Blender → PNG. Keine KI-generierten Ersatzbilder. Materialien, Licht und Kamera dürfen die Darstellung verbessern, aber keine falschen Maße oder Bauteile suggerieren.
+- Einzelne Bretter, Latten, Ständer, Dämmung und weitere Materiallagen erkennbar darstellen. Explosionsansichten verschieben Bauteile ohne Skalierung; die Cutaway-Ansicht blendet Dach und kameraseitige Fassaden für die Innenansicht reversibel aus.
+- Den Workflow `Render CAD to Blender` in `.github/workflows/render-cad.yml` für den aktuellen Modellstand erfolgreich durchlaufen lassen. Danach die PNGs aus den zugehörigen Artefakten herunterladen, selbst visuell prüfen und im Ergebnis zeigen. Keine veralteten Bilder als aktuellen Stand ausgeben.
+- Die vier Ausgaben heißen `gartensauna_assembled`, `gartensauna_exploded`, `gartensauna_wall_detail` und `gartensauna_cutaway` (jeweils `.blend`, `.png` und Prüfbericht). Das gemeinsame Download-Paket heißt `gartensauna-cad-blender`.
+- Zusätzlich zu den Bildern den passenden GitHub-Lauf bzw. das Download-Paket mit den Blender-Dateien verlinken. Noch offene Maße, Schichtdicken und Konstruktionsannahmen knapp benennen, soweit sie für die gezeigte Änderung relevant sind.
+- Falls Rendering oder Bildanzeige technisch scheitern, den konkreten Fehler transparent nennen; keine erfolgreiche Bildprüfung behaupten.
+- Reine Dokumentationsänderungen ohne Einfluss auf Modell oder Darstellung erfordern keinen erneuten Renderlauf.
