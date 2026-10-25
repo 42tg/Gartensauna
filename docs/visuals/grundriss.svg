@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+<rect width="900" height="650" fill="#f8f6f1"/>
+<text x="45" y="52" font-family="Arial" font-size="30" fill="#24313a" font-weight="bold">Gartensauna – Grundriss V2</text>
+<text x="45" y="85" font-family="Arial" font-size="17" fill="#667">Konzept / Variante 2,00 m Tiefe · Maße in mm</text>
+<rect x="140" y="160" width="560" height="350" fill="#f4e7d2" stroke="#875d3a" stroke-width="18"/>
+<rect x="158" y="178" width="524" height="85" fill="#b98a54"/>
+<rect x="158" y="263" width="524" height="55" fill="#d3ad7c"/>
+<text x="420" y="227" text-anchor="middle" font-family="Arial" font-size="22" fill="#30231b">Obere Bank</text>
+<text x="420" y="297" text-anchor="middle" font-family="Arial" font-size="19" fill="#30231b">Trittbank</text>
+<rect x="187" y="396" width="75" height="84" rx="7" fill="#64717a"/>
+<text x="224" y="444" text-anchor="middle" font-family="Arial" font-size="16" fill="white">Ofen</text>
+<rect x="475" y="490" width="155" height="25" fill="#f8f6f1"/>
+<path d="M475 505 V350 A155 155 0 0 1 630 505" fill="none" stroke="#178b91" stroke-width="3" stroke-dasharray="10 8"/>
+<path d="M475 505 L475 350" stroke="#178b91" stroke-width="8"/>
+<line x1="140" y1="130" x2="700" y2="130" stroke="#24313a" stroke-width="2"/><path d="M140 120v20 M700 120v20" stroke="#24313a" stroke-width="2"/>
+<text x="420" y="118" text-anchor="middle" font-family="Arial" font-size="21">3.200</text>
+<line x1="735" y1="160" x2="735" y2="510" stroke="#24313a" stroke-width="2"/><path d="M725 160h20 M725 510h20" stroke="#24313a" stroke-width="2"/>
+<text x="767" y="335" font-family="Arial" font-size="21" transform="rotate(90 767 335)" text-anchor="middle">2.000</text>
+<text x="45" y="578" font-family="Arial" font-size="18" fill="#364">Bestand: 3.200 × 1.700 · Planung: 3.200 × 2.000</text>
+<text x="45" y="607" font-family="Arial" font-size="15" fill="#667">Tür, Ofen und Bänke: schematische Platzhalter; Sicherheitsabstände noch offen.</text>
+</svg>
