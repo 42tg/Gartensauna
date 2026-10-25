@@ -8,7 +8,7 @@
 - Linker Bestandsbereich als **beheizbare Umkleide mit Sitzbank**.
 - Zugang von außen links.
 - Durchgang durch eine zweite, innenliegende Tür in den rechten Saunaflügel.
-- Rechte Seite mit Liegebänken und Glasfront zum Garten.
+- Rechte Wand des Saunaflügels mit Liegebänken; **Glasfront an der linken Längsseite des Saunaflügels**, mit Blick in den Garten (vom Saunaflügel aus gesehen).
 - Vorhandene Unterstandskonstruktion wird nicht als tragfähig vorausgesetzt; Neubau möglich.
 
 ## Geometrie und offene Interpretation
@@ -32,3 +32,6 @@ Die Tür-/Bankpositionen in der Zeichnung sind schematisch. Insbesondere eine 2.
 
 ## Prüfpunkte vor baulicher Planung
 Grundstücksgrenze/Abstandsrecht, Bestandsmauer, Fundament, Dachhöhe/Neigung, Ofen-/Glasabstände, Tragfähigkeit, Feuchteschutz, Lüftung und Elektroinstallation. Es liegt kein fachlicher Nachweis vor.
+
+## Korrektur 25.10.2026 – Ausrichtung der Glasfront
+Die Verglasung liegt ausdrücklich **links am rechten Saunaflügel** und blickt in den Garten. Die bisherige Stirnseitenverglasung war falsch. Öffnungsmaße, Anschluss an den Umkleidebereich und endgültige Liegebankanordnung sind weiter zu prüfen.
