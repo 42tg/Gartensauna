@@ -33,3 +33,7 @@ Siehe [Messwerte](docs/measurements.md), [Anforderungen](docs/requirements.md), 
 [Alle Zeichnungen](docs/visuals/README.md) · [Parametrisches OpenSCAD-Modell](cad/sauna.scad)
 
 **Hinweis:** Das OpenSCAD-Modell ist ein neues Konzeptmodell, nicht die zuvor im Chat erwähnte FreeCAD-/STEP-Datei. Bauphysik und Konstruktion sind noch nicht freigegeben.
+
+## Vorentwurf V2
+
+[Maßgeprüfter Konzept- und Angebotsvorentwurf](docs/vorentwurf-v2.md) mit Schichttabelle, Mengengerüst, Bau- und Sicherheitsprüfpunkten. **Keine bauaufsichtliche, statische oder bauphysikalische Freigabe.**
