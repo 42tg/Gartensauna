@@ -9,6 +9,7 @@ wall = 180;              // Modellparameter, NICHT freigegebener Wandaufbau
 height = 2400;           // Annahme
 floor_thickness = 120;
 roof_thickness = 160;
+include <bench-layout.scad>
 part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
 view = "assembled";      // ["assembled","exploded"]
 offset = view == "exploded" ? 420 : 0;
@@ -37,7 +38,7 @@ module walls(){
         translate([main_width-wing_width+wall,-wing_extension+wall,-1])
             cube([wing_width-2*wall,wing_extension+main_depth-2*wall,height+2]);
         // passage from dressing room into sauna wing
-        translate([main_width-wing_width-wall-5,370,0]) cube([wall*2+10,800,2050]);
+        translate([main_width-wing_width-wall-5,sauna_door_y,0]) cube([wall*2+10,sauna_door_width,2050]);
         // outside entrance on left front (y=0)
         translate([360,-10,0]) cube([850,wall+20,2050]);
         // Full garden-facing front: floor to roof underside, entire projecting wing
@@ -51,12 +52,12 @@ module roof(){
         offset(r=80) footprint();
 }
 module upper_bench(){
-    translate([main_width-700,-wing_extension+180,920])
-        cube([510,wing_extension+850,55]);
+    translate([bench_upper_x,bench_start_y,bench_upper_z-27])
+        cube([bench_depth,bench_length,55]);
 }
 module lower_bench(){
-    translate([main_width-1080,-wing_extension+180,480])
-        cube([350,wing_extension+850,55]);
+    translate([bench_lower_x,bench_start_y,bench_lower_z-27])
+        cube([bench_depth,bench_length,55]);
 }
 module chair(){
     // Only illustrative chair: seat + backrest + legs

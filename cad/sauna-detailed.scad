@@ -73,7 +73,8 @@ module roof_boards(z,t,width){intersection(){roof_mask(z,t);union(){
         translate([-80,y,z])cube([main_width+160,width-1.5,t]);
 }}}
 module bench_slats(x,y,z,w,l){
-    for(dx=[0:85:w-1])translate([x+dx,y,z])cube([min(80,w-dx),l,28]);
+    n=ceil(w/85); gap=5; slat_w=(w-(n-1)*gap)/n;
+    for(i=[0:n-1])translate([x+i*(slat_w+gap),y,z])cube([slat_w,l,28]);
     for(dy=[0:650:l-45])translate([x,y+dy,z-50])cube([w,45,50]);
     for(dy=[0,l-60])for(dx=[0,w-45])translate([x+dx,y+dy,0])cube([45,45,z-50]);
 }
@@ -103,8 +104,8 @@ module select_part(name){
     if(name=="roof_covering")roof_mask(height+157,3);
     if(name=="roof_fascia")difference(){roof_mask(height,157);translate([0,0,height-1])
         linear_extrude(height=160)offset(r=60)footprint();}
-    if(name=="bench_upper")bench_slats(main_width-700,-wing_extension+180,947,510,2850);
-    if(name=="bench_lower")bench_slats(main_width-1080,-wing_extension+180,507,350,2850);
+    if(name=="bench_upper")bench_slats(bench_upper_x,bench_start_y,bench_upper_z,bench_depth,bench_length);
+    if(name=="bench_lower")bench_slats(bench_lower_x,bench_start_y,bench_lower_z,bench_depth,bench_length);
     if(name=="changing_chair")chair();
     if(name=="glass_front")translate([1207,-wing_extension+35,35])cube([24,wing_extension-70,height-70]);
     if(name=="glass_frame")window_frame();
@@ -119,7 +120,12 @@ function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600
     n=="floor_joists" || n=="floor_insulation" ? -350 : n=="floor_boards" ? -120 :
     n=="ceiling_boards" ? 800 : n=="roof_joists" || n=="roof_insulation" ? 1200 :
     n=="roof_deck" ? 1700 : n=="roof_covering" ? 2050 : n=="roof_fascia" ? 1500 : 0;
-if(view=="wall_detail"){
+if(part=="plan") {
+    projection(cut=false) union(){
+        walls();
+        for(n=["bench_upper","bench_lower","changing_chair","glass_frame","heater_cage","heater_mount"])select_part(n);
+    }
+}else if(view=="wall_detail"){
     for(i=[0:len(layer_names)-1])if(part==layer_names[i] || part=="detailed_all")
         translate([i*1400,0,0])layer_local(layer_names[i],1200);
 }else{
