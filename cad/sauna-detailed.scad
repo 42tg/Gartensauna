@@ -122,7 +122,8 @@ function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600
     n=="roof_deck" ? 1700 : n=="roof_covering" ? 2050 : n=="roof_fascia" ? 1500 : 0;
 if(part=="plan") {
     projection(cut=false) union(){
-        walls();
+        // Horizontal wall section through openings; omit door lintels in plan.
+        intersection(){ walls(); translate([-100,-2100,1000])cube([3400,3900,1]); }
         for(n=["bench_upper","bench_lower","changing_chair","glass_frame","heater_cage","heater_mount"])select_part(n);
     }
 }else if(view=="wall_detail"){
