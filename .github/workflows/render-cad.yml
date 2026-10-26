@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install CAD
         run: |
-          sudo apt-get update
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get install -y openscad xvfb
       - name: Export individual CAD meshes
         run: xvfb-run -a python3 scripts/export_meshes.py
@@ -37,9 +37,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
+        timeout-minutes: 4
         run: |
           sudo apt-get update
-          sudo apt-get install -y blender
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y blender
       - uses: actions/download-artifact@v4
         with:
           name: cad-meshes
