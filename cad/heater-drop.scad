@@ -5,8 +5,9 @@ heater_width = 390;
 heater_depth = 335;
 heater_height = 590;
 heater_bottom = 310; // provisional mounting height, not installation approval
-heater_x = 1800;
-heater_back_y = 1520; // provisional rear interior wall
+heater_x = 1700;
+heater_back_y = -1820; // interior of end wall beside garden glazing
+heater_rotation = 180; // face into the sauna, bracket against the end wall
 heater_wire = 6;
 // Smooth, open-topped basket, narrow foot and rounded shoulder.
 heater_profile = [[0,0.20],[0.08,0.48],[0.20,0.73],[0.35,0.92],
@@ -21,7 +22,9 @@ function drop_point(t,a) = [(heater_width/2-heater_wire/2)*drop_radius(t)*cos(a)
     (heater_depth/2-heater_wire/2)*drop_radius(t)*sin(a),
     heater_wire/2+t*(heater_height-heater_wire)];
 module heater_placement(){
-    translate([heater_x,heater_back_y-heater_depth/2,heater_bottom]) children();
+    translate([heater_x,heater_back_y,heater_bottom])
+        rotate([0,0,heater_rotation])
+            translate([0,-heater_depth/2,0]) children();
 }
 module drop_ring(t){
     p=drop_point(t,0);

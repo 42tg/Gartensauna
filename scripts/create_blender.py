@@ -174,6 +174,8 @@ report = {
     "source": manifest["source"], "variant": variant, "source_variant": source_variant, "units": "m",
     "parts": {obj.name: {"dimensions": list(obj.dimensions),
                          "mesh": obj["cad_mesh"], "hidden_in_render": obj.hide_render,
+                         "bounds_min": [min((obj.matrix_world @ Vector(c))[i] for c in obj.bound_box) for i in range(3)],
+                         "bounds_max": [max((obj.matrix_world @ Vector(c))[i] for c in obj.bound_box) for i in range(3)],
                          "cutaway_modifiers": len(obj.modifiers)} for obj in cad_objects},
     "bounds_min": list(minimum), "bounds_max": list(maximum),
 }

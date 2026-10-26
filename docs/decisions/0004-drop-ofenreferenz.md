@@ -13,7 +13,7 @@ Nutzerwunsch: Ofen ungefähr wie das verlinkte Produkt in den CAD-/Blender-Ansic
 ## Modellentscheidung und Annahmen
 Eigenes parametrisches Näherungsmodell in `cad/heater-drop.scad`, kein Hersteller-CAD und keine Fertigungszeichnung. Korbprofil, Stababstände, Halterung und Steinanordnung sind visuell angenähert. Alle drei Gruppen werden über OpenSCAD → STL nach Blender übernommen, einschließlich Cutaway und Explosion; keine nachträglich erfundene Blender-Geometrie.
 
-Vorläufig an der hinteren Innenwand, Mitte x=1800 mm, Rückkante y=1520 mm, Unterkante z=310 mm. Diese Position lässt die Glasfront frei. Der Ofen bleibt bei der Gebäude-Explosion unzerlegt an seiner Position. Die zusätzliche Ansicht `heater_detail` zeigt dieselben CAD-Meshes aus der Nähe.
+Die ursprüngliche Position an der hinteren Innenwand wurde am 2026-10-26 durch die fensternahe Position aus [ADR 0005](0005-ofen-am-fenster.md) ersetzt. Dort stehen aktuelle Maße und Abstandsprüfung. Der Ofen bleibt bei der Gebäude-Explosion unzerlegt an seiner Position. Die zusätzliche Ansicht `heater_detail` zeigt dieselben CAD-Meshes aus der Nähe.
 
 ## Offen
 Leistungsvariante, Eignung für Raumvolumen inklusive großer Glasfläche, vorgeschriebene Sicherheitsabstände, Berührungsschutz, tragfähige Wandbefestigung und Elektroplanung sind noch zu prüfen. Die gerenderte Lage ist keine bestätigte sichere Montage. Keine Behauptung einer exakt 55 kg schweren modellierten Steinfüllung. Alte V1-/V3-Konzeptmodelle bleiben historische Layoutstände; das aktive Detailmodell enthält den neuen Ofen.

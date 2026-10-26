@@ -10,6 +10,12 @@
 - Neue Entscheidungen als kurze ADR unter docs/decisions/ dokumentieren; Ungeklärtes als Issue erfassen.
 - Keine Maße aus Fotos ableiten, als seien sie vermessen worden.
 
+## Plausible Platzierung und Abstände
+- Bei Änderungen an Ofen, Bänken, Öffnungen oder Einbauten selbstständig die zugänglichen Herstellerunterlagen prüfen, Maße am aktuellen CAD kontrollieren und eine sinnvolle Position wählen.
+- Wärmeabstände zu brennbaren Bauteilen, Glas/Rahmen, Boden und Decke sowie Kollisionen, Montageorientierung und Laufwege berücksichtigen. Bei ungewählter Variante konservative verfügbare Herstellerwerte verwenden und Annahmen benennen.
+- Wesentliche geometrisch prüfbare Abstände automatisiert absichern. Nicht prüfbare Punkte konkret dokumentieren; geometrisches Bestehen nicht als umfassende Montagefreigabe darstellen.
+- Bei Ofenplanung auch Raumvolumen und Glaszuschlag auf Plausibilität prüfen. Nutzer nicht für routinemäßige sinnvolle Platzierungen um Bestätigung bitten.
+
 ## Verbindliche visuelle Präsentation
 
 - Bei Änderungen an CAD-Geometrie, Raumaufteilung, Bauteilen, Materialien oder der Darstellung die aktualisierten Ansichten erzeugen und dem Nutzer **direkt als eingebettete Bilder** präsentieren. Ein bloßer Hinweis auf einen erfolgreichen Workflow oder ein Download-Link genügt nicht.
