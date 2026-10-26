@@ -10,6 +10,11 @@ height = 2400;           // Annahme
 floor_thickness = 120;
 // roof_thickness from envelope.scad
 include <bench-layout.scad>
+// Fail before expensive exports if envelope changes consume usable space.
+assert(bench_lower_x-(main_width-wing_width+45)>=500, "Window aisle below 500 mm planning minimum");
+assert(main_depth-wall-(bench_start_y+bench_length)>=600, "Rear landing below 600 mm");
+assert(bench_upper_x-(bench_lower_x+bench_depth)>=bench_gap, "Lying surfaces overlap");
+assert(wall+20+850<=main_width-wing_width-wall/2, "Entrance intersects partition");
 part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
 view = "assembled";      // ["assembled","exploded"]
 offset = view == "exploded" ? 420 : 0;
