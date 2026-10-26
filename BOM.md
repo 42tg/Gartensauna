@@ -5,7 +5,7 @@ Noch keine freigegebene Stückliste. CAD-Geometrie und Materialentscheidungen st
 Konzept-V3: vollflächige Glasfront 2,00 × 2,40 m = 4,80 m² Brutto-Ansichtsfläche. Kein Bestellmaß; Rahmen, Teilung und Glasaufbau offen.
 
 ## Detailliertes Materialmodell
-29 CAD-Bauteilgruppen für Betonauflager, Boden, Wandlagen, Dachlagen, Bänke, Stuhl und Glasfront. Sämtliche zusätzlichen Material- und Querschnittsannahmen stehen in [detailmodell.md](docs/detailmodell.md). Keine freigegebene Bestell- oder Zuschnittliste.
+34 CAD-Bauteilgruppen für Betonauflager, Boden, Wandlagen, Dachlagen, Bänke, Stuhl und Glasfront. Sämtliche zusätzlichen Material- und Querschnittsannahmen stehen in [detailmodell.md](docs/detailmodell.md). Keine freigegebene Bestell- oder Zuschnittliste.
 
 
 ## Ofen als visuelle Referenz
@@ -13,3 +13,8 @@ Konzept-V3: vollflächige Glasfront 2,00 × 2,40 m = 4,80 m² Brutto-Ansichtsfl�
 
 ## Liegebänke (Konzeptstand 26.10.2026)
 2 × Liegebank 600 × 2100 mm, je acht gleich breite Lamellen mit sieben 5-mm-Fugen; rechnerische Lamellenbreite 70,625 mm und Dicke 28 mm. Fertigungsquerschnitte, Unterbau und Belastbarkeit noch nicht freigegeben. Layout siehe ADR 0006.
+
+
+## Hüllaufbau V3.1
+
+Wand: 19-mm-Innenholz, 20-mm-Lattung, Alu-Bahn, 100-mm-Ständer/Dämmung, Windbahn, 15-mm-Außenplatte, 30-mm-Fassadenlattung, 20-mm-Außenholz; Modellgesamtmaß 205 mm. Dach: 15-mm-Untersicht, 20-mm-Lattung, Alu, 160-mm-Dämmzone, Windbahn, 60-mm-Lüftungsreserve, 22-mm-Schalung, 3-mm-Dachhaut; insgesamt 281 mm. Materialprodukte und Mengen nicht bestellfertig; [Details](docs/construction/insulation.md).

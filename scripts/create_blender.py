@@ -67,14 +67,14 @@ if heater is not None:
 # A presentation-only cutaway. Original imported meshes remain intact in the .blend.
 # Roof and glass can be shown again; wall cuts are reversible Boolean modifiers.
 if variant == "cutaway":
-    hidden_parts = {"ceiling_boards", "roof_joists", "roof_insulation", "roof_deck",
+    hidden_parts = {"ceiling_boards", "ceiling_battens", "ceiling_vapour", "roof_wind", "roof_vent_battens", "roof_joists", "roof_insulation", "roof_deck",
                     "roof_covering", "roof_fascia", "glass_front", "glass_frame"}
-    wall_parts = {"wall_cladding", "wall_battens", "wind_barrier", "wall_studs",
+    wall_parts = {"wall_cladding", "wall_battens", "wall_sheathing", "wind_barrier", "wall_studs",
                   "wall_insulation", "vapour_barrier", "service_battens", "interior_boards"}
     # CAD footprint is in metres here. Remove only the camera-facing facades.
-    cuts = [((0, 0, -0.01), (1.201, 0.181, 2.42)),
-            ((1.199, -2.001, -0.01), (2.002, 0.182, 2.42)),
-            ((-0.001, 0, -0.01), (0.182, 1.701, 2.42))]
+    cuts = [((0, 0, -0.01), (1.201, 0.206, 2.42)),
+            ((1.199, -2.001, -0.01), (2.002, 0.207, 2.42)),
+            ((-0.001, 0, -0.01), (0.207, 1.701, 2.42))]
     cutters = []
     for index, (origin, size) in enumerate(cuts):
         bpy.ops.mesh.primitive_cube_add(size=1, location=Vector(origin)+Vector(size)*0.5)
@@ -99,9 +99,9 @@ if variant == "cutaway":
 
 # Text is a visual annotation; exported CAD meshes remain unchanged.
 if variant == "wall_detail":
-    labels = ["1  Fassade / Bretter", "2  Hinterlueftung / Lattung", "3  Winddichtung",
-              "4  Holzstaender", "5  Daemmung", "6  Alu-Dampfsperre",
-              "7  Innenlattung", "8  Saunaholz / Bretter"]
+    labels = ["1  Fassade / Bretter", "2  Hinterlueftung / Lattung", "3  Aussenplatte 15 mm", "4  Winddichtung",
+              "5  Holzstaender 100 mm", "6  Daemmung 100 mm", "7  Alu-Dampfsperre",
+              "8  Luft / Lattung 20 mm", "9  Saunaholz 19 mm"]
     for i, label in enumerate(labels):
         bpy.ops.object.text_add(location=(i*1.4, -0.06, 2.58), rotation=(radians(90), 0, 0))
         obj = bpy.context.object
@@ -182,4 +182,5 @@ report = {
 (out / f"gartensauna_{variant}.json").write_text(json.dumps(report, indent=2) + "\n")
 bpy.ops.render.render(write_still=True)
 print("Saved Blender and render for", variant)
+
 

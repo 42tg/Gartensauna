@@ -3,15 +3,29 @@
 include <sauna-v3.scad>
 include <heater-drop.scad>
 part = "detailed_all";
-// Layer depths from outside: 18 + 20 + 2 + 100 + 1 + 19 + 20 = 180 mm.
+// Shared envelope totals 205 mm. Membrane dimensions are planning allowances.
+d_vent=cladding_t;
+d_sheath=d_vent+vent_t;
+d_wind=d_sheath+sheathing_t;
+d_stud=d_wind+wind_t;
+d_vapour=d_stud+stud_t;
+d_service=d_vapour+vapour_t;
+d_lining=d_service+service_t;
+z_vapour=height+ceiling_t+ceiling_gap;
+z_insulation=z_vapour+vapour_t;
+z_wind=z_insulation+roof_insulation_t;
+z_vent=z_wind+wind_t;
+z_deck=z_vent+roof_vent_t;
+z_cover=z_deck+roof_deck_t;
 faces = [[1200,-2000,2000,0],[3200,-2000,3700,90],
          [3200,1700,3200,180],[0,1700,1700,270],[0,0,1200,0]];
-layer_names = ["wall_cladding","wall_battens","wind_barrier","wall_studs",
+layer_names = ["wall_cladding","wall_battens","wall_sheathing","wind_barrier","wall_studs",
                "wall_insulation","vapour_barrier","service_battens","interior_boards"];
 module face(f) { translate([f[0],f[1],0]) rotate([0,0,f[3]]) children(); }
 module strips(length,d,t,width=120,gap=3) {
-    for(u=[0:width:length-0.1]) translate([u,d,0])
-        cube([min(width-gap,length-u),t,height]);
+    // Horizontal boards on vertical battens keep vertical air paths continuous.
+    for(z=[0:width:height-0.1]) translate([0,d,z])
+        cube([length,t,min(width-gap,height-z)]);
 }
 module panel_frame(length,d,t) {
     for(u=[0:600:length-45]) translate([u,d,45]) cube([45,t,height-90]);
@@ -19,19 +33,20 @@ module panel_frame(length,d,t) {
     for(z=[0,height-45])translate([0,d,z])cube([length,t,45]);
 }
 module layer_local(name,length) {
-    if(name=="wall_cladding") strips(length,0,18);
+    if(name=="wall_cladding") strips(length,0,cladding_t);
     if(name=="wall_battens")
-        for(z=[150:550:height-50])translate([0,18,z])cube([length,20,45]);
-    if(name=="wind_barrier")translate([0,38,0])cube([length,2,height]);
-    if(name=="wall_studs")panel_frame(length,40,100);
+        for(u=[0:600:length-45])translate([u,d_vent,0])cube([45,vent_t,height]);
+    if(name=="wall_sheathing")translate([0,d_sheath,0])cube([length,sheathing_t,height]);
+    if(name=="wind_barrier")translate([0,d_wind,0])cube([length,wind_t,height]);
+    if(name=="wall_studs")panel_frame(length,d_stud,stud_t);
     if(name=="wall_insulation")difference(){
-        translate([0,40,0])cube([length,100,height]);
-        panel_frame(length,39,102);
+        translate([0,d_stud,0])cube([length,stud_t,height]);
+        panel_frame(length,d_stud-1,stud_t+2);
     }
-    if(name=="vapour_barrier")translate([0,140,0])cube([length,1,height]);
+    if(name=="vapour_barrier")translate([0,d_vapour,0])cube([length,vapour_t,height]);
     if(name=="service_battens")
-        for(z=[150:550:height-50])translate([0,141,z])cube([length,19,40]);
-    if(name=="interior_boards")strips(length,160,20,95,1.5);
+        for(u=[0:600:length-40])translate([u,d_service,0])cube([40,service_t,height]);
+    if(name=="interior_boards")strips(length,d_lining,lining_t,95,1.5);
 }
 module wall_layer(name) {
     intersection(){walls(); union(){for(f=faces)face(f)layer_local(name,f[2]);}}
@@ -42,13 +57,13 @@ module perimeter_mask(){
 module partition_mask(){difference(){walls();perimeter_mask();}}
 module partition_frame(){
     intersection(){partition_mask();union(){
-        for(y=[0:600:main_depth])translate([1110,y,0])cube([270,45,height]);
-        for(z=[0,height-45])translate([1110,0,z])cube([270,main_depth,45]);
+        for(y=[0:600:main_depth])translate([main_width-wing_width-wall/2,y,0])cube([wall*1.5,45,height]);
+        for(z=[0,height-45])translate([main_width-wing_width-wall/2,0,z])cube([wall*1.5,main_depth,45]);
     }}
 }
 module partition_boards(){
     intersection(){partition_mask();union(){
-        for(x=[1110,1360])for(y=[0:95:main_depth])
+        for(x=[main_width-wing_width-wall/2,main_width-wing_width+wall-20])for(y=[0:95:main_depth])
             translate([x,y,0])cube([20,93.5,height]);
     }}
 }
@@ -64,10 +79,10 @@ module floor_boards(){intersection(){
     union(){for(x=[0:120:main_width])translate([x,-wing_extension,-20])cube([118,3700,20]);}
 }}
 module roof_mask(z,t){translate([0,0,z])linear_extrude(height=t)offset(r=80)footprint();}
-module roof_joists(){intersection(){roof_mask(height+15,120);union(){
-    for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,height+15])cube([60,3860,120]);
+module roof_joists(){intersection(){roof_mask(z_insulation,roof_insulation_t);union(){
+    for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_insulation])cube([60,3860,roof_insulation_t]);
 }}}
-module roof_insulation(){difference(){roof_mask(height+15,120);roof_joists();}}
+module roof_insulation(){difference(){roof_mask(z_insulation,roof_insulation_t);roof_joists();}}
 module roof_boards(z,t,width){intersection(){roof_mask(z,t);union(){
     for(y=[-wing_extension-80:width:main_depth+80])
         translate([-80,y,z])cube([main_width+160,width-1.5,t]);
@@ -97,13 +112,19 @@ module select_part(name){
     for(n=layer_names)if(name==n)wall_layer(n);
     if(name=="partition_frame")partition_frame();
     if(name=="partition_boards")partition_boards();
-    if(name=="ceiling_boards")roof_boards(height,15,95);
+    if(name=="ceiling_boards")roof_boards(height,ceiling_t,95);
+    if(name=="ceiling_battens")intersection(){roof_mask(height+ceiling_t,ceiling_gap); union(){
+        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,height+ceiling_t])cube([45,3860,ceiling_gap]);}}
+    if(name=="ceiling_vapour")roof_mask(z_vapour,vapour_t);
+    if(name=="roof_wind")roof_mask(z_wind,wind_t);
+    if(name=="roof_vent_battens")intersection(){roof_mask(z_vent,roof_vent_t); union(){
+        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_vent])cube([60,3860,roof_vent_t]);}}
     if(name=="roof_joists")roof_joists();
     if(name=="roof_insulation")roof_insulation();
-    if(name=="roof_deck")roof_boards(height+135,22,140);
-    if(name=="roof_covering")roof_mask(height+157,3);
-    if(name=="roof_fascia")difference(){roof_mask(height,157);translate([0,0,height-1])
-        linear_extrude(height=160)offset(r=60)footprint();}
+    if(name=="roof_deck")roof_boards(z_deck,roof_deck_t,140);
+    if(name=="roof_covering")roof_mask(z_cover,roof_cover_t);
+    if(name=="roof_fascia")difference(){roof_mask(height,roof_thickness-roof_cover_t);translate([0,0,height-1])
+        linear_extrude(height=roof_thickness+2)offset(r=60)footprint();}
     if(name=="bench_upper")bench_slats(bench_upper_x,bench_start_y,bench_upper_z,bench_depth,bench_length);
     if(name=="bench_lower")bench_slats(bench_lower_x,bench_start_y,bench_lower_z,bench_depth,bench_length);
     if(name=="changing_chair")chair();
@@ -111,14 +132,14 @@ module select_part(name){
     if(name=="glass_frame")window_frame();
 }
 names = ["concrete_piers","floor_underside","floor_joists","floor_insulation","floor_boards",
-         "wall_cladding","wall_battens","wind_barrier","wall_studs","wall_insulation",
+         "wall_cladding","wall_battens","wall_sheathing","wind_barrier","wall_studs","wall_insulation",
          "vapour_barrier","service_battens","interior_boards","partition_frame","partition_boards",
-         "ceiling_boards","roof_joists","roof_insulation","roof_deck","roof_covering","roof_fascia",
+         "ceiling_boards","ceiling_battens","ceiling_vapour","roof_wind","roof_vent_battens","roof_joists","roof_insulation","roof_deck","roof_covering","roof_fascia",
          "bench_upper","bench_lower","changing_chair","glass_front","glass_frame",
          "heater_cage","heater_mount","heater_stones"];
 function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600 :
     n=="floor_joists" || n=="floor_insulation" ? -350 : n=="floor_boards" ? -120 :
-    n=="ceiling_boards" ? 800 : n=="roof_joists" || n=="roof_insulation" ? 1200 :
+    n=="ceiling_boards" ? 800 : n=="ceiling_battens" || n=="ceiling_vapour" ? 1000 : n=="roof_wind" || n=="roof_vent_battens" ? 1450 : n=="roof_joists" || n=="roof_insulation" ? 1200 :
     n=="roof_deck" ? 1700 : n=="roof_covering" ? 2050 : n=="roof_fascia" ? 1500 : 0;
 if(part=="plan") {
     projection(cut=false) union(){
@@ -133,4 +154,5 @@ if(part=="plan") {
     for(n=names)if(part==n || part=="detailed_all")
         translate([0,0,view=="exploded" ? explode_z(n) : 0])select_part(n);
 }
+
 

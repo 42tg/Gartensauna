@@ -2,6 +2,7 @@
 import bpy
 
 def material_for(part):
+    part = {"ceiling_vapour": "vapour_barrier", "roof_wind": "wind_barrier"}.get(part, part)
     material = bpy.data.materials.new(part)
     material.use_nodes = True
     nodes, links = material.node_tree.nodes, material.node_tree.links
@@ -72,4 +73,5 @@ def material_for(part):
     links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
     material.diffuse_color = high
     return material
+
 

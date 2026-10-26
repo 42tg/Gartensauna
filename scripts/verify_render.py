@@ -12,11 +12,11 @@ png = stem.with_suffix('.png').read_bytes()
 assert png[:8] == b'\x89PNG\r\n\x1a\n'
 assert struct.unpack('>II', png[16:24]) == (1600, 1100)
 report = json.loads(stem.with_suffix('.json').read_text())
-assert len(report['parts']) == (8 if variant == 'wall_detail' else 29)
+assert len(report['parts']) == (9 if variant == 'wall_detail' else 34)
 if variant == 'cutaway':
     assert report['source_variant'] == 'assembled'
-    assert sum(p['hidden_in_render'] for p in report['parts'].values()) == 8
-    assert sum(p['cutaway_modifiers'] for p in report['parts'].values()) == 24
+    assert sum(p['hidden_in_render'] for p in report['parts'].values()) == 12
+    assert sum(p['cutaway_modifiers'] for p in report['parts'].values()) == 27
     for name in ('bench_upper', 'bench_lower', 'changing_chair', 'floor_boards'):
         assert not report['parts'][name]['hidden_in_render']
 if variant != 'wall_detail':
@@ -49,8 +49,8 @@ if variant == 'assembled':
         assert gap >= minimum - 0.5, (name, gap, minimum)
     # Bracket faces the window-side end wall; no accidental mirror/old placement.
     mount_lo = parts['heater_mount']['bounds_min']
-    assert abs(mount_lo[1] - (-1.820)) < 0.001
-    assert -1.821 < lo[1] < -1.819 and -1.486 < hi[1] < -1.484
+    assert abs(mount_lo[1] - (-1.795)) < 0.001
+    assert -1.796 < lo[1] < -1.794 and -1.461 < hi[1] < -1.459
     assert abs((lo[0] + hi[0]) / 2 - 1.700) < 0.001
     upper, lower = parts['bench_upper'], parts['bench_lower']
     for bench in (upper, lower):
@@ -61,14 +61,15 @@ if variant == 'assembled':
     exposed_gap = upper['bounds_min'][0]-lower['bounds_max'][0]
     assert exposed_gap >= 0.019, 'Lower lying surface must not be covered by upper bench'
     window_aisle = lower['bounds_min'][0]-parts['glass_frame']['bounds_max'][0]
-    assert window_aisle >= 0.544
+    assert window_aisle >= 0.519
     # Entry landing and the rear portion of the 650..1450 doorway remain clear.
-    assert 1.520-lower['bounds_max'][1] >= 0.669
+    assert 1.495-lower['bounds_max'][1] >= 0.644
     assert 1.450-lower['bounds_max'][1] >= 0.599
     report['bench_layout_mm'] = {'depth_each': 600, 'length_each': 2100,
-        'window_aisle': window_aisle*1000, 'rear_landing': (1.520-lower['bounds_max'][1])*1000,
+        'window_aisle': window_aisle*1000, 'rear_landing': (1.495-lower['bounds_max'][1])*1000,
         'clear_entry_span': (1.450-lower['bounds_max'][1])*1000}
     report['heater_clearances_mm'] = clearances
     stem.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Heater clearances (mm):', clearances)
 print(variant, 'verified:', len(report['parts']), 'CAD groups, Blender file, 1600x1100 PNG')
+

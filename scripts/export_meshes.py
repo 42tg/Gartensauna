@@ -10,12 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "cad" / "sauna-detailed.scad"
 DEST = ROOT / "build" / "meshes"
 PARTS = ["concrete_piers", "floor_underside", "floor_joists", "floor_insulation", "floor_boards",
-         "wall_cladding", "wall_battens", "wind_barrier", "wall_studs", "wall_insulation",
+         "wall_cladding", "wall_battens", "wall_sheathing", "wind_barrier", "wall_studs", "wall_insulation",
          "vapour_barrier", "service_battens", "interior_boards", "partition_frame", "partition_boards",
-         "ceiling_boards", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
+         "ceiling_boards", "ceiling_battens", "ceiling_vapour", "roof_wind", "roof_vent_battens", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
          "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame",
          "heater_cage", "heater_mount", "heater_stones"]
-WALL_PARTS = PARTS[5:13]
+WALL_PARTS = PARTS[5:14]
 VARIANTS = ["assembled", "exploded", "wall_detail"]
 
 def main():
@@ -36,4 +36,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

@@ -19,11 +19,11 @@
 | Zusätzliche Ausdehnung rechter Flügel | 2.000 mm | Nutzerangabe; Richtung im Gelände noch bestätigen |
 | Breite rechter Flügel | 2.000 mm | **Entwurfsannahme** |
 | Höhe | noch offen | Neubau |
-| Wanddicke | 180 mm in CAD-V3 | **bloßer Modellparameter**, keine geprüfte Schichtfolge |
+| Wanddicke | 205 mm in CAD-V3.1 | Planungsaufbau, siehe Hüllaufbau; nicht baufreigegeben |
 
 Bei dieser Interpretation beträgt die Gesamtausdehnung in der Tiefe **3.700 mm** (1.700 + 2.000). Der rechte Flügel belegt 2.000 mm der 3.200 mm Breite. Der linke, verbleibende Teil ist außen 1.200 mm breit: **für einen komfortablen beheizten Sitz-/Umkleidebereich wahrscheinlich zu schmal**. Deshalb ist diese V3 ein erster geometrischer Ansatz, **keine optimierte Aufteilung**. Wir sollten die Flügelbreite und die Lage der Trennwand in V3.1 optimieren; eventuell muss die Gesamtbreite wachsen.
 
-Die Tür-/Bankpositionen in der Zeichnung sind schematisch. Insbesondere eine 2.000-mm-Liegefläche und die freie Bewegungsfläche sind noch nicht nachgewiesen.
+Die Tür-/Bankpositionen in der Zeichnung sind schematisch. Aktuell sind zwei 600 × 2100-mm-Liegeflächen geometrisch nachgewiesen; Bewegungsflächen siehe V3.1.
 
 ## Dateien
 - [Bemaßtes schematisches Layout](visuals/grundriss-v3.svg)
@@ -41,3 +41,8 @@ Ein Stuhl genügt, optional zwei. Die bisherige durchgehende Sitzbank ist nicht 
 
 ## Vollflächige Glasfront – 25.10.2026
 Die gesamte gartenseitige Front des vorspringenden Saunaflügels wird verglast: keine geschlossene Brüstung und kein geschlossener Wandstreifen über dem Fenster. Im aktuellen Konzept sind das 2.000 mm Breite × 2.400 mm Höhe (Höhe weiterhin Entwurfsannahme), von Oberkante Boden bis Unterkante Dach. Rahmen, Tragwerk und Glasaufteilung sind noch nicht konstruiert; 40 mm im CAD sind ein Platzhalter für den Glasaufbau.
+
+
+## Konkretisierung V3.1 – 26.10.2026
+
+Maßgebend ist der [aktuelle Hüllaufbau](construction/insulation.md): 205 mm Wand, 281 mm Dach, 160 mm Dachdämmung. Innenhöhe 2400 mm bleibt erhalten. Gang am Glas 520 mm, Standfläche hinten 645 mm. Umkleide lichte 892,5 × 1290 mm; weiterhin eng. Außenmaße unverändert. [Aktuelles Detailmodell](detailmodell.md).

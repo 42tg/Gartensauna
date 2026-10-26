@@ -5,10 +5,10 @@ main_width = 3200;
 main_depth = 1700;
 wing_width = 2000;       // Annahme, zu bestätigen
 wing_extension = 2000;   // Nutzerangabe als zusätzlicher Schenkel interpretiert
-wall = 180;              // Modellparameter, NICHT freigegebener Wandaufbau
+include <envelope.scad>
 height = 2400;           // Annahme
 floor_thickness = 120;
-roof_thickness = 160;
+// roof_thickness from envelope.scad
 include <bench-layout.scad>
 part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
 view = "assembled";      // ["assembled","exploded"]
@@ -40,7 +40,7 @@ module walls(){
         // passage from dressing room into sauna wing
         translate([main_width-wing_width-wall-5,sauna_door_y,0]) cube([wall*2+10,sauna_door_width,2050]);
         // outside entrance on left front (y=0)
-        translate([360,-10,0]) cube([850,wall+20,2050]);
+        translate([wall+20,-10,0]) cube([850,wall+20,2050]);
         // Full garden-facing front: floor to roof underside, entire projecting wing
         translate([main_width-wing_width-1,-wing_extension-1,-1])
             cube([wall+2,wing_extension+1,height+2]);
@@ -81,3 +81,4 @@ if(part=="all" || part=="upper_bench") color("wheat") upper_bench();
 if(part=="all" || part=="lower_bench") color("peru") lower_bench();
 if(part=="all" || part=="chair") color("saddlebrown") chair();
 if(part=="all" || part=="glazing") color("lightblue",0.5) glazing();
+

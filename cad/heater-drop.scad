@@ -6,7 +6,7 @@ heater_depth = 335;
 heater_height = 590;
 heater_bottom = 310; // provisional mounting height, not installation approval
 heater_x = 1700;
-heater_back_y = -1820; // interior of end wall beside garden glazing
+heater_back_y = -wing_extension+wall; // interior of end wall beside garden glazing
 heater_rotation = 180; // face into the sauna, bracket against the end wall
 heater_wire = 6;
 // Smooth, open-topped basket, narrow foot and rounded shoulder.
@@ -59,3 +59,4 @@ module heater_part(name){heater_placement(){
     if(name=="heater_mount")drop_mount();
     if(name=="heater_stones")drop_stones();
 }}
+
