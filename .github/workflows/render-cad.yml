@@ -24,6 +24,8 @@ jobs:
           name: cad-meshes
           path: build/meshes/
           if-no-files-found: error
+          # Job handoff; meshes are also included in the final download.
+          retention-days: 7
   render:
     needs: export
     runs-on: ubuntu-24.04
@@ -52,6 +54,8 @@ jobs:
           name: render-${{ matrix.view }}
           path: build/blender/
           if-no-files-found: error
+          # Keep intermediate views briefly for diagnostics and failed package retries.
+          retention-days: 7
   package:
     needs: render
     runs-on: ubuntu-24.04
@@ -71,4 +75,5 @@ jobs:
           name: gartensauna-cad-blender
           path: build/
           if-no-files-found: error
-
+          # Preserve the complete user-facing CAD/Blender download.
+          retention-days: 90
