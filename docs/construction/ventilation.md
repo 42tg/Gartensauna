@@ -61,3 +61,7 @@ Bei 80 m³/h: geplante Position Faktor ca. **0,758**, Ø **7,11 min**, P95 **10,
 Gitterwechsel 12→8 cm: ca. **0,2 %** Faktoränderung. Mischungsvariation: Faktor **0,689–0,856**. Diese Modellunsicherheit ist deutlich größer als die beobachtete Gitterabweichung. Ausgangs-Luftvolumen ca. 12,52 m³ (voxelisierte freie Luft); 80 m³/h entsprechen ca. 6,39 Luftwechseln/h. Das Raumvolumen ohne Einbauten ist größer und darf für die Ofenauslegung nicht durch das simulierte Luftvolumen ersetzt werden.
 
 Für eine thermische Optimierung: tatsächliche Heizleistung/Steintemperatur, Zulufttemperatur, Glas-/Wandwärmeverluste, Ventilatorbetrieb und Nutzung definieren; anschließend thermische CFD mit Auftrieb und Gitter-/Randbedingungssensitivität. Nach Bau reale Luftmenge, Temperaturverteilung und Luftqualität mit für die Bedingungen geeigneter Messtechnik überprüfen.
+
+## Thermische Erweiterung
+
+Seit 03.11.2026 ergänzt eine [gekoppelte OpenFOAM-CFD](thermal-cfd.md) dieses isotherme Screening. Sie berechnet temperaturabhängige Dichte, Wärmeauftrieb, Turbulenz, Hüllverluste und Oberflächenstrahlung. Die thermischen Szenarien haben eigene Bilanz- und Stabilitätsprüfungen. Die oben dokumentierten Potentialmodell-Zahlen bleiben Ergebnisse des alten vereinfachten Modells und werden nicht als thermische Ergebnisse umgedeutet.

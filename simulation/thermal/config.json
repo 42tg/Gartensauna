@@ -1,0 +1,57 @@
+{
+  "model": "openfoam1912-ideal-gas-rans-fvdom-v1",
+  "base": {
+    "grid_m": 0.16,
+    "inlet_flow_m3h": 80,
+    "supply_temperature_C": 10,
+    "outside_temperature_C": 10,
+    "initial_temperature_C": 65,
+    "heater_power_W": 3000,
+    "wall_conductance_W_m2K": 0.35,
+    "glass_conductance_W_m2K": 2.5,
+    "roof_conductance_W_m2K": 0.22,
+    "floor_conductance_W_m2K": 0.5,
+    "gravity_m_s2": 9.81,
+    "radiation": true,
+    "radiation_nPhi": 2,
+    "radiation_nTheta": 2,
+    "iterations": 4000,
+    "exhaust": "exhaust",
+    "ramp_iterations": 500,
+    "surface_emissivity": 0.9
+  },
+  "cases": [
+    {
+      "name": "thermal_planned"
+    },
+    {
+      "name": "thermal_no_gravity",
+      "gravity_m_s2": 0
+    },
+    {
+      "name": "thermal_near_heater",
+      "exhaust_y_m": -1.1
+    },
+    {
+      "name": "thermal_high_exhaust",
+      "exhaust": "drying"
+    },
+    {
+      "name": "thermal_fine",
+      "grid_m": 0.11
+    },
+    {
+      "name": "thermal_high_glass_loss",
+      "glass_conductance_W_m2K": 5.8
+    },
+    {
+      "name": "thermal_high_power",
+      "heater_power_W": 6000
+    },
+    {
+      "name": "thermal_radiation_fine",
+      "radiation_nPhi": 3,
+      "radiation_nTheta": 3
+    }
+  ]
+}

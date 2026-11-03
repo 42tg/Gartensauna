@@ -49,3 +49,7 @@ Siehe [Messwerte](docs/measurements.md), [Anforderungen](docs/requirements.md), 
 ## Lüftung und Strömungsvergleich
 
 [Öffnungen, Modellannahmen und Kennzahlen](docs/construction/ventilation.md): CAD mit Zuluft, Abluft und Trocknungsklappe; automatisierter 3-D-Luftaltervergleich mit Varianten und Sensitivitätsprüfung. **Isothermes Orientierungsmodell, keine thermische Sauna-CFD.** Ergebnisse im Workflow [Ventilation comparison](https://github.com/42tg/Gartensauna/actions/workflows/ventilation.yml).
+
+## Thermische CFD mit Wärmeauftrieb
+
+[Modell, Prüfungen und Reproduktion](docs/construction/thermal-cfd.md): OpenFOAM berechnet Luftdichte, Temperatur, Auftrieb, Turbulenz und Oberflächenstrahlung gekoppelt. Acht Szenarien einschließlich Kontrollfall ohne Schwerkraft. **Nur numerisch qualifizierte Fälle vergleichen; Randbedingungen sind noch Annahmen.** [Workflow und Ergebnisse](https://github.com/42tg/Gartensauna/actions/workflows/thermal-ventilation.yml).
