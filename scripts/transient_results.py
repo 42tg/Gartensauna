@@ -71,6 +71,7 @@ def summarize(path,start=100.,end=None):
     dirs=sorted([p for p in path.iterdir() if p.is_dir() and p.name.replace('.','',1).isdigit()],key=lambda p:float(p.name));times=np.array([float(p.name) for p in dirs]);end=float(times[-1]) if end is None else end
     if len(dirs)<3 or start>=end:raise ValueError('Insufficient physical-time snapshots')
     allT=[];allU=[];allAge=[];allAgeDelta=[];rv=[];divs=[];rows=[];age=None;age0=None;prev_rv=None
+    coarse_age=None;coarse_rv=None;coarse_t=None;coarse_times=[];coarse_ages=[]
     for i,d in enumerate(dirs):
         a=sample(d,meta,m);allT.append(a['T']);allU.append(a['U']);rv.append(a['rhoV']);divs.append(a['div'])
         if age is None:
@@ -80,9 +81,17 @@ def summarize(path,start=100.,end=None):
             age=spsolve(B,a['rhoV']+prev_rv*age/dt);age0=spsolve(B,a['rhoV']+prev_rv*age0/dt)
         if not np.isfinite(age).all() or age.min()<0:raise ValueError('Nonphysical age')
         allAge.append(age.copy());allAgeDelta.append(age-age0);prev_rv=a['rhoV']
+        if i==0:
+            coarse_age=age.copy();coarse_rv=a['rhoV'];coarse_t=times[i];coarse_times.append(times[i]);coarse_ages.append(age.copy())
+        elif i%2==0 or i==len(dirs)-1:
+            coarse_dt=times[i]-coarse_t;coarse_age=spsolve(a['A']+diags(a['rhoV']/coarse_dt),a['rhoV']+coarse_rv*coarse_age/coarse_dt)
+            coarse_rv=a['rhoV'];coarse_t=times[i];coarse_times.append(times[i]);coarse_ages.append(coarse_age.copy())
         row={'time_s':times[i],**{k:a[k] for k in ('heat_out','mass_out','inmass','stored_energy','radiation','bc_error','minT','maxT')}}
         for k,sel in reg.items():row[k+'_T_C']=float(np.average(a['T'][sel],weights=v[sel])-273.15);row[k+'_speed']=float(np.average(np.linalg.norm(a['U'][sel],axis=1),weights=v[sel]))
-        row['age_min']=float(np.average(age[occupied],weights=v[occupied])/60);rows.append(row)
+        row['ventilation_heat_W']=a['patch_heat']['supply']+a['patch_heat']['exhaust']
+        row['age_min']=float(np.average(age[occupied],weights=v[occupied])/60)
+        for k,sel in reg.items():row[k+'_age_min']=float(np.average(age[sel],weights=v[sel])/60)
+        rows.append(row)
     allT=np.array(allT);allU=np.array(allU);rv=np.array(rv);divs=np.array(divs);allAge=np.array(allAge);allAgeDelta=np.array(allAgeDelta)
     mean=lambda a:time_mean(times,a,start,end)
     T=mean(allT);U=mean(allU);speed=mean(np.linalg.norm(allU,axis=2));age=mean(allAge);mid=(start+end)/2
@@ -97,7 +106,7 @@ def summarize(path,start=100.,end=None):
     heat=float(mean([r['heat_out'] for r in rows]));res=(power-heat-storage)/power
     use=(times>=start)&(times<=end);age_sensitivity=float(np.average(mean(allAgeDelta)[occupied],weights=v[occupied])/np.average(age[occupied],weights=v[occupied]))
     stats={'solver':'buoyantPimpleFoam','case':cfg['name'],'window_start_s':start,'window_end_s':end,'window_duration_s':end-start,'samples_total':len(times),'sample_interval_max_s':float(np.diff(times).max()),'cells':meta['n_cells'],
-        'energy_balance_relative':res,'mean_heat_out_W':heat,'energy_storage_rate_W':float(storage),'mean_mass_in_kg_s':mdot,
+        'energy_balance_relative':res,'mean_ventilation_heat_W':float(mean([r['ventilation_heat_W'] for r in rows])),'mean_heat_out_W':heat,'energy_storage_rate_W':float(storage),'mean_mass_in_kg_s':mdot,
         'mass_balance_relative':float(abs(local.sum())/mdot),'local_mass_balance_relative':float(np.abs(local).sum()/mdot),
         'radiation_closure_relative':float(mean(np.abs([r['radiation'] for r in rows]))/power),
         'boundary_heat_balance_relative':float(mean([r['bc_error'] for r in rows])/power),
@@ -106,9 +115,17 @@ def summarize(path,start=100.,end=None):
         'occupied_mean_age_min':float(np.average(age[occupied],weights=v[occupied])/60),'age_initial_condition_sensitivity_relative':age_sensitivity,
         'nominal_mass_residence_min':float(mean(rv.sum(axis=1))/mdot/60),'regions':{},'time_step_sensitivity_verified':False}
     stats['occupied_age_factor']=stats['occupied_mean_age_min']/stats['nominal_mass_residence_min']
+    stats['occupied_p95_mean_age_min']=weighted_percentile(age[occupied],v[occupied],95)/60
+    stats['occupied_p95_mean_speed_m_s']=weighted_percentile(speed[occupied],v[occupied],95)
+    coarse_mean=time_mean(coarse_times,np.array(coarse_ages),start,end)
+    stats['age_sampling_sensitivity_relative']=float(np.average(abs(coarse_mean[occupied]-age[occupied]),weights=v[occupied])/np.average(age[occupied],weights=v[occupied]))
+    stats['age_window_drift_relative']=float(abs(time_mean(times,[r['age_min'] for r in rows],start,mid)-time_mean(times,[r['age_min'] for r in rows],mid,end))/stats['occupied_mean_age_min'])
     for k,sel in reg.items():
         stats['regions'][k]={'mean_temperature_C':float(np.average(T[sel],weights=v[sel])-273.15),'mean_speed_m_s':float(np.average(speed[sel],weights=v[sel])),
             'mean_temperature_spatial_p10_C':weighted_percentile(T[sel]-273.15,v[sel],10),'mean_temperature_spatial_p90_C':weighted_percentile(T[sel]-273.15,v[sel],90),
+            'mean_age_min':float(np.average(age[sel],weights=v[sel])/60),'age_factor':float(np.average(age[sel],weights=v[sel])/60/stats['nominal_mass_residence_min']),
+            'age_initial_condition_sensitivity_relative':float(np.average(mean(allAgeDelta)[sel],weights=v[sel])/np.average(age[sel],weights=v[sel])),
+            'age_window_drift_relative':float(abs(time_mean(times,[r[k+'_age_min'] for r in rows],start,mid)-time_mean(times,[r[k+'_age_min'] for r in rows],mid,end))/(np.average(age[sel],weights=v[sel])/60)),
             'split_temperature_difference_K':float(abs(time_mean(times,[r[k+'_T_C'] for r in rows],start,mid)-time_mean(times,[r[k+'_T_C'] for r in rows],mid,end))),
             'split_speed_difference_m_s':float(abs(time_mean(times,[r[k+'_speed'] for r in rows],start,mid)-time_mean(times,[r[k+'_speed'] for r in rows],mid,end)))}
     # Sampling sensitivity: recompute time means from every second stored field.
@@ -129,7 +146,12 @@ def summarize(path,start=100.,end=None):
     stats['initial_pre_adjustment_Co_max']=max(initial_co) if initial_co else None
     if not dt or not co:failures.append('missing solver time-step diagnostics')
     elif max(co)>1.2*info['max_Co']:failures.append('completed-step Courant exceeds configured limit by >20%')
-    stats['thermal_window_pass']=not failures;stats['quality_failures']=failures;stats['age_initialization_pass']=age_sensitivity<=.05
+    stats['thermal_window_pass']=not failures;stats['quality_failures']=failures;stats['age_initialization_pass']=max([age_sensitivity]+[r['age_initial_condition_sensitivity_relative'] for r in stats['regions'].values()])<=.05
+    stats['age_quality_failures']=[]
+    if not stats['age_initialization_pass']:stats['age_quality_failures'].append('initial age fields differ by >5%')
+    if max([stats['age_window_drift_relative']]+[r['age_window_drift_relative'] for r in stats['regions'].values()])>.05:stats['age_quality_failures'].append('age mean window drift >5%')
+    if stats['age_sampling_sensitivity_relative']>.03:stats['age_quality_failures'].append('age transport sample-step sensitivity >3%')
+    stats['age_quality_pass']=not stats['age_quality_failures']
     # No experimental validation or time-step independence is implied by this flag.
     (path/'transient_results.json').write_text(json.dumps(stats,indent=2)+'\n');(path/'time_series.json').write_text(json.dumps(rows,indent=2)+'\n')
     np.savez_compressed(path/'mean_fields.npz',T_C=T-273.15,U=U,mean_speed=speed,age_s=age,centers=xyz,volumes=v)

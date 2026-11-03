@@ -1,0 +1,77 @@
+{
+  "id": "ventilation-positions-2026-11-03",
+  "source_model": "dry-ideal-gas-URANS-fvDOM-closed-heater-v1",
+  "reference": "A_current",
+  "seed_iterations": 1000,
+  "end_time_s": 3600,
+  "mean_start_s": 3000,
+  "sample_s": 5,
+  "ranks": 2,
+  "max_Co": 5,
+  "max_delta_t_s": 0.05,
+  "max_finalists": 2,
+  "ranking_margin_relative": 0.1,
+  "temperature_tradeoff_K": 2.0,
+  "speed_tradeoff_m_s": 0.02,
+  "variants": [
+    {
+      "name": "A_current",
+      "label": "A · bisherige Anordnung",
+      "supply_center_z_m": 1.12,
+      "exhaust_center_y_m": 0.65,
+      "exhaust_center_z_m": 0.3
+    },
+    {
+      "name": "B_far_exhaust",
+      "label": "B · Abluft weiter hinten",
+      "supply_center_z_m": 1.12,
+      "exhaust_center_y_m": 1.2,
+      "exhaust_center_z_m": 0.3
+    },
+    {
+      "name": "C_raised_exhaust",
+      "label": "C · Abluft höher",
+      "supply_center_z_m": 1.12,
+      "exhaust_center_y_m": 0.65,
+      "exhaust_center_z_m": 0.5
+    },
+    {
+      "name": "D_high_supply",
+      "label": "D · Zuluft höher",
+      "supply_center_z_m": 1.5,
+      "exhaust_center_y_m": 0.65,
+      "exhaust_center_z_m": 0.3
+    },
+    {
+      "name": "E_low_supply",
+      "label": "E · Zuluft knapp über Ofen",
+      "supply_center_z_m": 0.98,
+      "exhaust_center_y_m": 0.65,
+      "exhaust_center_z_m": 0.3
+    }
+  ],
+  "validation_scenarios": [
+    {
+      "name": "fine_mesh",
+      "grid_m": 0.12
+    },
+    {
+      "name": "half_step",
+      "max_Co": 2.5,
+      "max_delta_t_s": 0.025
+    },
+    {
+      "name": "flow_60",
+      "inlet_flow_m3h": 60
+    },
+    {
+      "name": "flow_100",
+      "inlet_flow_m3h": 100
+    },
+    {
+      "name": "heater_partition",
+      "heater_emissivity": 0.5
+    }
+  ],
+  "ranking_scope": "Nominal freshness ranking among five cases; finalist robustness only among validated finalists. No validated full ordering of eliminated candidates and no experimental validation."
+}

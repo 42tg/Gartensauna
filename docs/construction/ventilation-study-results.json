@@ -1,0 +1,39 @@
+{
+  "study_id": "ventilation-positions-2026-11-03",
+  "nominal_freshness_order": [],
+  "nominal_tiers": [],
+  "relative_comparison_bands": {},
+  "finalists": [],
+  "missing": [
+    [
+      "A_current",
+      "nominal"
+    ],
+    [
+      "B_far_exhaust",
+      "nominal"
+    ],
+    [
+      "C_raised_exhaust",
+      "nominal"
+    ],
+    [
+      "D_high_supply",
+      "nominal"
+    ],
+    [
+      "E_low_supply",
+      "nominal"
+    ]
+  ],
+  "unqualified": [],
+  "complete": false,
+  "robust_finalist_winner": null,
+  "finalist_checks": [],
+  "scope": "Nominal freshness ranking among five cases; finalist robustness only among validated finalists. No validated full ordering of eliminated candidates and no experimental validation.",
+  "uncertainty_note": "Comparison bands are engineering separation thresholds plus observed grid/time sensitivity, not statistical confidence intervals.",
+  "physical_validation": false,
+  "implementation_sha256": "097c06a43e81daa9a9548e7b2c1be62b5842745ba2d15077a68f0b4ff0e9c6e3",
+  "results": {},
+  "run_url": ""
+}

@@ -1,0 +1,213 @@
+name: Ventilation position study
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'simulation/ventilation-study.json'
+      - '.github/workflows/ventilation-study.yml'
+permissions:
+  contents: read
+concurrency:
+  group: ventilation-position-study
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      variants: ${{ steps.matrix.outputs.variants }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - name: Install pinned solver and build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfoam=1912.200626-2build3 libopenfoam=1912.200626-2build3 openscad build-essential flex bison curl
+          pip install -r simulation/requirements.txt
+      - name: Build boundary and verify geometry and ranking gates
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          bash scripts/build_thermal_boundary.sh
+          g++ -std=c++11 tests/test_thermal_relaxation.cpp -o build/test-thermal-relaxation
+          build/test-thermal-relaxation
+          python -m unittest discover -s tests -v
+          python scripts/study_report.py --layout --out build/study-layout
+      - id: matrix
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          s=json.load(open('simulation/ventilation-study.json'))
+          print('variants='+json.dumps([v['name'] for v in s['variants']]))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: study-support
+          path: |
+            build/thermal-lib/
+            build/study-layout/
+          retention-days: 3
+  nominal:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        variant: ${{ fromJSON(needs.prepare.outputs.variants) }}
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfoam=1912.200626-2build3 libopenfoam=1912.200626-2build3 openmpi-bin openscad
+          pip install -r simulation/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: study-support
+          path: build
+      - name: Run full physical hour and audit last ten minutes
+        run: python scripts/study_run.py '${{ matrix.variant }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: study-result-${{ matrix.variant }}-nominal
+          path: build/study-artifacts/
+          retention-days: 3
+  select:
+    needs: [prepare, nominal]
+    if: always() && needs.prepare.result == 'success'
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.selection.outputs.matrix }}
+      has_finalists: ${{ steps.selection.outputs.has_finalists }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r simulation/requirements.txt
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: study-result-*
+          path: build/inputs
+      - id: selection
+        run: |
+          mkdir -p build/inputs
+          python scripts/study_report.py --root build/inputs --select > build/selection.json
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          m=json.load(open('build/selection.json'))
+          print('matrix='+json.dumps(m))
+          print('has_finalists='+str(bool(m['include'])).lower())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: study-selection
+          path: build/selection.json
+          retention-days: 3
+  validate:
+    needs: [prepare, select]
+    if: needs.select.outputs.has_finalists == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix: ${{ fromJSON(needs.select.outputs.matrix) }}
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfoam=1912.200626-2build3 libopenfoam=1912.200626-2build3 openmpi-bin openscad
+          pip install -r simulation/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: study-support
+          path: build
+      - name: Run independent sensitivity case
+        run: python scripts/study_run.py '${{ matrix.variant }}' --scenario '${{ matrix.scenario }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: study-result-${{ matrix.variant }}-${{ matrix.scenario }}
+          path: build/study-artifacts/
+          retention-days: 3
+  report:
+    needs: [prepare, nominal, select, validate]
+    if: always() && needs.prepare.result == 'success'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r simulation/requirements.txt
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: study-result-*
+          path: build/inputs
+      - uses: actions/download-artifact@v4
+        with:
+          name: study-support
+          path: build/support
+      - name: Publish complete or explicitly inconclusive comparison
+        run: |
+          python scripts/study_report.py --root build/inputs --out docs/construction --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          mkdir -p docs/construction/assets
+          cp build/support/study-layout/ventilation-study-positions.png docs/construction/assets/
+          cat docs/construction/ventilation-study-results.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ventilation-study-report
+          path: |
+            docs/construction/ventilation-study-results.*
+            docs/construction/assets/ventilation-study-positions.png
+          retention-days: 7
+      - name: Save generated findings on main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/construction/ventilation-study-results.md docs/construction/ventilation-study-results.json docs/construction/assets/ventilation-study-positions.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish ventilation position study results ($GITHUB_RUN_ID)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Require all planned computations to qualify
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('docs/construction/ventilation-study-results.json'))
+          if not r['complete']:
+              raise SystemExit('Study incomplete or unqualified; diagnostic report published without a full ranking.')
+          PY
