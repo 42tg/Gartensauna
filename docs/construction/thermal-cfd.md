@@ -104,6 +104,22 @@ python scripts/thermal_compare.py
 
 Vorhandene Ergebnisordner werden nicht automatisch überschrieben. Für einen neuen Lauf den alten Fallordner umbenennen/archivieren. Der Workflow **Thermal sauna CFD** baut die Randbedingung einmal und rechnet die acht Fälle mit maximal vier parallelen Jobs. Er läuft bei Änderungen an relevanter CAD-Geometrie, Solver, Tests oder Konfiguration sowie manuell. Artefakte werden 14 Tage aufbewahrt; ein neuer Lauf derselben Branch ersetzt eine noch laufende ältere Rechnung.
 
+## Erster Prüfstand vom 03.11.2026
+
+Implementierung: Commit `23b025df1c824da0eeaf43379714bd6d8990681d`.
+Vier Python-Tests und der C++-Randbedingungstest bestehen lokal und im GitHub-Build. Der bisherige isotherme Workflow besteht ebenfalls.
+
+| Lokaler Diagnosefall | SIMPLE-Iterationen | Betrag Wärmebilanzfehler | Geschwindigkeitsänderung über 100 Iterationen | Numerische Kriterien |
+|---|---:|---:|---:|---|
+| Geplante Lüftung, Schwerkraft an | 8000 | 1,04 % | 0,0200 m/s | **Nicht bestanden: Strömung nicht stationär** |
+| Kontrollfall ohne Schwerkraft | 4000 | 1,92 % | 0,0000191 m/s | Bestanden |
+
+Diese lokalen Diagnosefälle wurden nach Verschärfung der Drucklösung fortgesetzt; der erste zusätzlich auf 8000 Iterationen verlängert. Sie sind keine frischen CI-Referenzläufe. Die vollständigen Kennzahlen und diese Herkunft stehen im [Prüfprotokoll](thermal-cfd-check-2026-11-03.json). Die Temperaturen und Luftalter des nicht konvergierten Falls dürfen nicht als freigegebene Planungswerte verwendet werden.
+
+Der frische [GitHub-Vergleich mit acht Fällen](https://github.com/42tg/Gartensauna/actions/runs/41638110805) lief zum Zeitpunkt dieser Notiz noch. Der Fall `thermal_near_heater` brach dort bei Iteration 2533 mit negativer Dichte und SIGFPE ab; seine Rohdaten/Logs sind im Laufartefakt erhalten. Der Gesamtworkflow ist daher **nicht vollständig erfolgreich**.
+
+**Offen:** robuste numerische Konvergenz der Auftriebsfälle und damit eine belastbare Rangfolge der Lüftungspositionen. Bloße Verlängerung des Basisfalls hat die Geschwindigkeitsänderung nicht unter die Grenze gebracht. Eine instationäre URANS-Rechnung mit überprüfter Zeitschrittweite, Einschwingphase und zeitlicher Mittelung ist der nächste Untersuchungsschritt; sie ist hier noch nicht implementiert. Ein bestandenes Kontrollszenario ohne Schwerkraft ersetzt diese Prüfung nicht.
+
 ## Noch nicht enthalten
 
 Aufguss, Wasserdampf, Kondensation, CO₂-Produktion, Personenwärme, realer Thermostat-/Sensorbetrieb, Wärmeaufnahme von Holz und Steinen beim Aufheizen, poröse Durchströmung des Steinkorbs, detaillierte Lamellen-/Düsenströmung, Wind und Ventilatorkennlinie. Für diese Aspekte darf aus der trockenen stationären Rechnung keine Aussage abgeleitet werden. Experimentelle Validierung steht aus; die offenen Punkte werden in [Issue #8](https://github.com/42tg/Gartensauna/issues/8) weitergeführt.

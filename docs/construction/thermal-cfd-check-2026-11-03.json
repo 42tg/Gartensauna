@@ -1,0 +1,212 @@
+{
+  "source_commit": "23b025df1c824da0eeaf43379714bd6d8990681d",
+  "provenance": "Local diagnostic runs, resumed after tightening pressure solver to tolerance 1e-8 / relTol 0. Planned case extended from 4000 to 8000 SIMPLE iterations. Not fresh-run CI reference results.",
+  "results": [
+    {
+      "case": "thermal_planned",
+      "config": {
+        "grid_m": 0.16,
+        "inlet_flow_m3h": 80,
+        "supply_temperature_C": 10,
+        "outside_temperature_C": 10,
+        "initial_temperature_C": 65,
+        "heater_power_W": 3000,
+        "wall_conductance_W_m2K": 0.35,
+        "glass_conductance_W_m2K": 2.5,
+        "roof_conductance_W_m2K": 0.22,
+        "floor_conductance_W_m2K": 0.5,
+        "gravity_m_s2": 9.81,
+        "radiation": true,
+        "radiation_nPhi": 2,
+        "radiation_nTheta": 2,
+        "iterations": 4000,
+        "exhaust": "exhaust",
+        "ramp_iterations": 500,
+        "surface_emissivity": 0.9,
+        "name": "thermal_planned"
+      },
+      "iteration": 8000.0,
+      "cells": 7359,
+      "geometry_sha256": "2772c6f695b4b337a27abca921d0fba505a2df2c20448644bdd31bcb48eab683",
+      "air_volume_m3": 12.9702765,
+      "supply_mass_flow_kg_s": 0.02770560688,
+      "exhaust_mass_flow_kg_s": 0.027705603554,
+      "mass_balance_relative": 1.2004790660002876e-07,
+      "local_mass_residual_L1_relative": 2.2492485106706434e-06,
+      "energy_balance_relative": 0.010437244766277066,
+      "heat_out_W": 2968.688265701169,
+      "energy_terms_W": {
+        "supply": -7884.4187142409155,
+        "exhaust": 9250.127358434373,
+        "glass": 804.8821609474559,
+        "roof": 87.86867631937075,
+        "floor": 203.58872876957764,
+        "walls": 487.99731609405256
+      },
+      "net_radiation_to_patches_W": {
+        "supply": 13.901108639999965,
+        "exhaust": 4.741630737255001,
+        "heater": -2712.695323065099,
+        "benches": 125.75974860010697,
+        "glass": 953.3404615512206,
+        "roof": 95.98680500424787,
+        "floor": 521.5325616773148,
+        "walls": 998.3802857279874
+      },
+      "conductive_heat_to_air_W": {
+        "supply": -0.9494515377405457,
+        "exhaust": -0.0017503840403120348,
+        "heater": 286.3144697534681,
+        "benches": 125.76354852888106,
+        "glass": 147.6155534614528,
+        "roof": 8.065918055937788,
+        "floor": 317.7180511264421,
+        "walls": 510.69033463897074
+      },
+      "boundary_heat_balance_relative": 0.0003300690604777022,
+      "boundary_heat_residuals_W": {
+        "heater": -0.9902071814331066,
+        "benches": 0.00379992877408597,
+        "walls": 0.30736500503593334,
+        "glass": -0.8427471423119641,
+        "roof": -0.052210628939334924,
+        "floor": -0.22578178129504067
+      },
+      "radiation_closure_relative": 0.00031575962434459727,
+      "temperature_volume_mean_C": 68.26213376839821,
+      "heater_surface_mean_C": 264.7731397436171,
+      "plume_mean_vertical_velocity_m_s": -0.001441741674846238,
+      "regions": {
+        "upper": {
+          "temperature_mean_C": 71.90978514729012,
+          "temperature_p10_C": 68.98245526800004,
+          "temperature_p90_C": 74.74425498361292,
+          "speed_p95_m_s": 0.06906809315041272
+        },
+        "lower": {
+          "temperature_mean_C": 66.88213163224597,
+          "temperature_p10_C": 62.17798932922064,
+          "temperature_p90_C": 71.08992640914815,
+          "speed_p95_m_s": 0.12495771478837006
+        }
+      },
+      "occupied_mean_age_min": 12.032322240192121,
+      "occupied_p95_age_min": 15.274797680415912,
+      "occupied_age_factor": 1.490777593260025,
+      "nominal_mass_residence_min": 8.071171913631932,
+      "age_equation_residual": 3.0598587894155002e-12,
+      "temperature_field_drift_K": 0.14020004549938275,
+      "velocity_field_drift_m_s": 0.020001880651433303,
+      "drift_iteration_interval": 100.0,
+      "minimum_air_temperature_C": 12.791999300000043,
+      "maximum_air_temperature_C": 86.40259940000004,
+      "exhaust_backflow_fraction": 0.0,
+      "quality_pass": false,
+      "quality_failures": [
+        "velocity_drift: 0.020002 > 0.01"
+      ]
+    },
+    {
+      "case": "thermal_no_gravity",
+      "config": {
+        "grid_m": 0.16,
+        "inlet_flow_m3h": 80,
+        "supply_temperature_C": 10,
+        "outside_temperature_C": 10,
+        "initial_temperature_C": 65,
+        "heater_power_W": 3000,
+        "wall_conductance_W_m2K": 0.35,
+        "glass_conductance_W_m2K": 2.5,
+        "roof_conductance_W_m2K": 0.22,
+        "floor_conductance_W_m2K": 0.5,
+        "gravity_m_s2": 0,
+        "radiation": true,
+        "radiation_nPhi": 2,
+        "radiation_nTheta": 2,
+        "iterations": 4000,
+        "exhaust": "exhaust",
+        "ramp_iterations": 500,
+        "surface_emissivity": 0.9,
+        "name": "thermal_no_gravity"
+      },
+      "iteration": 4000.0,
+      "cells": 7359,
+      "geometry_sha256": "2772c6f695b4b337a27abca921d0fba505a2df2c20448644bdd31bcb48eab683",
+      "air_volume_m3": 12.9702765,
+      "supply_mass_flow_kg_s": 0.02770786234,
+      "exhaust_mass_flow_kg_s": 0.02770786235,
+      "mass_balance_relative": 3.6090842031387507e-10,
+      "local_mass_residual_L1_relative": 1.9691477139410466e-07,
+      "energy_balance_relative": -0.019170056381469902,
+      "heat_out_W": 3057.5101691444097,
+      "energy_terms_W": {
+        "supply": -7884.756137730886,
+        "exhaust": 9248.861207952774,
+        "glass": 865.9995050948429,
+        "roof": 83.64524131323846,
+        "floor": 231.83801858486265,
+        "walls": 491.42307641977743
+      },
+      "net_radiation_to_patches_W": {
+        "supply": 15.239424827999962,
+        "exhaust": 5.259832681800001,
+        "heater": -2850.09198117013,
+        "benches": 130.47153372428045,
+        "glass": 979.5041168606283,
+        "roof": 220.47958388709864,
+        "floor": 373.05552493618285,
+        "walls": 1122.2754546890696
+      },
+      "conductive_heat_to_air_W": {
+        "supply": -0.40673727823921313,
+        "exhaust": 0.002565210760447632,
+        "heater": 156.08722972741384,
+        "benches": 130.83459995773256,
+        "glass": 113.30761028629907,
+        "roof": 136.84455361238608,
+        "floor": 141.06408187597242,
+        "walls": 629.1576484064727
+      },
+      "boundary_heat_balance_relative": 0.0020597369658480603,
+      "boundary_heat_residuals_W": {
+        "heater": 6.179210897544181,
+        "benches": 0.3630662334521162,
+        "walls": -1.6947298628194858,
+        "glass": -0.1970014794862891,
+        "roof": 0.010211038525895333,
+        "floor": -0.15342447534777648
+      },
+      "radiation_closure_relative": 0.0012688365210234208,
+      "temperature_volume_mean_C": 59.83888307824288,
+      "heater_surface_mean_C": 274.811105780851,
+      "plume_mean_vertical_velocity_m_s": -0.010974773299634333,
+      "regions": {
+        "upper": {
+          "temperature_mean_C": 56.30171130210467,
+          "temperature_p10_C": 55.48135221185489,
+          "temperature_p90_C": 57.220149489470984,
+          "speed_p95_m_s": 0.18330308561423092
+        },
+        "lower": {
+          "temperature_mean_C": 60.34292079909835,
+          "temperature_p10_C": 57.23122108382639,
+          "temperature_p90_C": 64.32946228995586,
+          "speed_p95_m_s": 0.10443441995685833
+        }
+      },
+      "occupied_mean_age_min": 8.718324540009998,
+      "occupied_p95_age_min": 9.127205029822699,
+      "occupied_age_factor": 1.0536489081046616,
+      "nominal_mass_residence_min": 8.274411403028745,
+      "age_equation_residual": 1.9019185161484643e-12,
+      "temperature_field_drift_K": 0.036087989324319995,
+      "velocity_field_drift_m_s": 1.9112170495878042e-05,
+      "drift_iteration_interval": 100.0,
+      "minimum_air_temperature_C": 11.195973900000013,
+      "maximum_air_temperature_C": 113.85103610000004,
+      "exhaust_backflow_fraction": 0.0,
+      "quality_pass": true,
+      "quality_failures": []
+    }
+  ]
+}
