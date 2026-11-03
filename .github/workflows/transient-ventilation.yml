@@ -1,0 +1,129 @@
+name: Transient sauna CFD
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: transient-sauna-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  seed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - name: Install pinned runtime and build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfoam=1912.200626-2build3 libopenfoam=1912.200626-2build3 openscad build-essential flex bison curl
+          pip install -r simulation/requirements.txt
+      - name: Build and verify boundary library
+        run: |
+          bash scripts/build_thermal_boundary.sh
+          g++ -std=c++11 tests/test_thermal_relaxation.cpp -o build/test-thermal-relaxation
+          build/test-thermal-relaxation
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -v
+      - name: Generate preheated initial condition
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        # This is only a finite initial field, not a claim of steady convergence.
+        run: python scripts/run_thermal.py thermal_planned
+      - uses: actions/upload-artifact@v4
+        with:
+          name: transient-seed
+          path: |
+            build/thermal-lib/
+            build/thermal/thermal_planned/
+          retention-days: 1
+  solve:
+    needs: seed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: planned
+            co: 5
+            dt: 0.05
+          - name: half-step
+            co: 2.5
+            dt: 0.025
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: simulation/requirements.txt
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openfoam=1912.200626-2build3 libopenfoam=1912.200626-2build3 openmpi-bin
+          pip install -r simulation/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: transient-seed
+          path: build
+      - name: Integrate physical time
+        run: >-
+          python scripts/run_transient.py --seed build/thermal/thermal_planned
+          --dest build/transient/${{ matrix.name }} --end 300 --sample 5
+          --max-co ${{ matrix.co }} --max-dt ${{ matrix.dt }} --outer 1 --ranks 2
+      - name: Average and audit
+        run: python scripts/transient_results.py build/transient/${{ matrix.name }} --start 100
+      - name: Compress solver log
+        if: always()
+        run: |
+          if [ -f build/transient/${{ matrix.name }}/log.transient ]; then
+            gzip build/transient/${{ matrix.name }}/log.transient
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transient-result-${{ matrix.name }}
+          path: |
+            build/transient/${{ matrix.name }}/*.json
+            build/transient/${{ matrix.name }}/*.png
+            build/transient/${{ matrix.name }}/mean_fields.npz
+            build/transient/${{ matrix.name }}/log.*
+            build/transient/${{ matrix.name }}/runtime.txt
+          retention-days: 3
+  compare:
+    needs: solve
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.2.6
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: transient-result-*
+          path: build/compare-input
+      - name: Check matching time windows and half-step sensitivity
+        run: >-
+          python scripts/transient_compare.py build/compare-input/transient-result-planned
+          build/compare-input/transient-result-half-step --require-quality
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f build/transient-comparison/comparison.md ]; then
+            cat build/transient-comparison/comparison.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transient-comparison
+          path: build/transient-comparison/
+          retention-days: 7

@@ -53,3 +53,5 @@ Siehe [Messwerte](docs/measurements.md), [Anforderungen](docs/requirements.md), 
 ## Thermische CFD mit Wärmeauftrieb
 
 [Modell, Prüfungen und Reproduktion](docs/construction/thermal-cfd.md): OpenFOAM berechnet Luftdichte, Temperatur, Auftrieb, Turbulenz und Oberflächenstrahlung gekoppelt. Acht Szenarien einschließlich Kontrollfall ohne Schwerkraft. **Nur numerisch qualifizierte Fälle vergleichen; Randbedingungen sind noch Annahmen.** [Workflow und Ergebnisse](https://github.com/42tg/Gartensauna/actions/workflows/thermal-ventilation.yml).
+
+Zeitabhängige Wärmeauftriebsrechnung: [URANS, Zeitmittel und Zeitschrittprüfung](docs/construction/transient-cfd.md).

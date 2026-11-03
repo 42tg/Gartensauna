@@ -118,7 +118,7 @@ Diese lokalen Diagnosefälle wurden nach Verschärfung der Drucklösung fortgese
 
 Der frische [GitHub-Vergleich mit acht Fällen](https://github.com/42tg/Gartensauna/actions/runs/41638110805) lief zum Zeitpunkt dieser Notiz noch. Der Fall `thermal_near_heater` brach dort bei Iteration 2533 mit negativer Dichte und SIGFPE ab; seine Rohdaten/Logs sind im Laufartefakt erhalten. Der Gesamtworkflow ist daher **nicht vollständig erfolgreich**.
 
-**Offen:** robuste numerische Konvergenz der Auftriebsfälle und damit eine belastbare Rangfolge der Lüftungspositionen. Bloße Verlängerung des Basisfalls hat die Geschwindigkeitsänderung nicht unter die Grenze gebracht. Eine instationäre URANS-Rechnung mit überprüfter Zeitschrittweite, Einschwingphase und zeitlicher Mittelung ist der nächste Untersuchungsschritt; sie ist hier noch nicht implementiert. Ein bestandenes Kontrollszenario ohne Schwerkraft ersetzt diese Prüfung nicht.
+**Offen:** robuste numerische Konvergenz der Auftriebsfälle und damit eine belastbare Rangfolge der Lüftungspositionen. Bloße Verlängerung des Basisfalls hat die Geschwindigkeitsänderung nicht unter die Grenze gebracht. Dieser Befund ist der Ausgangspunkt der inzwischen ergänzten [zeitabhängigen URANS-Rechnung mit Mittelung und Zeitschrittprüfung](transient-cfd.md). Ein bestandenes Kontrollszenario ohne Schwerkraft ersetzt diese Prüfung nicht.
 
 ## Noch nicht enthalten
 
