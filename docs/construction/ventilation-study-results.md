@@ -30,6 +30,6 @@ Die Reihenfolge gilt nur unter den nominalen Modellannahmen. Die Robustheitsprü
 Die Vergleichsbänder sind Mindestabstände für eine vorsichtige Ingenieurentscheidung und beobachtete Gitter-/Zeitschrittempfindlichkeit, keine statistischen Konfidenzintervalle. Die thermischen Zielkonfliktgrenzen (2 K und 0,02 m/s) sind gewählte Vergleichsregeln, keine Komfort- oder Sicherheitsnormen.
 Der Durchsatz ist vorgeschrieben. Ventilator-, Kanal- und Gitterdruckverluste werden nicht ausgelegt. Eine spätere Bauentscheidung erfordert auch deren Prüfung.
 
-Lokaler Bericht; kein GitHub-Lauf angegeben.
+[Rechenlauf und ausführliche Artefakte](https://github.com/42tg/Gartensauna/actions/runs/41668842137)
 
 ![CAD-basierte Positionsübersicht](assets/ventilation-study-positions.png)
