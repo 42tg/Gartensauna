@@ -10,6 +10,7 @@ height = 2400;           // Annahme
 floor_thickness = 120;
 // roof_thickness from envelope.scad
 include <bench-layout.scad>
+include <ventilation.scad>
 // Fail before expensive exports if envelope changes consume usable space.
 assert(bench_lower_x-(main_width-wing_width+45)>=500, "Window aisle below 500 mm planning minimum");
 assert(main_depth-wall-(bench_start_y+bench_length)>=600, "Rear landing below 600 mm");
@@ -38,6 +39,7 @@ module floor(){
 module walls(){
     difference(){
         footprint_3d(height);
+        ventilation_openings();
         // inset voids: room on left, and right L wing, with open connection
         translate([wall,wall,-1]) cube([main_width-wing_width-wall*1.5,main_depth-2*wall,height+2]);
         translate([main_width-wing_width+wall,-wing_extension+wall,-1])

@@ -14,7 +14,7 @@ PARTS = ["concrete_piers", "floor_underside", "floor_joists", "floor_insulation"
          "vapour_barrier", "service_battens", "interior_boards", "partition_frame", "partition_boards",
          "ceiling_boards", "ceiling_battens", "ceiling_vapour", "roof_wind", "roof_vent_battens", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
          "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame",
-         "heater_cage", "heater_mount", "heater_stones"]
+         "heater_cage", "heater_mount", "heater_stones", "vent_supply", "vent_exhaust", "vent_drying"]
 WALL_PARTS = PARTS[5:14]
 VARIANTS = ["assembled", "exploded", "wall_detail"]
 

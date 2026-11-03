@@ -1,0 +1,16 @@
+{
+  "model": "isothermal-potential-flow-age-v1",
+  "flow_m3h": 80,
+  "mixing_diffusivity_m2s": 0.003,
+  "grid_m": 0.12,
+  "cases": [
+    {"name": "planned", "exhaust": "exhaust"},
+    {"name": "near_heater", "exhaust": "exhaust", "exhaust_y_m": -1.1},
+    {"name": "high_exhaust", "exhaust": "drying"},
+    {"name": "planned_60m3h", "exhaust": "exhaust", "flow_m3h": 60},
+    {"name": "planned_100m3h", "exhaust": "exhaust", "flow_m3h": 100},
+    {"name": "planned_fine", "exhaust": "exhaust", "grid_m": 0.08},
+    {"name": "planned_low_mixing", "exhaust": "exhaust", "mixing_diffusivity_m2s": 0.001},
+    {"name": "planned_high_mixing", "exhaust": "exhaust", "mixing_diffusivity_m2s": 0.01}
+  ]
+}

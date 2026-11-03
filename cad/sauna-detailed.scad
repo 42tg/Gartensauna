@@ -100,6 +100,7 @@ module window_frame(){
 }
 module select_part(name){
     heater_part(name);
+    ventilation_part(name);
     if(name=="concrete_piers")intersection(){
         translate([0,0,-300])footprint_3d(180);
         union(){for(x=[0:900:main_width])for(y=[-wing_extension:900:main_depth])
@@ -136,7 +137,7 @@ names = ["concrete_piers","floor_underside","floor_joists","floor_insulation","f
          "vapour_barrier","service_battens","interior_boards","partition_frame","partition_boards",
          "ceiling_boards","ceiling_battens","ceiling_vapour","roof_wind","roof_vent_battens","roof_joists","roof_insulation","roof_deck","roof_covering","roof_fascia",
          "bench_upper","bench_lower","changing_chair","glass_front","glass_frame",
-         "heater_cage","heater_mount","heater_stones"];
+         "heater_cage","heater_mount","heater_stones","vent_supply","vent_exhaust","vent_drying"];
 function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600 :
     n=="floor_joists" || n=="floor_insulation" ? -350 : n=="floor_boards" ? -120 :
     n=="ceiling_boards" ? 800 : n=="ceiling_battens" || n=="ceiling_vapour" ? 1000 : n=="roof_wind" || n=="roof_vent_battens" ? 1450 : n=="roof_joists" || n=="roof_insulation" ? 1200 :

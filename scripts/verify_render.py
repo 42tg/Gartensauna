@@ -12,7 +12,7 @@ png = stem.with_suffix('.png').read_bytes()
 assert png[:8] == b'\x89PNG\r\n\x1a\n'
 assert struct.unpack('>II', png[16:24]) == (1600, 1100)
 report = json.loads(stem.with_suffix('.json').read_text())
-assert len(report['parts']) == (9 if variant == 'wall_detail' else 34)
+assert len(report['parts']) == (9 if variant == 'wall_detail' else 37)
 if variant == 'cutaway':
     assert report['source_variant'] == 'assembled'
     assert sum(p['hidden_in_render'] for p in report['parts'].values()) == 12

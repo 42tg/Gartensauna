@@ -45,3 +45,7 @@ Siehe [Messwerte](docs/measurements.md), [Anforderungen](docs/requirements.md), 
 - [V3: Konzept und offene Maßfragen](docs/vorentwurf-v3.md)
 - [V3: parametrisches 3D-Konzept](cad/sauna-v3.scad)
 - V2 bleibt als rechteckige Alternative erhalten. V3 ist noch nicht baufreigegeben.
+
+## Lüftung und Strömungsvergleich
+
+[Öffnungen, Modellannahmen und Kennzahlen](docs/construction/ventilation.md): CAD mit Zuluft, Abluft und Trocknungsklappe; automatisierter 3-D-Luftaltervergleich mit Varianten und Sensitivitätsprüfung. **Isothermes Orientierungsmodell, keine thermische Sauna-CFD.** Ergebnisse im Workflow [Ventilation comparison](https://github.com/42tg/Gartensauna/actions/workflows/ventilation.yml).

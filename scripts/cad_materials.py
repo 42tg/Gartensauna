@@ -8,6 +8,10 @@ def material_for(part):
     nodes, links = material.node_tree.nodes, material.node_tree.links
     bsdf = nodes.get("Principled BSDF")
     bsdf.inputs["Roughness"].default_value = 0.48
+    if part.startswith("vent_"):
+        bsdf.inputs["Base Color"].default_value = {"vent_supply": (0.08,0.35,0.52,1), "vent_exhaust": (0.55,0.18,0.06,1), "vent_drying": (0.22,0.24,0.26,1)}[part]
+        bsdf.inputs["Metallic"].default_value = 0.7
+        return material
     if part in ("heater_cage", "heater_mount"):
         bsdf.inputs["Base Color"].default_value = (0.42, 0.46, 0.49, 1)
         bsdf.inputs["Metallic"].default_value = 0.95
