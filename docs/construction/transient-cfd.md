@@ -1,5 +1,7 @@
 # Zeitabhängige Strömung mit zeitlicher Mittelung
 
+[Geprüfter Ergebnisbericht vom 03.11.2026 mit Bildern](transient-cfd-results-2026-11-03.md): Beide 300-s-Läufe bestehen die numerischen Fenster- und Zeitschrittprüfungen. Das Luftalter bleibt wegen seiner Startabhängigkeit separat nicht freigegeben.
+
 Die stationäre Auftriebsrechnung erfüllte die Geschwindigkeitsprüfung nicht. Diese Erweiterung verwendet OpenCFD v1912 `buoyantPimpleFoam` mit physikalischer Zeit: ideale Gasdichte, `buoyantKEpsilon`-URANS, Oberflächenstrahlung und dieselben Wärme-/Lüftungsrandbedingungen wie die [thermische Rechnung](thermal-cfd.md). Das CAD und das ursprüngliche orthogonale Rechengitter bleiben unverändert.
 
 ## Versuch und Mittelung
@@ -7,7 +9,7 @@ Die stationäre Auftriebsrechnung erfüllte die Geschwindigkeitsprüfung nicht. 
 - Ein endliches, vorgewärmtes Feld aus der stationären Rechnung dient ausschließlich als Initialisierung. Es wird nicht als konvergiert vorausgesetzt. Die physischen Zeitskalen beginnen wieder bei 0 s; die alte numerische Leistungsrampe wird deaktiviert, sodass tatsächlich konstant 3000 W anliegen.
 - Geplanter Zeitraum: 0–300 s. Mittelung: 100–300 s. Die ersten 100 s sind eine anfänglich gewählte Einschwingphase; die Prüfung der beiden Fensterhälften entscheidet, ob die Mittelwerte bereits ausreichend stabil sind.
 - Implizite Euler-Zeitdiskretisierung, PISO als Sonderfall von PIMPLE mit einem äußeren und zwei Druckkorrekturschritten; keine künstliche stationäre Unterrelaxation der Gleichungen.
-- Basis: adaptive Schritte mit `maxCo=5`, `maxDeltaT=0.05 s`. Kontrolllauf: **beide** Grenzen halbiert. Der hohe lokale Courant-Wert liegt in sehr dünnen Zellen; seine Eignung wird ausdrücklich durch den kleineren Zeitschritt geprüft, nicht aus impliziter Stabilität abgeleitet. Die tatsächlichen Schritte und Courant-Werte stehen im Solverlog.
+- Basis: adaptive Schritte mit `maxCo=5`, `maxDeltaT=0.05 s`. Kontrolllauf: **beide** Grenzen halbiert. Der hohe lokale Courant-Wert liegt in sehr dünnen Zellen; seine Eignung wird ausdrücklich durch den kleineren Zeitschritt geprüft, nicht aus impliziter Stabilität abgeleitet. Die tatsächlichen Schritte und Courant-Werte stehen im Solverlog. Die Diagnose trennt die Courant-Zahl eines fertig integrierten Schritts von der einmaligen Anzeige vor der ersten Schrittanpassung (die bei einem übernommenen Startfeld noch dessen alten Zeitschritt verwenden kann).
 - Ausgabefelder alle 5 s; die Zeitintegration der Strömung erfolgt wesentlich feiner. Die Mittelung verwendet Trapezgewichte der tatsächlichen Ausgabezeiten und interpoliert Fenstergrenzen. Ein arithmetischer Mittelwert über ungleich große Zeitschritte wäre falsch.
 - Mittelwerte der ersten und zweiten Fensterhälfte werden räumlich verglichen. Die gleiche Auswertung aus jedem zweiten gespeicherten Feld prüft die Empfindlichkeit gegenüber dem Ausgabeabstand.
 
@@ -19,6 +21,8 @@ Für einen instationären Kontrollraum gelten:
 
 - Masse: Netto-Massenausfluss plus zeitliche Änderung der Luftmasse muss null ergeben. Lokal wird dieselbe Bilanz je Zelle geprüft.
 - Energie: Ofenwärme minus Wärmeabgabe minus Änderung der im Luftvolumen gespeicherten inneren, kinetischen und potentiellen Energie muss null ergeben. An Öffnungen werden Enthalpie, kinetische/potentielle Energie, Strahlung und Wärmeleitung bilanziert.
+
+Zusätzlich werden Temperatur- und Geschwindigkeitsänderungen der beiden Fensterhälften separat über jeder Bank begrenzt (0,5 K bzw. 0,01 m/s).
 
 Die Mittelungsprüfung verwendet die bestehenden Bilanzgrenzen (globale Masse 0,5 %, lokale Masse 2 %, Wärme 5 %, Oberflächenbilanz 5 %, Strahlung 2 %). Hinzu kommen maximal 0,5 K bzw. 0,01 m/s Unterschied zwischen den gemittelten Feldhälften, maximal 0,1 K Einfluss des verdoppelten Ausgabeabstands und mindestens 100 s Mittelungsdauer. Der geplante Endzeitpunkt muss erreicht sein.
 

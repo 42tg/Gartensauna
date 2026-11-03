@@ -19,6 +19,9 @@ def compare(base,ref,out):
     failures=[]
     if not a['thermal_window_pass']:failures.append('base window: '+ '; '.join(a['quality_failures']))
     if not b['thermal_window_pass']:failures.append('half-step window: '+ '; '.join(b['quality_failures']))
+    for region in ('upper','lower'):
+        if abs(a['regions'][region]['mean_temperature_C']-b['regions'][region]['mean_temperature_C'])>.5:failures.append(region+' bank mean temperature step sensitivity >0.5 K')
+        if abs(a['regions'][region]['mean_speed_m_s']-b['regions'][region]['mean_speed_m_s'])>.01:failures.append(region+' bank mean speed step sensitivity >0.01 m/s')
     if dT>.5:failures.append('mean temperature step sensitivity >0.5 K')
     if dU>.01:failures.append('mean velocity step sensitivity >0.01 m/s')
     r={'thermal_time_step_check_pass':not failures,'failures':failures,'mean_field_temperature_difference_K':dT,'mean_field_velocity_difference_m_s':dU,
@@ -36,7 +39,7 @@ def compare(base,ref,out):
         'Die Energiebilanz enthält die Änderung der im Luftvolumen gespeicherten Energie; die Massenbilanz enthält die Änderung der Luftmasse. Das ist keine stationäre Bilanz.','',
         f"Luftalter: {'Initialisierungsprüfung bestanden' if r['air_age_qualified'] else 'noch nicht als Vergleichswert freigegeben'}. Empfindlichkeit gegenüber den zwei Startfeldern: {100*a['age_initial_condition_sensitivity_relative']:.1f} % / {100*b['age_initial_condition_sensitivity_relative']:.1f} %.",
         'Der Luftaltertransport wird aus gespeicherten Strömungsfeldern implizit nachgerechnet; er ist keine direkt mit jedem CFD-Schritt gekoppelte Messgröße.','',
-        'Annahmen: 3000 W mittlere Ofenwärme, 80 m³/h Zuluft bei 10 °C; vereinfachte geschlossene Ofen-/Bankhüllen. Trockenes URANS-Modell mit Oberflächenstrahlung. Keine Aufheizzeit realer Steine/Hölzer, kein Aufguss, keine Messvalidierung. Ein Zeitschrittvergleich ersetzt keine räumliche Gitterstudie und keinen Nachweis statistischer Unabhängigkeit.']
+        f"Annahmen: {am['config']['heater_power_W']:g} W mittlere Ofenwärme, {am['config']['inlet_flow_m3h']:g} m³/h Zuluft bei {am['config']['supply_temperature_C']:g} °C; vereinfachte geschlossene Ofen-/Bankhüllen. Trockenes URANS-Modell mit Oberflächenstrahlung. Keine Aufheizzeit realer Steine/Hölzer, kein Aufguss, keine Messvalidierung. Ein Zeitschrittvergleich ersetzt keine räumliche Gitterstudie und keinen Nachweis statistischer Unabhängigkeit."]
     if failures:lines+=['','Fehler:']+['- '+f for f in failures]
     (out/'comparison.md').write_text('\n'.join(lines)+'\n');return r
 if __name__=='__main__':

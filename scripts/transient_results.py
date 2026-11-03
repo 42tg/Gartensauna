@@ -21,6 +21,17 @@ def time_mean(t,a,start,end):
     take=(t>start)&(t<end);tt=np.r_[start,t[take],end];aa=np.concatenate([interp(start)[None],a[take],interp(end)[None]])
     return np.trapezoid(aa,tt,axis=0)/(end-start)
 
+def time_diagnostics(log):
+    dt=[float(x) for x in re.findall(r'^deltaT = ([0-9.eE+-]+)',log,re.M)]
+    co=[];initial_co=[];completed=False
+    for line in log.splitlines():
+        if line.startswith('Build  :'):completed=False
+        if line.startswith('ExecutionTime ='):completed=True
+        match=re.match(r'Courant Number mean: [0-9.eE+-]+ max: ([0-9.eE+-]+)',line)
+        if match:
+            (co if completed else initial_co).append(float(match[1]));completed=False
+    return dt,co,initial_co
+
 def regions(meta,xyz):
     result={};g=meta['geometry']
     for name in ('upper','lower'):
@@ -97,15 +108,27 @@ def summarize(path,start=100.,end=None):
     stats['occupied_age_factor']=stats['occupied_mean_age_min']/stats['nominal_mass_residence_min']
     for k,sel in reg.items():
         stats['regions'][k]={'mean_temperature_C':float(np.average(T[sel],weights=v[sel])-273.15),'mean_speed_m_s':float(np.average(speed[sel],weights=v[sel])),
-            'mean_temperature_spatial_p10_C':weighted_percentile(T[sel]-273.15,v[sel],10),'mean_temperature_spatial_p90_C':weighted_percentile(T[sel]-273.15,v[sel],90)}
+            'mean_temperature_spatial_p10_C':weighted_percentile(T[sel]-273.15,v[sel],10),'mean_temperature_spatial_p90_C':weighted_percentile(T[sel]-273.15,v[sel],90),
+            'split_temperature_difference_K':float(abs(time_mean(times,[r[k+'_T_C'] for r in rows],start,mid)-time_mean(times,[r[k+'_T_C'] for r in rows],mid,end))),
+            'split_speed_difference_m_s':float(abs(time_mean(times,[r[k+'_speed'] for r in rows],start,mid)-time_mean(times,[r[k+'_speed'] for r in rows],mid,end)))}
     # Sampling sensitivity: recompute time means from every second stored field.
     reduced=np.unique(np.r_[np.arange(0,len(times),2),len(times)-1]);stats['sampling_temperature_difference_K']=float(np.average(abs(time_mean(times[reduced],allT[reduced],start,end)-T),weights=v))
     failures=[]
     for name,limit in [('mass_balance_relative',.005),('local_mass_balance_relative',.02),('energy_balance_relative',.05),('radiation_closure_relative',.02),('boundary_heat_balance_relative',.05),('split_window_temperature_difference_K',.5),('split_window_velocity_difference_m_s',.01),('sampling_temperature_difference_K',.1)]:
         if abs(stats[name])>limit:failures.append(f'{name}: {stats[name]:.6g} > {limit}')
+    for name,r in stats['regions'].items():
+        if r['split_temperature_difference_K']>.5:failures.append(name+' bank temperature window drift >0.5 K')
+        if r['split_speed_difference_m_s']>.01:failures.append(name+' bank speed window drift >0.01 m/s')
     if end-start<100:failures.append('averaging window shorter than 100 s')
     info=json.loads((path/'transient.json').read_text())
     if times[-1]<info['end_time_s']-1e-6:failures.append('planned end time not reached')
+    log=(path/'log.transient').read_text()
+    dt,co,initial_co=time_diagnostics(log)
+    stats['actual_delta_t_min_s']=min(dt) if dt else None;stats['actual_delta_t_max_s']=max(dt) if dt else None
+    stats['completed_step_reported_Co_max']=max(co) if co else None
+    stats['initial_pre_adjustment_Co_max']=max(initial_co) if initial_co else None
+    if not dt or not co:failures.append('missing solver time-step diagnostics')
+    elif max(co)>1.2*info['max_Co']:failures.append('completed-step Courant exceeds configured limit by >20%')
     stats['thermal_window_pass']=not failures;stats['quality_failures']=failures;stats['age_initialization_pass']=age_sensitivity<=.05
     # No experimental validation or time-step independence is implied by this flag.
     (path/'transient_results.json').write_text(json.dumps(stats,indent=2)+'\n');(path/'time_series.json').write_text(json.dumps(rows,indent=2)+'\n')
@@ -123,7 +146,7 @@ def plot(path,meta,m,T,U,rows,stats):
         ax.set(title=title,xlabel='Längsrichtung y [m]',ylabel='Höhe [m]');ax.set_aspect('equal')
     fig.colorbar(im,ax=axs,label='Zeitlich gemittelte Lufttemperatur [°C]')
     status='Fensterprüfungen bestanden' if stats['thermal_window_pass'] else 'Mittelwerte noch nicht freigegeben'
-    fig.suptitle(f"Zeitmittel {stats['window_start_s']:g}–{stats['window_end_s']:g} s | {status}\nURANS, 3000 W; angenommene Randbedingungen; Zeitschrittvergleich separat")
+    fig.suptitle(f"Zeitmittel {stats['window_start_s']:g}–{stats['window_end_s']:g} s | {status}\nURANS, {meta['config']['heater_power_W']:g} W; angenommene Randbedingungen; Zeitschrittvergleich separat")
     fig.savefig(path/'transient_mean.png',dpi=150);plt.close(fig)
     fig,axs=plt.subplots(2,1,figsize=(10,6),sharex=True,constrained_layout=True);t=[r['time_s'] for r in rows]
     for k,label in [('upper','Obere Bank'),('lower','Untere Bank')]:

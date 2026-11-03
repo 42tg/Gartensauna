@@ -1,6 +1,6 @@
 # ADR 0010: Zeitabhängige Auftriebsrechnung und getrennte Mittelungsprüfung
 
-Status: implementiert, numerische Resultate gesondert prüfen. Datum: 03.11.2026.
+Status: implementiert; erster Vergleich der Temperatur-/Strömungszeitmittel besteht, Luftalter noch nicht freigegeben. Datum: 03.11.2026.
 
 ## Anlass
 
