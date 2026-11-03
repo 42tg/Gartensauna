@@ -69,6 +69,7 @@ Ein Solver-Ende allein ist kein Erfolgskriterium. `results.json` enthält `quali
 - Globale Massenbilanz: Fehler ≤0,5 % des einströmenden Massenstroms.
 - Lokale Massenbilanz: Summe absoluter Zell-Divergenzfehler ≤2 % des einströmenden Massenstroms.
 - Gesamtwärmebilanz: Fehler ≤5 % der vorgeschriebenen Ofenleistung. Berücksichtigt werden Hüllverluste, Enthalpie-/kinetische-/potentielle Energie an den Öffnungen und dort entweichende Strahlung.
+- Thermische Randbedingungen: Wärmeflussbilanz pro Oberflächenpatch ≤5 % der Ofenleistung; die Ofenleistung wird zusätzlich direkt an der Ofenfläche geprüft.
 - Geschlossene Strahlungsbilanz: Fehler ≤2 % der Ofenleistung.
 - Änderung zwischen den letzten gespeicherten Feldständen: volumenmittlerer Betrag der Temperaturänderung ≤0,5 K und der Geschwindigkeitsänderung ≤0,01 m/s. Der Vergleichsabstand wird ausgewiesen.
 - Endliche, plausible Temperaturwerte; nichtnegative endliche Luftalter und numerisches Luftalter-Gleichungsresiduum ≤1e-7.

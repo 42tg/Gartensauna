@@ -71,16 +71,11 @@ wallDist { method meshWave; }
 SIMPLE { nNonOrthogonalCorrectors 0; pRefCell 0; pRefValue 101325; }
 relaxationFactors { fields { rho 1; p_rgh 0.3; } equations { U 0.1; h 0.1; k 0.3; epsilon 0.3; "ILambda.*" 0.7; } }
 ''')
-    functions='''
-heatFlux { type wallHeatFlux; libs ("libfieldFunctionObjects.so"); executeControl writeTime; writeControl writeTime; }
-wallYplus { type yPlus; libs ("libfieldFunctionObjects.so"); executeControl writeTime; writeControl writeTime; }
-residuals { type solverInfo; libs ("libutilityFunctionObjects.so"); fields (U p_rgh h k epsilon); }
-'''
     dictionary('system','controlDict',f'''application buoyantSimpleFoam;
 libs ("libsaunaThermal.so");
 startFrom latestTime; startTime 0; stopAt endTime; endTime {c['iterations']}; deltaT 1;
 writeControl timeStep; writeInterval 100; purgeWrite 3;
 writeFormat ascii; writePrecision 10; writeCompression off; timeFormat general; timePrecision 8;
 runTimeModifiable false;
-functions {{ {functions} }}
+functions {{ }}
 ''')

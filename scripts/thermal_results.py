@@ -124,6 +124,8 @@ def summarize(path):
     for name,val,limit in [('mass_balance',stats['mass_balance_relative'],.005),('local_mass',stats['local_mass_residual_L1_relative'],.02),('energy_balance',abs(error),.05),('boundary_heat_balance',boundary_error,.05),('radiation_closure',stats['radiation_closure_relative'],.02),('temperature_drift',driftT,.5),('velocity_drift',driftU,.01),('age_residual',age_res,1e-7)]:
         if val>limit:failures.append(f'{name}: {val:.5g} > {limit}')
     if float(latest.name)<max(c['iterations'],c.get('ramp_iterations',0)+200):failures.append('target iterations / post-ramp window not reached')
+    if T.min()<min(c['supply_temperature_C'],c['outside_temperature_C'])+273.15-1:failures.append('air colder than coldest boundary by >1 K')
+    if p.min()<=0:failures.append('nonpositive absolute pressure')
     if age.min()<0 or not np.isfinite(age).all():failures.append('nonphysical age')
     stats['quality_pass']=not failures;stats['quality_failures']=failures
     (path/'results.json').write_text(json.dumps(stats,indent=2)+'\n')
@@ -137,8 +139,8 @@ def plot(path,meta,m,T,U,age,stats):
     vv=np.zeros((*ids.shape,3));vv[ids>=0]=U[ids[ids>=0]]
     axes=[(m[k][1:]+m[k][:-1])/2 for k in 'xyz']
     fig,axs=plt.subplots(1,2,figsize=(13,5.5),constrained_layout=True)
-    lo=float(np.nanpercentile(fields[0],2));hi=float(np.nanpercentile(fields[0],98))
-    for ax,x,title in zip(axs,[(g['heater'][0][0]+g['heater'][1][0]/2)/1000,2.5],['Ofen / Zuluft','Bankbereich']):
+    lo=float(np.floor(np.nanmin(fields[0])/5)*5);hi=float(np.ceil(np.nanmax(fields[0])/5)*5)
+    for ax,x,title in zip(axs,[(g['supply'][0][0]+g['supply'][1][0]/2)/1000,2.5],['Ofen / Zuluft','Bankbereich']):
         ix=int(np.argmin(abs(axes[0]-x)));sl=fields[0][ix].T
         im=ax.pcolormesh(m['y'],m['z'],sl,cmap='inferno',vmin=lo,vmax=hi,shading='flat')
         ax.quiver(axes[1][::2],axes[2][::2],vv[ix,::2,::2,1].T,vv[ix,::2,::2,2].T,color='cyan',alpha=.65)
