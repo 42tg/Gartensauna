@@ -88,6 +88,9 @@ if variant == "cutaway":
             ((wing_x-0.001, wing_y-0.001, -0.01),
              (floor_hi[0]-wing_x+0.002, 0.207, cut_h)),
             ((-0.001, 0, -0.01), (0.207, floor_hi[1]+0.001, cut_h))]
+    # Cut disconnected sauna end first, then side, then changing-room facade.
+    # The reverse order can reintroduce framing faces in Blender Boolean evaluation.
+    cuts = [cuts[1], cuts[2], cuts[0]]
     cutters = []
     for index, (origin, size) in enumerate(cuts):
         bpy.ops.mesh.primitive_cube_add(size=1, location=Vector(origin)+Vector(size)*0.5)
@@ -107,7 +110,22 @@ if variant == "cutaway":
                 modifier = obj.modifiers.new(name=cutter.name, type="BOOLEAN")
                 modifier.operation = "DIFFERENCE"
                 modifier.solver = "EXACT"
+                modifier.use_self = True
+                modifier.use_hole_tolerant = True
                 modifier.object = cutter
+    # Test evaluated geometry: successful rendering alone can hide Boolean artifacts.
+    bpy.context.view_layer.update()
+    for obj in cad_objects:
+        if obj.name not in wall_parts:
+            continue
+        evaluated = obj.evaluated_get(bpy.context.evaluated_depsgraph_get())
+        mesh = evaluated.to_mesh()
+        points = [obj.matrix_world @ mesh.vertices[i].co for face in mesh.polygons for i in face.vertices]
+        assert points, (obj.name, "cutaway unexpectedly removed entire wall group")
+        assert min(v.y for v in points) >= wing_y + .205 - .0001, (obj.name, "phantom front wall after Boolean cut")
+        assert min(v.x for v in points) >= .205 - .0001, (obj.name, "phantom left wall after Boolean cut")
+        assert not any(v.x < wing_x-.002 and v.y < .205-.0001 for v in points), (obj.name, "phantom changing-room facade")
+        evaluated.to_mesh_clear()
     scene["cutaway_note"] = "Presentation only: roof, glazing and three garden-facing facade sections hidden. Disable wall Boolean modifiers to restore facades."
 
 # Text is a visual annotation; exported CAD meshes remain unchanged.

@@ -1,4 +1,5 @@
 // Detailed concept geometry. Millimetres; all construction dimensions are assumptions.
+// Cutaway display requires self-intersection-aware Blender Booleans for multi-part framing.
 // The V3 room layout and openings remain the authoritative footprint.
 include <sauna-v3.scad>
 include <heater-drop.scad>
