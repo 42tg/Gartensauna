@@ -14,7 +14,7 @@ PARTS = ["concrete_piers", "floor_underside", "floor_joists", "floor_insulation"
          "vapour_barrier", "service_battens", "interior_boards", "partition_frame", "partition_boards",
          "ceiling_boards", "ceiling_battens", "ceiling_vapour", "roof_wind", "roof_vent_battens", "roof_joists", "roof_insulation", "roof_deck", "roof_covering", "roof_fascia",
          "bench_upper", "bench_lower", "changing_chair", "glass_front", "glass_frame",
-         "heater_cage", "heater_mount", "heater_stones", "vent_supply", "vent_exhaust", "vent_drying"]
+         "heater_cage", "heater_mount", "heater_stones", "vent_supply", "vent_exhaust", "vent_drying","partition_insulation","partition_vapour","partition_battens","sauna_door_frame","sauna_door_glass","sauna_door_handles","entrance_door_frame","entrance_door_leaf","entrance_door_handles","door_hinges"]
 WALL_PARTS = PARTS[5:14]
 VARIANTS = ["assembled", "exploded", "wall_detail"]
 
@@ -31,6 +31,11 @@ def main():
                        "-D", f'view="{view}"', str(SOURCE)]
             subprocess.run(command, check=True)
             manifest["variants"][view][part] = str(target.relative_to(ROOT))
+    manifest["variants"]["cutaway"] = dict(manifest["variants"]["assembled"])
+    for part in ("sauna_door_glass", "sauna_door_handles", "entrance_door_leaf", "entrance_door_handles"):
+        target = DEST / f"cutaway_{part}.stl"
+        subprocess.run(["openscad", "-o", str(target), "-D", f'part="{part}"', "-D", 'view="cutaway"', str(SOURCE)], check=True)
+        manifest["variants"]["cutaway"][part] = str(target.relative_to(ROOT))
     (DEST / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print("Wrote", DEST / "manifest.json")
 

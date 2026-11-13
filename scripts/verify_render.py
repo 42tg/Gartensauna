@@ -12,12 +12,14 @@ png = stem.with_suffix('.png').read_bytes()
 assert png[:8] == b'\x89PNG\r\n\x1a\n'
 assert struct.unpack('>II', png[16:24]) == (1600, 1100)
 report = json.loads(stem.with_suffix('.json').read_text())
-assert len(report['parts']) == (9 if variant == 'wall_detail' else 37)
+assert len(report['parts']) == (9 if variant == 'wall_detail' else 47)
 if variant == 'cutaway':
-    assert report['source_variant'] == 'assembled'
+    assert report['source_variant'] == 'cutaway'
     assert sum(p['hidden_in_render'] for p in report['parts'].values()) == 12
     assert sum(p['cutaway_modifiers'] for p in report['parts'].values()) == 27
-    for name in ('bench_upper', 'bench_lower', 'changing_chair', 'floor_boards'):
+    assert abs(report['parts']['sauna_door_glass']['dimensions'][0]-.794)<.0001
+    assert abs(report['parts']['entrance_door_leaf']['dimensions'][1]-.794)<.0001
+    for name in ('bench_upper', 'bench_lower', 'changing_chair', 'floor_boards', 'sauna_door_glass', 'entrance_door_leaf'):
         assert not report['parts'][name]['hidden_in_render']
 if variant != 'wall_detail':
     for name in ('heater_cage', 'heater_mount', 'heater_stones'):
@@ -53,24 +55,28 @@ if variant == 'assembled':
     assert -1.796 < lo[1] < -1.794 and -1.461 < hi[1] < -1.459
     assert abs((lo[0] + hi[0]) / 2 - parts['glass_frame']['bounds_min'][0] - 0.500) < 0.001
     # Check actual exported partition position and footprint, not just parameters.
-    assert abs(parts['floor_boards']['bounds_max'][0] - 3.7075) < 0.001
+    assert abs(parts['floor_boards']['bounds_max'][0] - 3.605) < 0.001
     assert abs(parts['partition_boards']['bounds_min'][0] - 0.205 - 1.400) < 0.001
+    assert abs(parts['partition_boards']['dimensions'][0] - .1281) < .0001
+    assert all(abs(a-b)<.0001 for a,b in zip(parts['sauna_door_glass']['dimensions'],(.008,.794,1.977)))
+    assert all(abs(a-b)<.0001 for a,b in zip(parts['entrance_door_leaf']['dimensions'],(.794,.060,1.987)))
+    assert abs(parts['sauna_door_frame']['bounds_min'][0]-parts['glass_frame']['bounds_min'][0])<.0001
     upper, lower = parts['bench_upper'], parts['bench_lower']
     for bench in (upper, lower):
         assert abs(bench['dimensions'][0]-0.600) < 0.001
         assert abs(bench['dimensions'][1]-2.100) < 0.001
-        assert abs(bench['bounds_min'][1]+1.250) < 0.001
-        assert abs(bench['bounds_max'][1]-0.850) < 0.001
+        assert abs(bench['bounds_min'][1]+1.280) < 0.001
+        assert abs(bench['bounds_max'][1]-0.820) < 0.001
     exposed_gap = upper['bounds_min'][0]-lower['bounds_max'][0]
     assert exposed_gap >= 0.019, 'Lower lying surface must not be covered by upper bench'
     window_aisle = lower['bounds_min'][0]-parts['glass_frame']['bounds_max'][0]
     assert window_aisle >= 0.519
     # Entry landing and the rear portion of the 650..1450 doorway remain clear.
-    assert 1.495-lower['bounds_max'][1] >= 0.644
-    assert 1.450-lower['bounds_max'][1] >= 0.599
+    assert 1.495-lower['bounds_max'][1] >= 0.674
+    assert 1.420-lower['bounds_max'][1] >= 0.599
     report['bench_layout_mm'] = {'depth_each': 600, 'length_each': 2100,
         'window_aisle': window_aisle*1000, 'rear_landing': (1.495-lower['bounds_max'][1])*1000,
-        'clear_entry_span': (1.450-lower['bounds_max'][1])*1000}
+        'clear_entry_span': (1.420-lower['bounds_max'][1])*1000}
     report['heater_clearances_mm'] = clearances
     stem.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Heater clearances (mm):', clearances)

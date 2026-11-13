@@ -8,16 +8,22 @@ wing_width = 2000;       // Annahme, zu bestätigen
 wing_extension = 2000;   // Nutzerangabe als zusätzlicher Schenkel interpretiert
 include <envelope.scad>
 changing_clear_width = 1400;
-main_width = wing_width + changing_clear_width + 1.5*wall; // 3707.5 mm
+partition_lining = 19;
+partition_stud = 70;
+partition_gap = 20;
+partition_t = 2*partition_lining + partition_stud + vapour_t + partition_gap;
+main_width = wing_width + changing_clear_width + wall; // 3605 mm; ADR 0014
 wing_start_x = main_width-wing_width;
 clear_internal_height = 2200; // Decision 0012: finished floor to finished ceiling, mm
 height = clear_internal_height; // Shared wall/glazing/ceiling datum; NOT exterior height
 floor_thickness = 120;
 // roof_thickness from envelope.scad; roof top = height + roof_thickness.
 // Floor underside = -floor_thickness; terrain/foundation datum still unconfirmed.
-assert(abs((main_width-wing_width-1.5*wall)-changing_clear_width)<0.01, "Changing-room clear width mismatch");
+assert(abs((main_width-wing_width-wall)-changing_clear_width)<0.01, "Changing-room clear width mismatch");
 assert(height > 2050, "Ceiling must clear the 2050 mm door openings");
 include <bench-layout.scad>
+view = "assembled";
+include <doors.scad>
 include <ventilation.scad>
 // Fail before expensive exports if envelope changes consume usable space.
 assert(bench_lower_x-(main_width-wing_width+45)>=500, "Window aisle below 500 mm planning minimum");
@@ -25,7 +31,7 @@ assert(main_depth-wall-(bench_start_y+bench_length)>=600, "Rear landing below 60
 assert(bench_upper_x-(bench_lower_x+bench_depth)>=bench_gap, "Lying surfaces overlap");
 assert(wall+20+850<=main_width-wing_width-wall/2, "Entrance intersects partition");
 part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
-view = "assembled";      // ["assembled","exploded"]
+// view set before door parameters; command-line -D overrides it.
 offset = view == "exploded" ? 420 : 0;
 // Grundriss: x von 0..main_width, y von -wing_extension..main_depth.
 // Umkleide links im Bestandsrechteck; Saunaflügel rechts.
@@ -46,19 +52,18 @@ module floor(){
 }
 module walls(){
     difference(){
-        footprint_3d(height);
+        union(){
+            cube([wall,main_depth,height]);
+            translate([0,main_depth-wall,0])cube([main_width,wall,height]);
+            translate([main_width-wall,-wing_extension,0])cube([wall,main_depth+wing_extension,height]);
+            cube([wing_start_x,wall,height]);
+            // Front wall meets the glazing frame: no 160 mm open corner.
+            translate([wing_start_x+45,-wing_extension,0])cube([wing_width-45,wall,height]);
+            translate([wing_start_x,0,0])cube([partition_t,main_depth-wall,height]);
+        }
         ventilation_openings();
-        // inset voids: room on left, and right L wing, with open connection
-        translate([wall,wall,-1]) cube([main_width-wing_width-wall*1.5,main_depth-2*wall,height+2]);
-        translate([main_width-wing_width+wall,-wing_extension+wall,-1])
-            cube([wing_width-2*wall,wing_extension+main_depth-2*wall,height+2]);
-        // passage from dressing room into sauna wing
-        translate([main_width-wing_width-wall-5,sauna_door_y,0]) cube([wall*2+10,sauna_door_width,2050]);
-        // outside entrance on left front (y=0)
-        translate([wall+20,-10,0]) cube([850,wall+20,2050]);
-        // Full garden-facing front: floor to roof underside, entire projecting wing
-        translate([main_width-wing_width-1,-wing_extension-1,-1])
-            cube([wall+2,wing_extension+1,height+2]);
+        translate([wing_start_x-1,sauna_door_y,-1])cube([partition_t+2,door_rough_width,door_rough_height+1]);
+        translate([entrance_door_x,-1,-1])cube([door_rough_width,wall+2,door_rough_height+1]);
     }
 }
 module roof(){

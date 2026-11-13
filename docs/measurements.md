@@ -25,4 +25,4 @@ Der alte Schuppen wird abgerissen. Seine 1.930 mm Höhe sind ausschließlich ein
 Fotos wurden im Chat bereitgestellt; noch nicht ins Repository übernommen.
 
 ## Vorläufige Vorraumbreite (13.11.2026)
-Vorraum **1400 mm lichte Breite**, Nachmessung durch den Nutzer ausstehend (ADR 0013). Saunaflügel bleibt 2000 mm außen breit; daraus folgt **3707,5 mm Neubau-Gesamtbreite** bei aktuellem Wand-/Trennwandaufbau, zuzüglich Dachüberstand. 3200 mm bleibt das alte Bestandsmaß; Scan nicht umskalieren. Lichte Höhe weiterhin 2200 mm.
+Vorraum **1400 mm lichte Breite**, Nachmessung durch den Nutzer ausstehend (ADR 0013). Saunaflügel bleibt 2000 mm außen breit; daraus folgt **3605 mm Neubau-Gesamtbreite** mit bündiger Trennwand nach ADR 0014, zuzüglich Dachüberstand. 3200 mm bleibt das alte Bestandsmaß; Scan nicht umskalieren. Lichte Höhe weiterhin 2200 mm.

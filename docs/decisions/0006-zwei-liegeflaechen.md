@@ -1,4 +1,6 @@
 # 0006 – Zwei gleich breite Liegeflächen
+
+> Historischer Entscheidungsstand. Geometrie, Türen und aktuelle Breiten werden durch [ADR 0014](0014-trennwand-tueren-realitaetscheck.md) konkretisiert/korrigiert.
 Datum: 2026-10-26. Nutzerziel: Zwei Personen sollen gleichzeitig liegen können; bei vier Personen überwiegend Sitzen.
 
 Harvia empfiehlt mindestens 600 mm Tiefe zum Liegen und etwa 600 mm Banklänge je Sitzplatz:

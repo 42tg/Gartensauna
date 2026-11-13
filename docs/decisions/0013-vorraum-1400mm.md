@@ -1,5 +1,7 @@
 # 0013 – Vorraum vorläufig 1400 mm licht
 
+> Historischer Entscheidungsstand. Geometrie, Türen und aktuelle Breiten werden durch [ADR 0014](0014-trennwand-tueren-realitaetscheck.md) konkretisiert/korrigiert.
+
 Status: vorläufige Planungsentscheidung, Aufmaß ausstehend. Datum: 13.11.2026.
 
 Der Vorraum wird auf **1400 mm lichte Breite** zwischen fertiger Außenwand-Innenseite und fertiger Trennwandfläche erweitert. Der Nutzer misst die verfügbare Gesamtbreite noch nach. 1400 mm ist keine Außenbreite, kein Bestandsmesswert und kein Maß aus der Punktwolke.

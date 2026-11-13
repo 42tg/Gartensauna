@@ -56,18 +56,27 @@ module wall_layer(name) {
 module perimeter_mask(){
     linear_extrude(height=height)difference(){footprint();offset(delta=-wall)footprint();}
 }
-module partition_mask(){difference(){walls();perimeter_mask();}}
-module partition_frame(){
-    intersection(){partition_mask();union(){
-        for(y=[0:600:main_depth])translate([main_width-wing_width-wall/2,y,0])cube([wall*1.5,45,height]);
-        for(z=[0,height-45])translate([main_width-wing_width-wall/2,0,z])cube([wall*1.5,main_depth,45]);
-    }}
+module partition_mask(){intersection(){walls();translate([wing_start_x,0,0])cube([partition_t,main_depth-wall,height]);}}
+module partition_studs(){
+    x=wing_start_x+partition_lining;
+    for(y=[0,sauna_door_y-45,sauna_door_y+door_rough_width])translate([x,y,0])cube([partition_stud,45,height]);
+    for(z=[0,height-45,door_rough_height])translate([x,0,z])cube([partition_stud,main_depth-wall,45]);
 }
+module partition_frame(){intersection(){partition_mask();partition_studs();}}
 module partition_boards(){
     intersection(){partition_mask();union(){
-        for(x=[main_width-wing_width-wall/2,main_width-wing_width+wall-20])for(y=[0:95:main_depth])
-            translate([x,y,0])cube([20,93.5,height]);
+        for(x=[wing_start_x,wing_start_x+partition_t-partition_lining])for(y=[0:95:main_depth])
+            translate([x,y,0])cube([partition_lining,93.5,height]);
     }}
+}
+module partition_layer(n){
+    intersection(){partition_mask();
+        if(n=="partition_insulation")difference(){
+            translate([wing_start_x+partition_lining,0,0])cube([partition_stud,main_depth,height]);partition_studs();
+        }else if(n=="partition_vapour")translate([wing_start_x+partition_lining+partition_stud,0,0])cube([vapour_t,main_depth,height]);
+        else if(n=="partition_battens")union(){for(y=[0:400:main_depth])
+            translate([wing_start_x+partition_lining+partition_stud+vapour_t,y,0])cube([partition_gap,40,height]);}
+    }
 }
 module floor_joists(){intersection(){
     translate([0,0,-108])footprint_3d(88);
@@ -102,6 +111,8 @@ module window_frame(){
 }
 module select_part(name){
     heater_part(name);
+    door_part(name);
+    if(name=="partition_insulation" || name=="partition_vapour" || name=="partition_battens")partition_layer(name);
     ventilation_part(name);
     if(name=="concrete_piers")intersection(){
         translate([0,0,-300])footprint_3d(180);
@@ -139,16 +150,20 @@ names = ["concrete_piers","floor_underside","floor_joists","floor_insulation","f
          "vapour_barrier","service_battens","interior_boards","partition_frame","partition_boards",
          "ceiling_boards","ceiling_battens","ceiling_vapour","roof_wind","roof_vent_battens","roof_joists","roof_insulation","roof_deck","roof_covering","roof_fascia",
          "bench_upper","bench_lower","changing_chair","glass_front","glass_frame",
-         "heater_cage","heater_mount","heater_stones","vent_supply","vent_exhaust","vent_drying"];
+         "heater_cage","heater_mount","heater_stones","vent_supply","vent_exhaust","vent_drying","partition_insulation","partition_vapour","partition_battens","sauna_door_frame","sauna_door_glass","sauna_door_handles","entrance_door_frame","entrance_door_leaf","entrance_door_handles","door_hinges"];
 function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600 :
     n=="floor_joists" || n=="floor_insulation" ? -350 : n=="floor_boards" ? -120 :
     n=="ceiling_boards" ? 800 : n=="ceiling_battens" || n=="ceiling_vapour" ? 1000 : n=="roof_wind" || n=="roof_vent_battens" ? 1450 : n=="roof_joists" || n=="roof_insulation" ? 1200 :
     n=="roof_deck" ? 1700 : n=="roof_covering" ? 2050 : n=="roof_fascia" ? 1500 : 0;
-if(part=="plan") {
+if(part=="audit_walls") {
+    projection(cut=true)translate([0,0,-1000])union(){walls();sauna_frame();entrance_frame();}
+}else if(part=="plan") {
     projection(cut=false) union(){
         // Horizontal wall section through openings; omit door lintels in plan.
         intersection(){ walls(); translate([-100,-wing_extension-100,1000])cube([main_width+200,main_depth+wing_extension+200,1]); }
-        for(n=["bench_upper","bench_lower","changing_chair","glass_frame","heater_cage","heater_mount"])select_part(n);
+        for(n=["bench_upper","bench_lower","changing_chair","glass_frame","heater_cage","heater_mount","sauna_door_glass","sauna_door_handles","entrance_door_leaf","entrance_door_handles"])select_part(n);
+        // Section frames at 1 m; their heads must not fill the plan opening.
+        intersection(){union(){sauna_frame();entrance_frame();}translate([-100,-2100,1000])cube([main_width+200,4000,1]);}
     }
 }else if(view=="wall_detail"){
     for(i=[0:len(layer_names)-1])if(part==layer_names[i] || part=="detailed_all")

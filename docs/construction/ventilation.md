@@ -1,5 +1,7 @@
 # Lüftung und vergleichende Strömungsprüfung
 
+> Die nachfolgenden Simulationszahlen gelten für den damaligen Modellstand. Seit ADR 0014 sind Trennwand und Volumen geändert. Ein neuer isothermer Vergleich ist kein erneuter Wärmeauftriebs-/Aufheiznachweis.
+
 **Geometrieänderung 13.11.2026:** Lichte Innenhöhe jetzt 2200 mm statt 2400 mm; Trocknungsöffnung z=1980…2140 mm. Frühere abgelegte Simulationsergebnisse beziehen sich auf den alten Modellstand und sind kein Nachweis für die neue Geometrie. Vor neuer Auslegung/Rangfolge neu rechnen.
 
 Stand: 03.11.2026. **Planungsvariante, keine Montage- oder bauphysikalische Freigabe.**

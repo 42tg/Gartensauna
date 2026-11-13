@@ -2,7 +2,7 @@
 import bpy
 
 def material_for(part):
-    part = {"ceiling_vapour": "vapour_barrier", "roof_wind": "wind_barrier"}.get(part, part)
+    part = {"ceiling_vapour": "vapour_barrier", "roof_wind": "wind_barrier", "partition_vapour": "vapour_barrier"}.get(part, part)
     material = bpy.data.materials.new(part)
     material.use_nodes = True
     nodes, links = material.node_tree.nodes, material.node_tree.links
@@ -12,12 +12,12 @@ def material_for(part):
         bsdf.inputs["Base Color"].default_value = {"vent_supply": (0.08,0.35,0.52,1), "vent_exhaust": (0.55,0.18,0.06,1), "vent_drying": (0.22,0.24,0.26,1)}[part]
         bsdf.inputs["Metallic"].default_value = 0.7
         return material
-    if part in ("heater_cage", "heater_mount"):
+    if part in ("heater_cage", "heater_mount", "door_hinges"):
         bsdf.inputs["Base Color"].default_value = (0.42, 0.46, 0.49, 1)
         bsdf.inputs["Metallic"].default_value = 0.95
         bsdf.inputs["Roughness"].default_value = 0.27
         return material
-    if part == "glass_front":
+    if part in ("glass_front", "sauna_door_glass"):
         bsdf.inputs["Base Color"].default_value = (0.92, 0.98, 0.97, 1)
         bsdf.inputs["Transmission Weight"].default_value = 1
         bsdf.inputs["IOR"].default_value = 1.45

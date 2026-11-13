@@ -16,7 +16,7 @@ Stand 26.10.2026. Planungsannahmen auf Nutzerwunsch konkretisiert, keine Ausfüh
 | Horizontale Holzfassade | 20 |
 | **Summe** | **205** |
 
-Die Bahndicken sind CAD-Reserven, keine Produktspezifikation. Ständer und Dämmung teilen sich eine Zone. Horizontale Bretter auf vertikalen Latten ermöglichen durchgehende vertikale Luftwege. Lüftungsöffnungen, Insektenschutz und Fenster-/Sockelanschlüsse müssen noch konstruiert werden. Außenplatte nicht pauschal durch OSB ersetzen; Material und Feuchteverhalten des Gesamtaufbaus prüfen. Die Trennwand bleibt ein gesonderter geometrischer Platzhalter (307,5 mm), nicht dieser Außenwandaufbau.
+Die Bahndicken sind CAD-Reserven, keine Produktspezifikation. Ständer und Dämmung teilen sich eine Zone. Horizontale Bretter auf vertikalen Latten ermöglichen durchgehende vertikale Luftwege. Lüftungsöffnungen, Insektenschutz und Fenster-/Sockelanschlüsse müssen noch konstruiert werden. Außenplatte nicht pauschal durch OSB ersetzen; Material und Feuchteverhalten des Gesamtaufbaus prüfen. Die Trennwand erhält einen gesonderten Planungsaufbau von **128,1 mm**: 19 mm Vorraumholz + 70 mm Ständer/Dämmung + 0,1 mm Dampfsperre auf der heißen Seite + 20 mm Lattung/Luft + 19 mm Saunaholz. Keine Tragwerks- oder Feuchteschutzfreigabe. Vorraumseite x=1605 mm bündig mit Flügel-/Glasrahmenbeginn.
 
 ## Decke / Dach, unten nach oben
 
@@ -28,26 +28,26 @@ Die 160 mm Dämmung sind ein Planungsansatz, kein statisch bemessener Balkenquer
 
 | Merkmal | V3.1 |
 |---|---:|
-| Umriss | 3707,5 × 3700 mm, L-Form |
+| Umriss | 3605 × 3700 mm, L-Form |
 | Saunaflügel außen | 2000 mm breit |
-| Saunabreite zwischen geschlossenen Innenwänden | 1590 mm |
+| Saunabreite hinten / vor Glasrahmen | 1666,9 / 1750 mm |
 | Saunalänge zwischen Stirnwänden | 3290 mm |
 | Liegeflächen | 2 × 600 × 2100 mm |
 | Gang zwischen Fensterrahmen und unterer Bank | 520 mm |
-| Rückwärtige Standfläche | 645 mm |
+| Rückwärtige Standfläche | 675 mm |
 | Freier Zugang hinter Bankende innerhalb Türöffnung | 600 mm |
-| Engstelle neben Trennwand, nicht regulärer Zugang | 360 mm |
+| Engstelle neben Trennwand, nicht regulärer Zugang | 436,9 mm |
 | Umkleide lichte Rechteckfläche | 1400 × 1290 mm |
 
-Bänke y=-1250..850 mm, obere Bank x=2892,5..3492,5, untere x=2272,5..2872,5. Der reguläre Zugang erfolgt hinter den Bänken. Vorraum vorläufig auf 1400 mm lichte Breite erweitert; Türrahmen, Anschlag und Bewegungsfläche sind noch nicht vollständig modelliert. Außenöffnung 850 mm auf x=225..1075 verschoben, damit sie nicht mehr in die Trennwand schneidet; verbleibende Pfostenbreiten sind statisch ungeprüft.
+Bänke y=-1280..820 mm, obere Bank x=2790..3390, untere x=2170..2770. Zugang hinter den Bänken; 675 mm bis zur Rückwand. Vorraum 1400 × 1290 mm. Trennwand 128,1 mm, lichte Zargenöffnungen 800 × 2000 mm. Mit um 90° geöffneten Türblättern bleiben 793 mm (Sauna) und 767 mm (außen). Öffnung und 600-mm-Prüfkörperroute werden gegen einen tatsächlichen CAD-Wandschnitt geprüft. Türprodukte, Fälze, Dichtungen und Beschläge bleiben unbestimmt.
 
-Ofen folgt dem verbreiterten Neubau: Montageebene y=-1795, x-Mitte=2207,5, Unterkante=310 mm. Konservative Abstände: Rahmen 260 mm, Glas 274 mm, untere Bank 210 mm, obere Bank ca. 533 mm, Decke 1300 mm, Boden 310 mm. Diese Modellhüllen werden in CI geprüft. Ofenschutz und Befestigung fehlen weiterhin.
+Ofenmitte x=2105, Montageebene y=-1795, Unterkante=310 mm. Konservative Modellhüllen: Rahmen 260, Glas 274, untere Bank 180, obere Bank rund 522, Decke 1300, Boden 310 mm. Der Render-Prüfer berechnet diese aus den tatsächlichen exportierten STL-Hüllen. Ofenschutz und Befestigung fehlen.
 
-Die vereinfachte rechteckige Referenzhülle im aktuellen Modell hat ca. 12,67 m³ (1,75 × 3,29 × 2,20 m, ohne Abzug des Trennwandvorsprungs). Mit ca. 4,11 m² sichtbarem Glas und bisherigem Glaszuschlag ergibt sich ein konservativer Orientierungswert von ca. 16,78 m³, keine exakte Volumenbilanz. DROP 9 bleibt deshalb nur Formreferenz, nicht ausgewähltes Heizgerät (Herstellerbereich bis 13 m³).
+Saunagrundfläche ohne Türnische 5,6333 m²; bei 2200 mm Höhe 12,3932 m³. Mit 0,2066 m³ Türnischenzuschlag und 5,6806 m² sichtbarem Glas (Front **und Tür**) ergeben sich nach HUUMs 1-m³/m²-Ansatz **18,28 m³ Auslegungsvolumen**. DROP bis 13 m³ ist dafür zu klein; nur Formreferenz. Vollständige Rechnung: [Realitätscheck](../reality-check-2026-11-13.md).
 
 ## Boden und offene Nachweise
 
-Der Boden bleibt ein 120-mm-Platzhalter: 12 mm Unterplatte, 88 mm Balken/Dämmung und 20 mm Dielen. Feuchteabdichtung, wasserbeständiger Oberbelag, Wandanschluss und Gründung sind noch zu planen. Ebenfalls offen: Trennwandaufbau, geschlossene Dampfsperrenanschlüsse an Wand/Decke/Glas, Tragwerk über der Glasfront, Bankaufstieg und Lüftung. Siehe Issues #3, #4 und #6.
+Der Boden bleibt ein 120-mm-Platzhalter: 12 mm Unterplatte, 88 mm Balken/Dämmung und 20 mm Dielen. Feuchteabdichtung, wasserbeständiger Oberbelag, Wandanschluss und Gründung sind noch zu planen. Ebenfalls offen: Bestätigung des Trennwandaufbaus, geschlossene Dampfsperrenanschlüsse an Wand/Decke/Glas, Tragwerk über der Glasfront, Bankaufstieg und Lüftung. Siehe Issues #3, #4 und #6.
 
 ## Quellen
 

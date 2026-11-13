@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 manifest = json.loads((ROOT / "build/meshes/manifest.json").read_text())
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 variant = args[0] if args else "assembled"
-source_variant = "assembled" if variant in ("cutaway", "heater_detail") else variant
+source_variant = "assembled" if variant == "heater_detail" else variant
 if source_variant not in manifest["variants"]:
     raise ValueError(f"Unknown variant: {variant}")
 
