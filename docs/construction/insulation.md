@@ -24,11 +24,11 @@ Die Bahndicken sind CAD-Reserven, keine Produktspezifikation. Ständer und Dämm
 
 Die 160 mm Dämmung sind ein Planungsansatz, kein statisch bemessener Balkenquerschnitt. Das CAD zeigt weiterhin eine horizontale Hülle. Dachgefälle, Entwässerung, Belüftungsöffnungen und Anschluss an die L-Ecke sind offen; die 60-mm-Zone ist noch kein funktionierender Lüftungsnachweis. Der Dachrand ist schematisch geschlossen. Lichte Innenhöhe ist seit Entscheidung 0012 auf 2200 mm festgelegt; Dachoberkante liegt auf 2481 mm über Fertigboden, zuzüglich späterem Gefälle. Bodenunterseite bei -120 mm, Auflagerunterkante bei -300 mm; Gelände-/Fundamentbezug offen.
 
-## Maßfolgen bei unverändertem Außenumriss
+## Aktuelle Maßfolgen (ADR 0012 und 0013; vorläufig bis Aufmaß)
 
 | Merkmal | V3.1 |
 |---|---:|
-| Umriss | 3200 × 3700 mm, L-Form |
+| Umriss | 3707,5 × 3700 mm, L-Form |
 | Saunaflügel außen | 2000 mm breit |
 | Saunabreite zwischen geschlossenen Innenwänden | 1590 mm |
 | Saunalänge zwischen Stirnwänden | 3290 mm |
@@ -37,13 +37,13 @@ Die 160 mm Dämmung sind ein Planungsansatz, kein statisch bemessener Balkenquer
 | Rückwärtige Standfläche | 645 mm |
 | Freier Zugang hinter Bankende innerhalb Türöffnung | 600 mm |
 | Engstelle neben Trennwand, nicht regulärer Zugang | 360 mm |
-| Umkleide lichte Rechteckfläche | 892,5 × 1290 mm |
+| Umkleide lichte Rechteckfläche | 1400 × 1290 mm |
 
-Bänke y=-1250..850 mm, obere Bank x=2385..2985, untere x=1765..2365. Der reguläre Zugang erfolgt hinter den Bänken. Umkleide bleibt eng; Türrahmen, Anschlag und Bewegungsfläche sind noch nicht vollständig modelliert. Außenöffnung 850 mm auf x=225..1075 verschoben, damit sie nicht mehr in die Trennwand schneidet; verbleibende Pfostenbreiten sind statisch ungeprüft.
+Bänke y=-1250..850 mm, obere Bank x=2892,5..3492,5, untere x=2272,5..2872,5. Der reguläre Zugang erfolgt hinter den Bänken. Vorraum vorläufig auf 1400 mm lichte Breite erweitert; Türrahmen, Anschlag und Bewegungsfläche sind noch nicht vollständig modelliert. Außenöffnung 850 mm auf x=225..1075 verschoben, damit sie nicht mehr in die Trennwand schneidet; verbleibende Pfostenbreiten sind statisch ungeprüft.
 
-Ofen wandert mit der Stirnwand 25 mm nach innen: Montageebene y=-1795, x-Mitte=1700, Unterkante=310 mm. Konservative Abstände: Rahmen 260 mm, Glas 274 mm, untere Bank 210 mm, obere Bank 490 mm, Decke 1500 mm, Boden 310 mm. Diese Modellhüllen werden in CI geprüft. Ofenschutz und Befestigung fehlen weiterhin.
+Ofen folgt dem verbreiterten Neubau: Montageebene y=-1795, x-Mitte=2207,5, Unterkante=310 mm. Konservative Abstände: Rahmen 260 mm, Glas 274 mm, untere Bank 210 mm, obere Bank ca. 533 mm, Decke 1300 mm, Boden 310 mm. Diese Modellhüllen werden in CI geprüft. Ofenschutz und Befestigung fehlen weiterhin.
 
-Das geschlossene innere Rechteck hat ca. 12,55 m³; die zusätzliche Nische an der dünneren Glasfront bringt den Raum auf ca. 13,24 m³ (ohne Türnische). Mit dem bisherigen Glaszuschlag von ca. 4,50 m³ liegt der Auslegungswert näherungsweise bei 17,74 m³. DROP 9 bleibt deshalb nur Formreferenz, nicht ausgewähltes Heizgerät (Herstellerbereich bis 13 m³).
+Die vereinfachte rechteckige Referenzhülle im aktuellen Modell hat ca. 12,67 m³ (1,75 × 3,29 × 2,20 m, ohne Abzug des Trennwandvorsprungs). Mit ca. 4,11 m² sichtbarem Glas und bisherigem Glaszuschlag ergibt sich ein konservativer Orientierungswert von ca. 16,78 m³, keine exakte Volumenbilanz. DROP 9 bleibt deshalb nur Formreferenz, nicht ausgewähltes Heizgerät (Herstellerbereich bis 13 m³).
 
 ## Boden und offene Nachweise
 

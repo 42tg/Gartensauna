@@ -9,7 +9,7 @@ Mechanische Abluft, passive Zuluft, separate geschlossene Trocknungsklappe. Die 
 
 | Bauteil | Position im CAD (mm) | Freie Rohöffnung vor Lamellen |
 |---|---|---|
-| Zuluft | Stirnwand am Ofen: x 1550–1700, z 1080–1160 | 150 × 80 mm |
+| Zuluft | Stirnwand am Ofen: x 2057,5–2207,5, z 1080–1160 | 150 × 80 mm |
 | Betriebsabluft | Rechte Außenwand: y 500–800, z 220–380 | 300 × 160 mm |
 | Trocknung | Rechte Außenwand: y 500–800, z 1980–2140 | 300 × 160 mm, während Nutzung geschlossen |
 
