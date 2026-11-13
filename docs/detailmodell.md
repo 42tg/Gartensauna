@@ -8,7 +8,7 @@ Der aktuelle [Hüllaufbau](construction/insulation.md) ersetzt die bisherigen 18
 
 - Gesamtansicht: vollständiges Bauteilmodell.
 - Explosion: identische Geometrie, Dach-/Bodenlagen in Z versetzt.
-- Wandlagen: neun Gruppen eines 1200 × 2400-mm-Musters, mit Beschriftung. Horizontale Bretter und vertikale Luftwege.
+- Wandlagen: neun Gruppen eines 1200 × 2200-mm-Musters, mit Beschriftung. Horizontale Bretter und vertikale Luftwege.
 - Cutaway: dieselben 34 Gruppen; zehn Dachgruppen und zwei Glasgruppen ausgeblendet. Neun Wandgruppen mit je drei reversiblen Schnittmasken. Bänke, Stuhl und Boden bleiben sichtbar.
 
 Zusätzlich bleibt die Ofendetailansicht verfügbar. Ausgabe: `gartensauna_<Ansicht>.blend/.png/.json`; gemeinsames Paket `gartensauna-cad-blender`.

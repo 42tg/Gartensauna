@@ -21,3 +21,6 @@ Die CI prüft diese Abstände an den tatsächlichen importierten CAD-Außenhüll
 
 ## Leistung bleibt offen
 Innenraum näherungsweise 1,64 × 3,34 × 2,40 = 13,15 m³, ohne Abzug von Bänken. Sichtbares Glas 1,93 × 2,33 = 4,50 m². Mit Herstellerzuschlag 1 m³ je m² ungedämmter Glasfläche ergibt sich ca. 17,64 m³; selbst mit dieser günstigen Glasflächenannahme über 13 m³ (DROP 9). Deshalb keine Kaufempfehlung für die konkrete DROP-Variante. Ofenfamilie/Leistung und tatsächlicher Glasaufbau müssen vor Beschaffung neu bewertet werden. Siehe Issue #6.
+
+## Fortschreibung 13.11.2026
+Die obige Volumenrechnung beschreibt den damaligen Entwurf. Für den aktuellen Hüllaufbau und 2200 mm Innenhöhe siehe [Entscheidung 0012](0012-neubau-innenhoehe.md). Die Ofenauswahl bleibt offen.

@@ -27,3 +27,8 @@
 - Zusätzlich zu den Bildern den passenden GitHub-Lauf bzw. das Download-Paket mit den Blender-Dateien verlinken. Noch offene Maße, Schichtdicken und Konstruktionsannahmen knapp benennen, soweit sie für die gezeigte Änderung relevant sind.
 - Falls Rendering oder Bildanzeige technisch scheitern, den konkreten Fehler transparent nennen; keine erfolgreiche Bildprüfung behaupten.
 - Reine Dokumentationsänderungen ohne Einfluss auf Modell oder Darstellung erfordern keinen erneuten Renderlauf.
+
+## Verbindlicher Neubau- und Höhenbezug
+- Der alte Schuppen wird abgerissen. Seine 1930 mm Höhe sind ausschließlich Bestandsdaten und keine Neubaugrenze.
+- Entscheidung 0012 gilt: 2200 mm lichte Innenhöhe, Oberkante Fertigboden bis Unterkante fertige Decke. Dach- und Bodenaufbau kommen außen hinzu.
+- `clear_internal_height` ist die zentrale CAD-Vorgabe. Innenhöhe, Dachoberkante und Gelände-/Fundamentbezug ausdrücklich unterscheiden. Historische V1/V2-Maße und ältere ADR-Höhen nicht als aktuellen Stand übernehmen.

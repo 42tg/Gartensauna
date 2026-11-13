@@ -2,14 +2,20 @@
 
 Planung einer Gartensauna am Standort des bestehenden Holzunterstands. Dieses Repository ist die zentrale Quelle für Maße, Entscheidungen, CAD-Modelle, Bauaufbau, Kosten und Aufgaben.
 
-## Gesicherter Stand (25.10.2026)
+## Verbindlicher Planungsstand (13.11.2026)
+
+**Der alte Holzunterstand wird abgerissen; geplant wird ein Neubau. Seine 1,93 m Höhe begrenzen den Neubau nicht. Beschlossen sind 2,20 m lichte Innenhöhe, gemessen von Oberkante Fertigboden bis Unterkante fertiger Decke.**
+
+Mit dem aktuellen 281-mm-Dachaufbau liegt die Dachoberkante bei 2,481 m über Fertigboden. Einschließlich 120 mm Bodenaufbau: 2,601 m von Bodenunterseite bis Dachoberkante, ohne Fundamente und zusätzliches Dachgefälle. Gelände- und Genehmigungshöhe bleiben zu bestimmen. Maßgebend: [Entscheidung 0012](docs/decisions/0012-neubau-innenhoehe.md).
+
+## Gemessener Altbestand (25.10.2026)
 - Bestehender Unterstand: **3,20 m lang**, **1,70 m tief** (links, Mitte und rechts), **1,93 m hoch** (gemessener Wert; Messpunkt noch zu klären).
 - Eine Erweiterung der Tiefe auf **bis zu ca. 2,00 m** ist möglich.
-- Die Höhe ist **variabel**, weil der Unterstand voraussichtlich neu gebaut wird.
+- Der Unterstand wird **abgerissen**. Bestandsmaße dienen der Standortreferenz, nicht als maximale Neubauhöhe.
 - Kein Umbau des Steinturms.
 - Vorhandene Fotos zeigen einen Holzunterstand mit Pultdach, Pfosten, OSB-Teilen und Holzlager.
 
-## Vorläufiger Entwurf
+## Historischer Entwurf V1 (nicht maßgebend für den aktuellen Neubau)
 Für CAD V1 werden **3,20 × 2,00 m** und eine **vordere Höhe von 2,30 m** als *Annahmen* verwendet, nicht als beschlossene Endmaße. Saunabänke, Tür und Ofen sind Platzhalter.
 
 ## Vorgehen

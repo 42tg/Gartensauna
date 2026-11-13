@@ -1,5 +1,7 @@
 # Zeitabhängige Strömung mit zeitlicher Mittelung
 
+**Geometrieänderung 13.11.2026:** Lichte Innenhöhe jetzt 2200 mm statt 2400 mm; Trocknungsöffnung z=1980…2140 mm. Frühere abgelegte Simulationsergebnisse beziehen sich auf den alten Modellstand und sind kein Nachweis für die neue Geometrie. Vor neuer Auslegung/Rangfolge neu rechnen.
+
 [Geprüfter Ergebnisbericht vom 03.11.2026 mit Bildern](transient-cfd-results-2026-11-03.md): Beide 300-s-Läufe bestehen die numerischen Fenster- und Zeitschrittprüfungen. Das Luftalter bleibt wegen seiner Startabhängigkeit separat nicht freigegeben.
 
 Die stationäre Auftriebsrechnung erfüllte die Geschwindigkeitsprüfung nicht. Diese Erweiterung verwendet OpenCFD v1912 `buoyantPimpleFoam` mit physikalischer Zeit: ideale Gasdichte, `buoyantKEpsilon`-URANS, Oberflächenstrahlung und dieselben Wärme-/Lüftungsrandbedingungen wie die [thermische Rechnung](thermal-cfd.md). Das CAD und das ursprüngliche orthogonale Rechengitter bleiben unverändert.

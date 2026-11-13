@@ -1,5 +1,7 @@
 # Lüftung und vergleichende Strömungsprüfung
 
+**Geometrieänderung 13.11.2026:** Lichte Innenhöhe jetzt 2200 mm statt 2400 mm; Trocknungsöffnung z=1980…2140 mm. Frühere abgelegte Simulationsergebnisse beziehen sich auf den alten Modellstand und sind kein Nachweis für die neue Geometrie. Vor neuer Auslegung/Rangfolge neu rechnen.
+
 Stand: 03.11.2026. **Planungsvariante, keine Montage- oder bauphysikalische Freigabe.**
 
 ## Eingebautes Konzept
@@ -9,7 +11,7 @@ Mechanische Abluft, passive Zuluft, separate geschlossene Trocknungsklappe. Die 
 |---|---|---|
 | Zuluft | Stirnwand am Ofen: x 1550–1700, z 1080–1160 | 150 × 80 mm |
 | Betriebsabluft | Rechte Außenwand: y 500–800, z 220–380 | 300 × 160 mm |
-| Trocknung | Rechte Außenwand: y 500–800, z 2180–2340 | 300 × 160 mm, während Nutzung geschlossen |
+| Trocknung | Rechte Außenwand: y 500–800, z 1980–2140 | 300 × 160 mm, während Nutzung geschlossen |
 
 Wanddurchführungen enthalten 2-mm-Hülsen, innen/außen Lamellen und einen 8-mm-Rand. Die Trocknungsöffnung hat eine geschlossene Platte. Farben zur Orientierung: Zuluft blau, Abluft kupferfarben, Trocknung dunkelgrau. Mechanik, Wetterschutz, Insektenschutz, Befestigung und Ventilator sind nicht konstruiert. Abdichtung der Hülse an die Dampfsperre, Kondensatableitung/Gefälle und Wärmebrücken sind vor Bau zu detaillieren; der CAD-Kontakt ersetzt keinen Dichtheitsnachweis.
 

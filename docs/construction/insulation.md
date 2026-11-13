@@ -22,7 +22,7 @@ Die Bahndicken sind CAD-Reserven, keine Produktspezifikation. Ständer und Dämm
 
 15 mm Holz + 20 mm Luft/Lattung + 0,1 mm Alu + 160 mm Balken/Dämmung + 0,9 mm diffusionsoffene Windlage + 60 mm reservierte Dachlüftung + 22 mm Dachschalung + 3 mm Dachhaut = **281 mm**.
 
-Die 160 mm Dämmung sind ein Planungsansatz, kein statisch bemessener Balkenquerschnitt. Das CAD zeigt weiterhin eine horizontale Hülle. Dachgefälle, Entwässerung, Belüftungsöffnungen und Anschluss an die L-Ecke sind offen; die 60-mm-Zone ist noch kein funktionierender Lüftungsnachweis. Der Dachrand ist schematisch geschlossen. Innenhöhe bleibt 2400 mm; Dachoberkante steigt auf 2681 mm über Fertigboden, zuzüglich späterem Gefälle. Bodenunterseite bei -120 mm, Auflagerunterkante bei -300 mm; Gelände-/Fundamentbezug offen.
+Die 160 mm Dämmung sind ein Planungsansatz, kein statisch bemessener Balkenquerschnitt. Das CAD zeigt weiterhin eine horizontale Hülle. Dachgefälle, Entwässerung, Belüftungsöffnungen und Anschluss an die L-Ecke sind offen; die 60-mm-Zone ist noch kein funktionierender Lüftungsnachweis. Der Dachrand ist schematisch geschlossen. Lichte Innenhöhe ist seit Entscheidung 0012 auf 2200 mm festgelegt; Dachoberkante liegt auf 2481 mm über Fertigboden, zuzüglich späterem Gefälle. Bodenunterseite bei -120 mm, Auflagerunterkante bei -300 mm; Gelände-/Fundamentbezug offen.
 
 ## Maßfolgen bei unverändertem Außenumriss
 

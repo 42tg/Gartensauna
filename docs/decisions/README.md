@@ -5,3 +5,5 @@ Jede Entscheidung bekommt eine eigene Markdown-Datei mit Status, Datum, Kontext,
 - [ADR-0001: Standort am Holzunterstand](0001-standort.md)
 
 Offene Varianten gehören zunächst in Issues und sind **keine** beschlossenen Entscheidungen.
+
+- [ADR-0012: Abriss und 2200 mm lichte Neubauhöhe](0012-neubau-innenhoehe.md) – maßgebend für den aktuellen Höhenbezug.

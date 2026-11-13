@@ -6,9 +6,12 @@ main_depth = 1700;
 wing_width = 2000;       // Annahme, zu bestätigen
 wing_extension = 2000;   // Nutzerangabe als zusätzlicher Schenkel interpretiert
 include <envelope.scad>
-height = 2400;           // Annahme
+clear_internal_height = 2200; // Decision 0012: finished floor to finished ceiling, mm
+height = clear_internal_height; // Shared wall/glazing/ceiling datum; NOT exterior height
 floor_thickness = 120;
-// roof_thickness from envelope.scad
+// roof_thickness from envelope.scad; roof top = height + roof_thickness.
+// Floor underside = -floor_thickness; terrain/foundation datum still unconfirmed.
+assert(height > 2050, "Ceiling must clear the 2050 mm door openings");
 include <bench-layout.scad>
 include <ventilation.scad>
 // Fail before expensive exports if envelope changes consume usable space.

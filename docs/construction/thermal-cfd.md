@@ -1,5 +1,7 @@
 # Thermische Sauna-CFD: Wärmeauftrieb, Strahlung und Luftwechsel
 
+**Geometrieänderung 13.11.2026:** Lichte Innenhöhe jetzt 2200 mm statt 2400 mm; Trocknungsöffnung z=1980…2140 mm. Frühere abgelegte Simulationsergebnisse beziehen sich auf den alten Modellstand und sind kein Nachweis für die neue Geometrie. Vor neuer Auslegung/Rangfolge neu rechnen.
+
 Stand: 03.11.2026. **Implementierte numerische Untersuchung mit angenommenen Betriebsbedingungen; keine Messung oder Bau-/Ofenfreigabe.** Der neue Workflow ergänzt den bisherigen isothermen Potentialvergleich. Seine Werte dürfen nicht ungeprüft mit dessen Faktoren gleichgesetzt werden.
 
 ## Tatsächlich gekoppelte Physik
