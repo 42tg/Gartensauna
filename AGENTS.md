@@ -32,3 +32,6 @@
 - Der alte Schuppen wird abgerissen. Seine 1930 mm Höhe sind ausschließlich Bestandsdaten und keine Neubaugrenze.
 - Entscheidung 0012 gilt: 2200 mm lichte Innenhöhe, Oberkante Fertigboden bis Unterkante fertige Decke. Dach- und Bodenaufbau kommen außen hinzu.
 - `clear_internal_height` ist die zentrale CAD-Vorgabe. Innenhöhe, Dachoberkante und Gelände-/Fundamentbezug ausdrücklich unterscheiden. Historische V1/V2-Maße und ältere ADR-Höhen nicht als aktuellen Stand übernehmen.
+
+## Vorläufige Vorraumbreite (13.11.2026)
+Vorraum **1400 mm lichte Breite**, Nachmessung durch den Nutzer ausstehend (ADR 0013). Saunaflügel bleibt 2000 mm außen breit; daraus folgt **3707,5 mm Neubau-Gesamtbreite** bei aktuellem Wand-/Trennwandaufbau, zuzüglich Dachüberstand. 3200 mm bleibt das alte Bestandsmaß; Scan nicht umskalieren. Lichte Höhe weiterhin 2200 mm.

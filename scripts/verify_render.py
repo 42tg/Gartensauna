@@ -45,13 +45,16 @@ if variant == 'assembled':
         'ceiling': (parts['ceiling_boards']['bounds_min'][2] - hi[2]) * 1000,
     }
     for name, gap in clearances.items():
-        minimum = 1200 if name == 'ceiling' else 100 if name == 'floor' else 150
+        minimum = 1200 if name == 'ceiling' else 310 if name == 'floor' else 150
         assert gap >= minimum - 0.5, (name, gap, minimum)
     # Bracket faces the window-side end wall; no accidental mirror/old placement.
     mount_lo = parts['heater_mount']['bounds_min']
     assert abs(mount_lo[1] - (-1.795)) < 0.001
     assert -1.796 < lo[1] < -1.794 and -1.461 < hi[1] < -1.459
-    assert abs((lo[0] + hi[0]) / 2 - 1.700) < 0.001
+    assert abs((lo[0] + hi[0]) / 2 - parts['glass_frame']['bounds_min'][0] - 0.500) < 0.001
+    # Check actual exported partition position and footprint, not just parameters.
+    assert abs(parts['floor_boards']['bounds_max'][0] - 3.7075) < 0.001
+    assert abs(parts['partition_boards']['bounds_min'][0] - 0.205 - 1.400) < 0.001
     upper, lower = parts['bench_upper'], parts['bench_lower']
     for bench in (upper, lower):
         assert abs(bench['dimensions'][0]-0.600) < 0.001

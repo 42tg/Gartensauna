@@ -72,9 +72,22 @@ if variant == "cutaway":
     wall_parts = {"wall_cladding", "wall_battens", "wall_sheathing", "wind_barrier", "wall_studs",
                   "wall_insulation", "vapour_barrier", "service_battens", "interior_boards"}
     # CAD footprint is in metres here. Remove only the camera-facing facades.
-    cuts = [((0, 0, -0.01), (1.201, 0.206, 2.42)),
-            ((1.199, -2.001, -0.01), (2.002, 0.207, 2.42)),
-            ((-0.001, 0, -0.01), (0.207, 1.701, 2.42))]
+    # Follow actual imported geometry when the changing room/wing moves.
+    bpy.context.view_layer.update()
+    def bounds(part):
+        obj = bpy.data.objects[part]
+        pts = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
+        return ([min(p[i] for p in pts) for i in range(3)],
+                [max(p[i] for p in pts) for i in range(3)])
+    floor_lo, floor_hi = bounds("floor_boards")
+    glass_lo, glass_hi = bounds("glass_frame")
+    ceiling_lo, _ = bounds("ceiling_boards")
+    wing_x, wing_y = glass_lo[0], glass_lo[1]
+    cut_h = ceiling_lo[2] + 0.02
+    cuts = [((0, 0, -0.01), (wing_x+0.001, 0.206, cut_h)),
+            ((wing_x-0.001, wing_y-0.001, -0.01),
+             (floor_hi[0]-wing_x+0.002, 0.207, cut_h)),
+            ((-0.001, 0, -0.01), (0.207, floor_hi[1]+0.001, cut_h))]
     cutters = []
     for index, (origin, size) in enumerate(cuts):
         bpy.ops.mesh.primitive_cube_add(size=1, location=Vector(origin)+Vector(size)*0.5)

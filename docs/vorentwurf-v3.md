@@ -14,7 +14,9 @@
 ## Geometrie und offene Interpretation
 | Parameter | Wert | Herkunft |
 |---|---:|---|
-| Bisheriger Unterstand, Gesamtbreite | 3.200 mm | gemessen |
+| Bisheriger Unterstand, Gesamtbreite | 3.200 mm | gemessen; Altbestand, keine Neubaugrenze |
+| Neubau, Gesamtbreite | 3.707,5 mm | abgeleitete vorläufige Planung; Nachmessung ausstehend |
+| Vorraum, lichte Breite | 1.400 mm | vorläufig beschlossen, ADR 0013 |
 | Bisheriger Unterstand, Tiefe | 1.700 mm | gemessen |
 | Zusätzliche Ausdehnung rechter Flügel | 2.000 mm | Nutzerangabe; Richtung im Gelände noch bestätigen |
 | Breite rechter Flügel | 2.000 mm | **Entwurfsannahme** |
@@ -22,7 +24,7 @@
 | Dachoberkante über Fertigboden | 2.481 mm | 2.200 + 281 mm Dachaufbau; zusätzliches Gefälle noch offen |
 | Wanddicke | 205 mm in CAD-V3.1 | Planungsaufbau, siehe Hüllaufbau; nicht baufreigegeben |
 
-Bei dieser Interpretation beträgt die Gesamtausdehnung in der Tiefe **3.700 mm** (1.700 + 2.000). Der rechte Flügel belegt 2.000 mm der 3.200 mm Breite. Der linke, verbleibende Teil ist außen 1.200 mm breit: **für einen komfortablen beheizten Sitz-/Umkleidebereich wahrscheinlich zu schmal**. Deshalb ist diese V3 ein erster geometrischer Ansatz, **keine optimierte Aufteilung**. Wir sollten die Flügelbreite und die Lage der Trennwand in V3.1 optimieren; eventuell muss die Gesamtbreite wachsen.
+Bei dieser Interpretation beträgt die Gesamtausdehnung in der Tiefe **3.700 mm** (1.700 + 2.000). Der rechte Flügel bleibt 2.000 mm breit. Seit ADR 0013 erhält der Vorraum 1.400 mm lichte Breite: 205 mm Außenwand plus 102,5 mm Versatz bis zur linken Trennwandfläche ergeben 1.707,5 mm bis zum Flügelbeginn und insgesamt 3.707,5 mm Neubau-Gesamtbreite. Diese Breite muss vor Ort bestätigt werden. Die lichte Vorraumtiefe bleibt 1.290 mm; der Raum ist damit noch keine großzügige Ruhezone.
 
 Die Tür-/Bankpositionen in der Zeichnung sind schematisch. Aktuell sind zwei 600 × 2100-mm-Liegeflächen geometrisch nachgewiesen; Bewegungsflächen siehe V3.1.
 
@@ -46,4 +48,4 @@ Die gesamte gartenseitige Front des vorspringenden Saunaflügels wird verglast: 
 
 ## Konkretisierung V3.1 – 26.10.2026
 
-Maßgebend ist der [aktuelle Hüllaufbau](construction/insulation.md): 205 mm Wand, 281 mm Dach, 160 mm Dachdämmung. Lichte Innenhöhe seit Entscheidung 0012: 2200 mm. Gang am Glas 520 mm, Standfläche hinten 645 mm. Umkleide lichte 892,5 × 1290 mm; weiterhin eng. Außengrundriss unverändert; Dachoberkante seit Entscheidung 0012 bei 2481 mm über Fertigboden. [Aktuelles Detailmodell](detailmodell.md).
+Maßgebend ist der [aktuelle Hüllaufbau](construction/insulation.md): 205 mm Wand, 281 mm Dach, 160 mm Dachdämmung. Lichte Innenhöhe seit Entscheidung 0012: 2200 mm. Gang am Glas 520 mm, Standfläche hinten 645 mm. Umkleide seit ADR 0013 lichte 1400 × 1290 mm; Gesamtbreite vorläufig 3707,5 mm. Tiefe und Saunaflügel unverändert; Dachoberkante seit Entscheidung 0012 bei 2481 mm über Fertigboden. [Aktuelles Detailmodell](detailmodell.md).

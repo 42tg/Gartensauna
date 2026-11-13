@@ -13,6 +13,6 @@ Der aktuelle [Hüllaufbau](construction/insulation.md) ersetzt die bisherigen 18
 
 Zusätzlich bleibt die Ofendetailansicht verfügbar. Ausgabe: `gartensauna_<Ansicht>.blend/.png/.json`; gemeinsames Paket `gartensauna-cad-blender`.
 
-Zwei freie Liegeflächen je 600 × 2100 mm; Oberkante unten 535, oben 975 mm. Acht Lamellen je Bank, 5-mm-Fugen. Gang an Glasfront 520 mm, rückwärtige Standfläche 645 mm, freier Türzugang hinter dem Bankende 600 mm. Umkleide nur 892,5 × 1290 mm. Bankaufstieg, Türflügel und konstruktive Anschlüsse bleiben offen.
+Zwei freie Liegeflächen je 600 × 2100 mm; Oberkante unten 535, oben 975 mm. Acht Lamellen je Bank, 5-mm-Fugen. Gang an Glasfront 520 mm, rückwärtige Standfläche 645 mm, freier Türzugang hinter dem Bankende 600 mm. Umkleide vorläufig 1400 × 1290 mm lichte Fläche (ADR 0013); Gesamtbreite 3707,5 mm, örtlich noch nachzumessen. Bankaufstieg, Türflügel und konstruktive Anschlüsse bleiben offen.
 
 Die Berichte prüfen Modellmaße und geometrische Ofenabstände; sie sind keine Fertigungs- oder Montagefreigabe. Das Dach ist ein flaches Schichtmodell mit reservierter Lüftungszone; Gefälle und offene Lüftungsanschlüsse sind noch nicht konstruiert.

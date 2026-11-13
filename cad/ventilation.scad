@@ -1,6 +1,6 @@
 // Mechanical ventilation concept; mm. Clear apertures before grille blades.
 // Supply above heater; exhaust below far end of upper bench; drying closed in use.
-vent_supply_x = 1550;
+vent_supply_x = wing_start_x + 350; // Follow the translated heater/sauna wing
 vent_supply_z = 1080;
 vent_supply_w = 150;
 vent_supply_h = 80;

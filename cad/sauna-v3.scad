@@ -1,16 +1,21 @@
 // Gartensauna V3 – parametrisches geometrisches Konzept, Einheiten mm.
 // Export: openscad -o wall.stl -D 'part="walls"' -D 'view="assembled"' sauna-v3.scad
 // Wichtig: KEINE geprüfte Baukonstruktion. Öffnungen und Materialien sind Platzhalter.
-main_width = 3200;
+// Overall width is derived from the requested CLEAR changing-room width.
+// Provisional new-build footprint, pending on-site measurement (ADR 0013).
 main_depth = 1700;
 wing_width = 2000;       // Annahme, zu bestätigen
 wing_extension = 2000;   // Nutzerangabe als zusätzlicher Schenkel interpretiert
 include <envelope.scad>
+changing_clear_width = 1400;
+main_width = wing_width + changing_clear_width + 1.5*wall; // 3707.5 mm
+wing_start_x = main_width-wing_width;
 clear_internal_height = 2200; // Decision 0012: finished floor to finished ceiling, mm
 height = clear_internal_height; // Shared wall/glazing/ceiling datum; NOT exterior height
 floor_thickness = 120;
 // roof_thickness from envelope.scad; roof top = height + roof_thickness.
 // Floor underside = -floor_thickness; terrain/foundation datum still unconfirmed.
+assert(abs((main_width-wing_width-1.5*wall)-changing_clear_width)<0.01, "Changing-room clear width mismatch");
 assert(height > 2050, "Ceiling must clear the 2050 mm door openings");
 include <bench-layout.scad>
 include <ventilation.scad>
@@ -22,7 +27,7 @@ assert(wall+20+850<=main_width-wing_width-wall/2, "Entrance intersects partition
 part = "all";            // ["all","foundation","floor","walls","roof","upper_bench","lower_bench","chair","glazing"]
 view = "assembled";      // ["assembled","exploded"]
 offset = view == "exploded" ? 420 : 0;
-// Grundriss: x von 0..3200, y von -2000..1700.
+// Grundriss: x von 0..main_width, y von -wing_extension..main_depth.
 // Umkleide links im Bestandsrechteck; Saunaflügel rechts.
 module footprint(){
     union(){

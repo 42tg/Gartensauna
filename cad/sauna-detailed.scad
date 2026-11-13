@@ -17,8 +17,10 @@ z_wind=z_insulation+roof_insulation_t;
 z_vent=z_wind+wind_t;
 z_deck=z_vent+roof_vent_t;
 z_cover=z_deck+roof_deck_t;
-faces = [[1200,-2000,2000,0],[3200,-2000,3700,90],
-         [3200,1700,3200,180],[0,1700,1700,270],[0,0,1200,0]];
+faces = [[wing_start_x,-wing_extension,wing_width,0],
+         [main_width,-wing_extension,main_depth+wing_extension,90],
+         [main_width,main_depth,main_width,180],[0,main_depth,main_depth,270],
+         [0,0,wing_start_x,0]];
 layer_names = ["wall_cladding","wall_battens","wall_sheathing","wind_barrier","wall_studs",
                "wall_insulation","vapour_barrier","service_battens","interior_boards"];
 module face(f) { translate([f[0],f[1],0]) rotate([0,0,f[3]]) children(); }
@@ -69,18 +71,18 @@ module partition_boards(){
 }
 module floor_joists(){intersection(){
     translate([0,0,-108])footprint_3d(88);
-    union(){for(x=[0:400:main_width])translate([x,-wing_extension,-108])cube([45,3700,88]);}
+    union(){for(x=[0:400:main_width])translate([x,-wing_extension,-108])cube([45,main_depth+wing_extension,88]);}
 }}
 module floor_insulation(){difference(){
     translate([0,0,-108])footprint_3d(88);floor_joists();
 }}
 module floor_boards(){intersection(){
     translate([0,0,-20])footprint_3d(20);
-    union(){for(x=[0:120:main_width])translate([x,-wing_extension,-20])cube([118,3700,20]);}
+    union(){for(x=[0:120:main_width])translate([x,-wing_extension,-20])cube([118,main_depth+wing_extension,20]);}
 }}
 module roof_mask(z,t){translate([0,0,z])linear_extrude(height=t)offset(r=80)footprint();}
 module roof_joists(){intersection(){roof_mask(z_insulation,roof_insulation_t);union(){
-    for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_insulation])cube([60,3860,roof_insulation_t]);
+    for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_insulation])cube([60,main_depth+wing_extension+160,roof_insulation_t]);
 }}}
 module roof_insulation(){difference(){roof_mask(z_insulation,roof_insulation_t);roof_joists();}}
 module roof_boards(z,t,width){intersection(){roof_mask(z,t);union(){
@@ -95,8 +97,8 @@ module bench_slats(x,y,z,w,l){
 }
 module window_frame(){
     // Concept aluminium perimeter, no invented glass segmentation.
-    for(y=[-wing_extension,-35])translate([1200,y,0])cube([45,35,height]);
-    for(z=[0,height-35])translate([1200,-wing_extension,z])cube([45,wing_extension,35]);
+    for(y=[-wing_extension,-35])translate([wing_start_x,y,0])cube([45,35,height]);
+    for(z=[0,height-35])translate([wing_start_x,-wing_extension,z])cube([45,wing_extension,35]);
 }
 module select_part(name){
     heater_part(name);
@@ -115,11 +117,11 @@ module select_part(name){
     if(name=="partition_boards")partition_boards();
     if(name=="ceiling_boards")roof_boards(height,ceiling_t,95);
     if(name=="ceiling_battens")intersection(){roof_mask(height+ceiling_t,ceiling_gap); union(){
-        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,height+ceiling_t])cube([45,3860,ceiling_gap]);}}
+        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,height+ceiling_t])cube([45,main_depth+wing_extension+160,ceiling_gap]);}}
     if(name=="ceiling_vapour")roof_mask(z_vapour,vapour_t);
     if(name=="roof_wind")roof_mask(z_wind,wind_t);
     if(name=="roof_vent_battens")intersection(){roof_mask(z_vent,roof_vent_t); union(){
-        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_vent])cube([60,3860,roof_vent_t]);}}
+        for(x=[-80:600:main_width+80])translate([x,-wing_extension-80,z_vent])cube([60,main_depth+wing_extension+160,roof_vent_t]);}}
     if(name=="roof_joists")roof_joists();
     if(name=="roof_insulation")roof_insulation();
     if(name=="roof_deck")roof_boards(z_deck,roof_deck_t,140);
@@ -129,7 +131,7 @@ module select_part(name){
     if(name=="bench_upper")bench_slats(bench_upper_x,bench_start_y,bench_upper_z,bench_depth,bench_length);
     if(name=="bench_lower")bench_slats(bench_lower_x,bench_start_y,bench_lower_z,bench_depth,bench_length);
     if(name=="changing_chair")chair();
-    if(name=="glass_front")translate([1207,-wing_extension+35,35])cube([24,wing_extension-70,height-70]);
+    if(name=="glass_front")translate([wing_start_x+7,-wing_extension+35,35])cube([24,wing_extension-70,height-70]);
     if(name=="glass_frame")window_frame();
 }
 names = ["concrete_piers","floor_underside","floor_joists","floor_insulation","floor_boards",
@@ -145,7 +147,7 @@ function explode_z(n) = n=="concrete_piers" ? -800 : n=="floor_underside" ? -600
 if(part=="plan") {
     projection(cut=false) union(){
         // Horizontal wall section through openings; omit door lintels in plan.
-        intersection(){ walls(); translate([-100,-2100,1000])cube([3400,3900,1]); }
+        intersection(){ walls(); translate([-100,-wing_extension-100,1000])cube([main_width+200,main_depth+wing_extension+200,1]); }
         for(n=["bench_upper","bench_lower","changing_chair","glass_frame","heater_cage","heater_mount"])select_part(n);
     }
 }else if(view=="wall_detail"){
