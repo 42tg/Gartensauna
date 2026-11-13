@@ -98,7 +98,7 @@ Für die jetzige DROP-Hülle: Rahmen 260 mm, Glas 274 mm, untere Bank 180 mm, ob
 | Trennwand je Seite, ohne Rohöffnung | 1,495×2,2 − 0,880×2,040 = **1,4938 m²** |
 | Liegeoberflächen | **2,52 m²** vor Lamellenfugen |
 
-Keine Stückliste zum Einkauf: Pfostenraster, Stürze, Lastabtragung über Glas, Befestigungen, Zuschnitt und Verschnitt müssen erst bemessen werden. Der schematische 900-mm-Fundamentraster ist kein Tragfähigkeitsnachweis.
+Keine Stückliste zum Einkauf: Pfostenraster, Stürze, Lastabtragung über Glas, Befestigungen, Zuschnitt und Verschnitt müssen erst bemessen werden. Die Auflager sind jetzt unbeschnittene 250 × 250 × 180-mm-Körper mit höchstens 900 mm Achsraster; schmale, durch Randbeschnitt entstehende 5-mm-Reste wurden beseitigt. Ebenso wurden Randbalken und Dielenverteilung angepasst. Auch dieser schematische Fundamentraster ist kein Tragfähigkeitsnachweis.
 
 ## Quellen und offene Entscheidungen
 

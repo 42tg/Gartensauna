@@ -80,14 +80,16 @@ module partition_layer(n){
 }
 module floor_joists(){intersection(){
     translate([0,0,-108])footprint_3d(88);
-    union(){for(x=[0:400:main_width])translate([x,-wing_extension,-108])cube([45,main_depth+wing_extension,88]);}
+    union(){for(x=[0:400:main_width-45])translate([x,-wing_extension,-108])cube([45,main_depth+wing_extension,88]);
+        translate([main_width-45,-wing_extension,-108])cube([45,main_depth+wing_extension,88]);}
 }}
 module floor_insulation(){difference(){
     translate([0,0,-108])footprint_3d(88);floor_joists();
 }}
 module floor_boards(){intersection(){
     translate([0,0,-20])footprint_3d(20);
-    union(){for(x=[0:120:main_width])translate([x,-wing_extension,-20])cube([118,main_depth+wing_extension,20]);}
+    union(){n=ceil(main_width/120); pitch=main_width/n;
+        for(i=[0:n-1])translate([i*pitch,-wing_extension,-20])cube([pitch-(i==n-1?0:2),main_depth+wing_extension,20]);}
 }}
 module roof_mask(z,t){translate([0,0,z])linear_extrude(height=t)offset(r=80)footprint();}
 module roof_joists(){intersection(){roof_mask(z_insulation,roof_insulation_t);union(){
@@ -114,10 +116,13 @@ module select_part(name){
     door_part(name);
     if(name=="partition_insulation" || name=="partition_vapour" || name=="partition_battens")partition_layer(name);
     ventilation_part(name);
-    if(name=="concrete_piers")intersection(){
-        translate([0,0,-300])footprint_3d(180);
-        union(){for(x=[0:900:main_width])for(y=[-wing_extension:900:main_depth])
-            translate([x,y,-300])cube([250,250,180]);}
+    if(name=="concrete_piers"){
+        // Whole 250-mm schematic supports; never clip edge piers to thin slivers.
+        // Spacing is a geometric layout only, NOT a structural foundation design.
+        nx=ceil((main_width-250)/900); ny=ceil((main_depth-250)/900);
+        for(i=[0:nx])for(j=[0:ny])translate([i*(main_width-250)/nx,j*(main_depth-250)/ny,-300])cube([250,250,180]);
+        wx=ceil((wing_width-250)/900); wy=ceil((wing_extension-250)/900);
+        for(i=[0:wx])for(j=[0:wy])translate([wing_start_x+i*(wing_width-250)/wx,-wing_extension+j*(wing_extension-250)/wy,-300])cube([250,250,180]);
     }
     if(name=="floor_underside")translate([0,0,-120])footprint_3d(12);
     if(name=="floor_joists")floor_joists();

@@ -71,8 +71,28 @@ def evaluate():
     volume=area*h/1e9
     door_recess=(x+p-(sh[0]+4))*cw*ch/1e9
     glass_area=(e-70)*(h-70)/1e6+l*1977/1e6
+    # Guard against edge-clipped 5-mm piers/joists/boards after footprint changes.
+    component_sizes={}
+    with tempfile.TemporaryDirectory() as td:
+        for part,min_width in [('concrete_piers',249.99),('floor_joists',39.99),('floor_boards',100)]:
+            dest=Path(td)/(part+'.stl')
+            subprocess.run(['openscad','-o',str(dest),'-D',f'part="{part}"',str(ROOT/'cad/sauna-detailed.scad')],capture_output=True,text=True,check=True)
+            verts=[tuple(round(float(v),4) for v in m) for m in re.findall(r'vertex\s+([-+\d.e]+)\s+([-+\d.e]+)\s+([-+\d.e]+)',dest.read_text())]
+            parent={v:v for v in verts}
+            def find(v):
+                while parent[v]!=v:
+                    parent[v]=parent[parent[v]];v=parent[v]
+                return v
+            for i in range(0,len(verts),3):
+                for v in verts[i+1:i+3]:parent[find(v)]=find(verts[i])
+            groups={}
+            for v in parent:groups.setdefault(find(v),[]).append(v)
+            sizes=[[max(v[k] for v in group)-min(v[k] for v in group) for k in range(3)] for group in groups.values()]
+            assert sizes and all(size[0]>=min_width for size in sizes),(part,sizes)
+            if part=='concrete_piers':assert all(size[1]>=249.99 and abs(size[2]-180)<.01 for size in sizes)
+            component_sizes[part]={'connected_components':len(sizes),'minimum_component_width_mm':min(size[0] for size in sizes)}
     report={'status':'geometric planning checks passed; construction approval NOT established',
-        'cad_parameters':g,'width_mm':w,'partition_mm':p,'changing_room_mm':[x-t,d-2*t],
+        'substructure_stl_check':component_sizes,'cad_parameters':g,'width_mm':w,'partition_mm':p,'changing_room_mm':[x-t,d-2*t],
         'clear_height_mm':h,'roof_top_above_floor_mm':h+roof,'roof_external_bounds_mm':[w+160,d+e+160],
         'bench_mm':[bw,bl],'bench_top_mm':[lz,uz],'headroom_above_upper_mm':h-uz,
         'rear_landing_mm':d-t-by-bl,'window_aisle_mm':lo-x-45,'side_aisle_at_partition_mm':lo-x-p,
