@@ -39,6 +39,16 @@ def evaluate():
     sauna_local=unary_union([box(-4,-l,4,0),box(-39,-l+65,39,-l+85)])
     entry_local=unary_union([box(0,-30,l,30),box(l-100,-65,l,65)])
     def pose(poly,hinge,a):return translate(rotate(poly,-a,origin=(0,0)),hinge[0],hinge[1])
+    # Cross-check moving leaves AND handles from actual CAD, not only copied bounds.
+    with tempfile.TemporaryDirectory() as td:
+        td=Path(td)
+        for name,poly,hinge,parts in [('sauna',sauna_local,sh,['sauna_door_glass','sauna_door_handles']),('entrance',entry_local,eh,['entrance_door_leaf','entrance_door_handles'])]:
+            src=td/'door.scad'
+            src.write_text('include <'+str(ROOT/'cad/sauna-detailed.scad')+'>\nprojection()union(){'+''.join('door_part("'+part+'");' for part in parts)+'}')
+            for angle in (0,45,90):
+                dest=td/'door.svg'
+                subprocess.run(['openscad','-o',str(dest),'-D','part="audit_projection"','-D',f'door_angle={angle}',str(src)],capture_output=True,text=True,check=True)
+                assert svg_geometry(dest).symmetric_difference(pose(poly,hinge,angle)).area<20,(name,angle,'CAD door envelope mismatch')
     obstacles=unary_union([actual_walls,chair,benches,glass])
     swing={}
     # Samples every 0.05 degrees, with a conservative inter-sample motion bound.
@@ -117,7 +127,7 @@ def plan(report,route,dest):
     fig.text(.5,.925,'Neubau · lichte Höhe 2.200 mm · Türen bei 90° geöffnet',ha='center',fontsize=11)
     fig.text(.5,.06,'Türzargen nominal 800 × 2.000 mm; Produktmaße noch offen.\nTürschwenkwege kollisionsfrei; blaue Route mit Ø 600-mm-Prüfkörper geprüft.\n*DROP ist zu klein dimensioniert. Bankaufstieg weiterhin ungelöst.\nPlanungsgeometrie, kein Aufmaß oder Ausführungsplan.',ha='center',fontsize=10,color='#663e27',linespacing=1.5)
     ax.set_xlim(-200,4120);ax.set_ylim(-2200,2120);ax.set_aspect('equal');ax.axis('off');fig.subplots_adjust(top=.9,bottom=.15,left=.04,right=.96)
-    fig.savefig(dest,dpi=180);plt.close(fig)
+    fig.savefig(dest,dpi=180);fig.savefig(ROOT/'docs/visuals/grundriss-v3-bemasst.svg');plt.close(fig)
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--plan',type=Path);parser.add_argument('--output',type=Path,default=ROOT/'build/audit/layout.json');args=parser.parse_args()

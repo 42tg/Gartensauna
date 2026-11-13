@@ -2,7 +2,7 @@
 
 **Status: Vorentwurf / Layout-Variante, nicht bau- oder maßtechnisch freigegeben.** Stand 25.10.2026.
 
-![L-Grundriss](visuals/grundriss-v3.svg)
+![CAD-Grundriss mit Türen und Maßen](visuals/grundriss-v3-bemasst.svg)
 
 ## Konzept
 - Linker Bestandsbereich als **kleine, beheizbare Umkleide mit einem Stuhl (Standard), optional zwei Stühlen**; keine große Ruhezone erforderlich.
@@ -26,7 +26,7 @@
 
 Bei dieser Interpretation beträgt die Gesamtausdehnung in der Tiefe **3.700 mm** (1.700 + 2.000). Der rechte Flügel bleibt 2.000 mm breit. Seit ADR 0013 erhält der Vorraum 1.400 mm lichte Breite: 205 mm Außenwand + 1400 mm Vorraum ergeben 1605 mm bis zur bündigen Trennwand-/Flügelebene und insgesamt 3605 mm Neubau-Gesamtbreite (ADR 0014). Diese Breite muss vor Ort bestätigt werden. Die lichte Vorraumtiefe bleibt 1.290 mm; der Raum ist damit noch keine großzügige Ruhezone.
 
-Die Tür-/Bankpositionen in der Zeichnung sind schematisch. Aktuell sind zwei 600 × 2100-mm-Liegeflächen geometrisch nachgewiesen; Bewegungsflächen siehe V3.1.
+Türblätter, Zargen und Griffe sind modelliert und schwenkgeprüft; konkrete Produkte und Einbaudetails bleiben offen. Zwei 600 × 2100-mm-Liegeflächen sind geometrisch nachgewiesen. [Realitätscheck mit beiden Türen](reality-check-2026-11-13.md).
 
 ## Dateien
 - [Bemaßtes schematisches Layout](visuals/grundriss-v3.svg)
@@ -40,7 +40,7 @@ Grundstücksgrenze/Abstandsrecht, Bestandsmauer, Fundament, Dachhöhe/Neigung, O
 Die Verglasung liegt ausdrücklich **links am rechten Saunaflügel** und blickt in den Garten. Die bisherige Stirnseitenverglasung war falsch. Öffnungsmaße, Anschluss an den Umkleidebereich und endgültige Liegebankanordnung sind weiter zu prüfen.
 
 ## Nutzeranforderung – Sitzplätze in der Umkleide
-Ein Stuhl genügt, optional zwei. Die bisherige durchgehende Sitzbank ist nicht erforderlich. Platz für Garderobenhaken, Umziehen und den Durchgang zur Sauna erhalten. Die Umkleide soll beheizbar bleiben. Die CAD-Möblierung muss entsprechend aktualisiert werden.
+Ein Stuhl genügt, optional zwei. Die bisherige durchgehende Sitzbank ist nicht erforderlich. Platz für Garderobenhaken, Umziehen und den Durchgang zur Sauna erhalten. Die Umkleide soll beheizbar bleiben. Das CAD enthält einen Stuhl.
 
 ## Vollflächige Glasfront – 25.10.2026
 Die gesamte gartenseitige Front des vorspringenden Saunaflügels wird verglast: keine geschlossene Brüstung und kein geschlossener Wandstreifen über dem Fenster. Im aktuellen Konzept sind das 2.000 mm Breite × 2.200 mm Höhe (beschlossene lichte Innenhöhe vom 13.11.2026), von Oberkante Boden bis Unterkante Dach. Rahmen, Tragwerk und Glasaufteilung sind noch nicht konstruiert; 40 mm im CAD sind ein Platzhalter für den Glasaufbau.

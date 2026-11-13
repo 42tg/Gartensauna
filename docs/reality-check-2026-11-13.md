@@ -45,7 +45,7 @@ Außerdem wurde eine **160-mm-Lücke an der vorderen Glas-/Wandecke** geschlosse
 
 **Dies sind noch keine bestellbaren Türspezifikationen.** Beispiel: Harvia DA92104 hat als reales 9×21-Element 890 × 2090 × 60 mm und 8-mm-Sicherheitsglas. Es passt nicht unverändert in unsere 880 × 2040-mm-Rohöffnung. Vor Bestellung Produkt wählen, Rohöffnung/Zarge/Falz/Spalte/Bänder/Glas und Schwelle danach anpassen und Prüfung erneut laufen lassen. Die aktuelle tiefe Zarge ist eine vereinfachte Laibungsdarstellung, kein Nachbau dieses Produkts.
 
-Prüfung: 0–90° in 0,05°-Schritten, einschließlich beidseitiger Griffe. Von jedem Stichprobenabstand wird eine konservative maximale Bewegung zwischen zwei Schritten abgezogen (r·Δwinkel/2, rund 0,35 mm). Kein Kontakt mit Wänden, Zargen, Glasrahmen, Stuhl oder Liegen. Kleinster bestätigter Abstand zum Stuhl beim Saunatürschwenk etwa **85,6 mm**. Beide Türbewegungsräume sind voneinander getrennt.
+Blatt- und Griffumrisse werden zusätzlich bei 0°, 45° und 90° mit echten OpenSCAD-Projektionen abgeglichen. Prüfung: 0–90° in 0,05°-Schritten, einschließlich beidseitiger Griffe. Von jedem Stichprobenabstand wird eine konservative maximale Bewegung zwischen zwei Schritten abgezogen (r·Δwinkel/2, rund 0,35 mm). Kein Kontakt mit Wänden, Zargen, Glasrahmen, Stuhl oder Liegen. Kleinster bestätigter Abstand zum Stuhl beim Saunatürschwenk etwa **85,6 mm**. Beide Türbewegungsräume sind voneinander getrennt.
 
 Direkt an den Zargen bleiben im vereinfachten Schwenkmodell nur ca. **2,8 mm** (Sauna) bzw. **0,6 mm** (außen) garantierter Abstand. Das ist **kein Einbautoleranznachweis**: konkrete Beschlagkinematik, Dichtungen und Falz fehlen. Die Bänder sind schematische Drehachsen, ihre Verschraubung ist nicht modelliert.
 
@@ -109,3 +109,11 @@ Herstellerunterlagen am 13.11.2026 eingesehen:
 - [Tylö Kiruna Montagehandbuch](https://tylo.com/hubfs/TYLO%20US/Tylo-US%20Manuals/71-0185_Tylo_Kiruna_1_2_IG%20S-810_820_Manual_Rev_C_09-26-2024.pdf): nach außen öffnende Saunatür ohne mechanische Verriegelung als Gestaltungsgrundsatz; kein deutscher Normnachweis.
 
 Offen bleiben Aufmaß einschließlich Außentürbewegung, Tür-/Glasprodukte, Bankaufstieg, größerer Ofen, Statik/Gründung, Feuchteschutz und Elektro. Geometrisch bestandene Tests dürfen nicht als Bau- oder Montagefreigabe bezeichnet werden.
+
+## Ausgeführte Verifikation dieses Stands
+
+- 12 bestehende Tests für Geometrie, numerische Erhaltung und CFD-Auswertung bestanden; CAD-Prüfung der Lüftungsöffnungen ohne Ständer-/Lattenüberschneidung bestanden.
+- Beide Türbewegungen und 600-mm-Prüfkörperroute bestanden. Bewegte Blatt-/Griffprojektionen bei 0°, 45° und 90° stimmen mit OpenSCAD überein; Wandschnitt separat abgeglichen.
+- [Isothermer Lüftungsvergleich](https://github.com/42tg/Gartensauna/actions/runs/43500580253) mit aktueller Geometrie erfolgreich: `planned` bei 80 m³/h mittleres Luftalter 6,01 min, P95 9,02 min, Faktor 0,701. Feineres Gitter Faktor 0,709 (1,3 % Änderung); Mischungsannahme variiert den Faktor von 0,635 bis 0,820. Kein thermischer Komfortnachweis. Die dortigen 7,00 Luftwechsel/h beziehen sich auf das voxelisierte **freie Luftvolumen** ohne Einbauten, nicht den geometrischen Raumansatz von 12,60 m³.
+- Automatisch gestartete thermische Fälle verwenden weiterhin 3 bzw. 6 kW, 10 °C Außen-/Zuluft und angenommene Leitwerte. Auch ein numerisch erfolgreicher Lauf wäre keine Bestätigung des noch ungewählten, größeren Ofens oder des realen Aufheizverhaltens. Lauf: https://github.com/42tg/Gartensauna/actions/runs/43500580159
+- CAD-/Blender-Geometriestand: `6171ff7431c8fac67e956361cc74be0355ef1787`. Zugehöriger Renderlauf: https://github.com/42tg/Gartensauna/actions/runs/43500580199 . Der nachfolgende Dokumentations-/Prüfskriptstand verändert diese Geometrie nicht.
