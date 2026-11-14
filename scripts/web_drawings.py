@@ -35,7 +35,8 @@ for name,rotation,span in [('front',[-90,0,0],w),('side',[-90,0,90],d+e)]:
  # Project the CAD mesh exports used by Blender.
  # Use individually exported assembled meshes; bypass main selector.
  meshparts=['wall_cladding','glass_front','glass_frame','roof_covering','roof_fascia','floor_boards','entrance_door_leaf','entrance_door_frame','concrete_piers']
- src.write_text('projection()rotate('+json.dumps(rotation)+')union(){'+''.join('import("'+str(ROOT/'build/meshes'/f'assembled_{p}.stl')+'");' for p in meshparts)+'}')
+ transform='rotate([-90,0,0])'+('rotate([0,0,90])' if name=='side' else '')
+ src.write_text('projection()'+transform+'union(){'+''.join('import("'+str(ROOT/'build/meshes'/f'assembled_{p}.stl')+'");' for p in meshparts)+'}')
  target=ROOT/'build'/f'{name}.svg';subprocess.run(['openscad','-o',str(target),str(src)],capture_output=True,check=True)
  tree=ET.parse(target);root=tree.getroot();raw=''.join('<path class="wall" fill-rule="evenodd" d="'+q.attrib['d']+'"/>' for q in root.iter() if q.tag.endswith('path'))
  xx,yy,ww,hh=map(float,root.attrib['viewBox'].split())
