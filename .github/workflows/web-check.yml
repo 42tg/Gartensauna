@@ -1,0 +1,23 @@
+name: Check web viewer
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', 'scripts/export_web.py', 'scripts/web_drawings.py', '.github/workflows/web-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: web
+      - run: npm test
+        working-directory: web
+      - name: Verify JavaScript bundle independently of private assets
+        working-directory: web
+        run: npx esbuild src/app.js --bundle --format=esm --outfile=/tmp/sauna-viewer.js

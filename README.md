@@ -70,3 +70,10 @@ Vorraum **1400 mm lichte Breite**, Nachmessung durch den Nutzer ausstehend (ADR 
 ## Realitätscheck mit beiden Türen
 
 [Prüfbericht und offene Punkte](docs/reality-check-2026-11-13.md) · [Bemaßter CAD-Grundriss](docs/visuals/grundriss-v3-bemasst.svg). Bündige 128,1-mm-Trennwand, beide Türschwenks geprüft; Bankaufstieg und Ofenauswahl weiterhin offen.
+
+## Interaktive Web-Werkbank
+
+Drei Tabs für bemaßte Zeichnungen, CAD-/Blender-Modell mit Explosion und Cutaway
+sowie Umgebungsscan mit einblendbarer Sauna. Quellcode und lokale Build-Anleitung:
+[web/README.md](web/README.md). Der CAD-Renderlauf liefert zusätzlich das
+Artefakt `gartensauna-web`; private Scanaufnahmen sind nicht Bestandteil des Repos.

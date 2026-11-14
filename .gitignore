@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 simulation/thermal/boundary/Make/linux*/
 simulation/thermal/boundary/lnInclude/
+web/node_modules/
+web/dist/
+web/assets/

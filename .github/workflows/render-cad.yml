@@ -79,3 +79,39 @@ jobs:
           if-no-files-found: error
           # Preserve the complete user-facing CAD/Blender download.
           retention-days: 90
+  web:
+    needs: render
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: cad-meshes
+          path: build/meshes
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: render-*
+          merge-multiple: true
+          path: build/blender
+      - name: Install export tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender openscad
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Export exact Blender geometry and CAD drawings
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          blender -b -t 2 --python-exit-code 1 -P scripts/export_web.py -- build/blender web/assets
+          python3 scripts/web_drawings.py
+      - run: npm ci && npm test && npm run build
+        working-directory: web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gartensauna-web
+          path: web/dist/
+          if-no-files-found: error
+          retention-days: 30
